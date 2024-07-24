@@ -1,0 +1,64 @@
+{
+    "locations": [
+        {
+            "name": "clyde minaret",
+            "lat": 37.6618,
+            "long": -119.1781
+        },
+        {
+            "name": "mt whitney",
+            "lat": 36.5785,
+            "long": -118.2919
+        },
+        {
+            "name": "incredible hulk",
+            "lat": 38.1215,
+            "long": -119.4147
+        },
+        {
+            "name": "charlottes dome",
+            "lat": 36.7819,
+            "long": -118.4805
+        },
+        {
+            "name": "merriam peak",
+            "lat": 37.3088,
+            "long": -118.7651
+        },
+        {
+            "name": "mount conness",
+            "lat": 37.9681,
+            "long": -119.3018
+        },
+        {
+            "name": "phineas and ferb",
+            "lat": 37.8501,
+            "long": -119.4471
+        },
+        {
+            "name": "picture peak",
+            "lat": 37.1504,
+            "long": -118.649
+        },
+        {
+            "name": "temple crag",
+            "lat": 37.1094,
+            "long": -118.4913
+        },
+        {
+            "name": "mt sill",
+            "lat": 37.0959,
+            "long": -118.5031
+        },
+        {
+            "name": "mammoth coffee roasters",
+            "lat": 37.6401,
+            "long": -118.9667
+        },
+        {
+            "name": "scenic loop",
+            "lat": 37.6754,
+            "long": -118.9887
+        }
+    ]
+}
