@@ -2,7 +2,7 @@ import { S3Client } from '@aws-sdk/client-s3';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http';
-import { myErrorHandler, PGContextController } from 'dwf-3-api-tjb';
+import { myErrorHandler, PGContextController } from 'ww-3-api-tjb';
 import {
     DeleteInvite,
     DeletePicture,
