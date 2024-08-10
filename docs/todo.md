@@ -1,0 +1,58 @@
+* get `api` and `app_config` in their own modules
+  * `app_config`
+    * hmm, the actual configuration must live outside the module as the specifics aren't shared between apps.
+    * how tho?
+
+
+# app config
+So, services depend on a configuration, and the configuration template is unique per app. But, the vendor of the template is consistent. so its not so straightforward.
+
+## consistent
+* vendor (`get_app_config`)
+* envs (`enum Environment`);
+
+## inconsistent
+* template
+* instances of template
+
+## options
+1. branches in the git repo (one branch per app)
+2. the generalizee `app_config` package consumes a per app `app_config_template` package that vends a standardized name.
+Its worth noting that this still requires a change to the package (changing `package.json` to consume the app specific template)
+3. a pointer within the `AppConfig` definition.  Not sure this helps it just moves the problem.
+
+I think I need to research a bit...
+### Question
+can i export a package as a different name (ie `dwf_app_config_template` gets packaged as `app_specific_template`.) If I can do this, the apps can share an unmodified
+copy of `app_config` module as that can consume without knowing the templates are diffferent
+
+#### Answer
+`exports` field in package.json will allow for exporting with a different name (ie `my_app` vs `my_app/config_template`).
+
+Is it as easy as having all template packages use the same name? yes, but only because I don't have them in a registry. Once they are in a registry this will break.
+maybe these don't need to be in a registry?
+
+what do i get out of a registry?
+
+
+### Decision
+.... wait till the question is answered
+
+ultimately, since both require a change to the package
+
+U
+
+#### revisiting later
+```
+// so now, instead of the shared app_config module consuming the app specific configurations,
+// the app specific configurations will consume this vending function, give it the app specific
+// generic configuration map, and vend a non generic `get_app_config`
+export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
+  const env_var = process.env.TJB_ENV;
+  if (!env_var) {
+    throw new Error("TJB_ENV is not defined");
+  }
+
+  return appConfigMap.get(env_var);
+};
+```

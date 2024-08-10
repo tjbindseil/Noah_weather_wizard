@@ -1,0 +1,28 @@
+{
+    "name": "ww-3-app-config-tjb",
+    "version": "1.0.1",
+    "description": "app configuration that is inconsistent accross environments",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "scripts": {
+        "test": "echo no tests just config",
+        "tsc": "tsc",
+        "ww-clean": "rm -rf node_modules package-lock.json build",
+        "ww-format": "npx prettier --write $(find src package*)",
+        "ww-lint": "npx eslint $(find src package*)",
+        "ww-build": "tsc && npm run test && npm run ww-format && npm run ww-lint && echo success!",
+        "ww-build-reinstall": "npm run ww-clean && npm install && tsc && npm run test && npm run ww-format && npm run ww-lint && echo success!"
+    },
+    "author": "TJB",
+    "license": "ISC",
+    "dependencies": {
+        "@types/node": "^20.11.16"
+    },
+    "devDependencies": {
+        "typescript": "^5.2.2",
+        "@typescript-eslint/eslint-plugin": "^7.3.1",
+        "eslint": "^8.40.0",
+        "eslint-config-prettier": "^8.8.0",
+        "prettier": "2.8.8"
+    }
+}
