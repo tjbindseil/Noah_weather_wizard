@@ -1,3 +1,5 @@
+import { SSL, SSLMode } from 'ts-postgres';
+
 enum Environment {
     'host', // TODO rename to laptop
     'laptopIT',
@@ -9,26 +11,70 @@ enum Environment {
 export interface AppConfig {
     locationServiceHost: string;
     locationServicePort: number;
+    locationDbConnectionConfig: {
+        database: string;
+        host: string;
+        port: number;
+        user: string;
+        password: string;
+        ssl: SSLMode.Disable | SSL | undefined;
+    };
 }
 
 const hostAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        // TODO make a db and fix this
+        database: 'dwf',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: SSLMode.Disable,
+    },
 };
 
 const laptopITConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        // TODO make a db and fix this
+        database: 'dwf',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: SSLMode.Disable,
+    },
 };
 
 const devAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        // TODO make a db and fix this
+        database: 'dwf',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: SSLMode.Disable,
+    },
 };
 
 const testAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        // TODO make a db and fix this
+        database: 'dwf',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: SSLMode.Disable,
+    },
 };
 
 // TODO a lot these fields are a function of the enum, ie
@@ -37,6 +83,15 @@ const testAppConfig: AppConfig = {
 const prodAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        // TODO make a db and fix this
+        database: 'dwf',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: SSLMode.Disable,
+    },
 };
 
 let app_config: AppConfig;

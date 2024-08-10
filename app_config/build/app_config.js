@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.get_app_config = void 0;
+var ts_postgres_1 = require("ts-postgres");
 var Environment;
 (function (Environment) {
     Environment[Environment["host"] = 0] = "host";
@@ -12,18 +13,54 @@ var Environment;
 var hostAppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        // TODO make a db and fix this
+        database: 'dwf',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: ts_postgres_1.SSLMode.Disable,
+    },
 };
 var laptopITConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        // TODO make a db and fix this
+        database: 'dwf',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: ts_postgres_1.SSLMode.Disable,
+    },
 };
 var devAppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        // TODO make a db and fix this
+        database: 'dwf',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: ts_postgres_1.SSLMode.Disable,
+    },
 };
 var testAppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        // TODO make a db and fix this
+        database: 'dwf',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: ts_postgres_1.SSLMode.Disable,
+    },
 };
 // TODO a lot these fields are a function of the enum, ie
 // * bucketName: "dwf-3-pictures-prod",
@@ -31,6 +68,15 @@ var testAppConfig = {
 var prodAppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        // TODO make a db and fix this
+        database: 'dwf',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: ts_postgres_1.SSLMode.Disable,
+    },
 };
 var app_config;
 var set_app_config = function () {

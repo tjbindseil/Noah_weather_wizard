@@ -46,6 +46,12 @@ const schema = {
             },
             required: ['location'],
         },
+        DeleteLocationInput: {
+            type: 'object',
+            properties: { id: { type: 'number' } },
+            required: ['id'],
+        },
+        DeleteLocationOutput: { type: 'object' },
     },
 } as const;
 export default schema.definitions;

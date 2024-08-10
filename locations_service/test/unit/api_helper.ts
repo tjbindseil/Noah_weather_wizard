@@ -1,43 +1,18 @@
-import {
-    DeletePicture,
-    GetPictures,
-    PostPicture,
-    PostInvite,
-    GetInvites,
-    DeleteInvite,
-} from '../../src/handlers';
+import { GetLocations, PostLocation, DeleteLocation } from '../../src/handlers';
 
-export class DeletePicture_WithValidatedUserSetter extends DeletePicture {
+export class GetLocations_WithValidatedUserSetter extends GetLocations {
     public setValidatedUsername(validatedUsername: string) {
         this.validatedUsername = validatedUsername;
     }
 }
 
-export class GetPictures_WithValidatedUserSetter extends GetPictures {
+export class PostLocation_WithValidatedUserSetter extends PostLocation {
     public setValidatedUsername(validatedUsername: string) {
         this.validatedUsername = validatedUsername;
     }
 }
 
-export class PostPicture_WithValidatedUserSetter extends PostPicture {
-    public setValidatedUsername(validatedUsername: string) {
-        this.validatedUsername = validatedUsername;
-    }
-}
-
-export class PostInvite_WithValidatedUserSetter extends PostInvite {
-    public setValidatedUsername(validatedUsername: string) {
-        this.validatedUsername = validatedUsername;
-    }
-}
-
-export class GetInvites_WithValidatedUserSetter extends GetInvites {
-    public setValidatedUsername(validatedUsername: string) {
-        this.validatedUsername = validatedUsername;
-    }
-}
-
-export class DeleteInvite_WithValidatedUserSetter extends DeleteInvite {
+export class DeleteLocation_WithValidatedUserSetter extends DeleteLocation {
     public setValidatedUsername(validatedUsername: string) {
         this.validatedUsername = validatedUsername;
     }
