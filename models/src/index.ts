@@ -7,3 +7,9 @@ export {
     PostLocationInput,
     PostLocationOutput,
 } from './location_service_models/post_location';
+export {
+    DeleteLocationInput,
+    DeleteLocationOutput,
+} from './location_service_models/delete_location';
+import _schema from './schema_validation/_schema';
+export { _schema };

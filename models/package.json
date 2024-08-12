@@ -2,8 +2,8 @@
     "name": "ww-3-models-tjb",
     "version": "1.0.1",
     "description": "models used in draw with friends application",
-    "main": "build/src/index.js",
-    "types": "build/src/index.d.ts",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
     "scripts": {
         "schema": "node src/schema_validation/schemaGenerator.js",
         "build": "npm run schema && tsc",
