@@ -15,7 +15,7 @@ var hostAppConfig = {
     locationServicePort: 8080,
     locationDbConnectionConfig: {
         // TODO make a db and fix this
-        database: 'dwf',
+        database: 'ww',
         host: 'localhost',
         port: 5469,
         user: '',
@@ -28,7 +28,7 @@ var laptopITConfig = {
     locationServicePort: 8080,
     locationDbConnectionConfig: {
         // TODO make a db and fix this
-        database: 'dwf',
+        database: 'ww-laptop',
         host: 'localhost',
         port: 5469,
         user: '',
@@ -41,7 +41,7 @@ var devAppConfig = {
     locationServicePort: 8080,
     locationDbConnectionConfig: {
         // TODO make a db and fix this
-        database: 'dwf',
+        database: 'ww-dev',
         host: 'localhost',
         port: 5469,
         user: '',
@@ -54,7 +54,7 @@ var testAppConfig = {
     locationServicePort: 8080,
     locationDbConnectionConfig: {
         // TODO make a db and fix this
-        database: 'dwf',
+        database: 'ww-test',
         host: 'localhost',
         port: 5469,
         user: '',
@@ -70,7 +70,7 @@ var prodAppConfig = {
     locationServicePort: 8080,
     locationDbConnectionConfig: {
         // TODO make a db and fix this
-        database: 'dwf',
+        database: 'ww-prod',
         host: 'localhost',
         port: 5469,
         user: '',

@@ -5,6 +5,7 @@ enum Environment {
     'laptopIT',
     'dev', // TODO rename to docker
     'test',
+    'unit_test',
     'prod',
 }
 
@@ -25,8 +26,7 @@ const hostAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
-        // TODO make a db and fix this
-        database: 'dwf',
+        database: 'ww',
         host: 'localhost',
         port: 5469,
         user: '',
@@ -39,8 +39,7 @@ const laptopITConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
-        // TODO make a db and fix this
-        database: 'dwf',
+        database: 'ww-laptop',
         host: 'localhost',
         port: 5469,
         user: '',
@@ -53,8 +52,7 @@ const devAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
-        // TODO make a db and fix this
-        database: 'dwf',
+        database: 'ww-dev',
         host: 'localhost',
         port: 5469,
         user: '',
@@ -67,8 +65,20 @@ const testAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
-        // TODO make a db and fix this
-        database: 'dwf',
+        database: 'ww-test',
+        host: 'localhost',
+        port: 5469,
+        user: '',
+        password: '',
+        ssl: SSLMode.Disable,
+    },
+};
+
+const unitTestAppConfig: AppConfig = {
+    locationServiceHost: 'localhost',
+    locationServicePort: 8080,
+    locationDbConnectionConfig: {
+        database: 'ww-unit-test',
         host: 'localhost',
         port: 5469,
         user: '',
@@ -84,8 +94,7 @@ const prodAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
-        // TODO make a db and fix this
-        database: 'dwf',
+        database: 'ww-prod',
         host: 'localhost',
         port: 5469,
         user: '',
@@ -106,6 +115,8 @@ const set_app_config = () => {
         app_config = devAppConfig;
     } else if (env_var === Environment[Environment.test]) {
         app_config = testAppConfig;
+    } else if (env_var === Environment[Environment.unit_test]) {
+        app_config = unitTestAppConfig;
     } else if (env_var === Environment[Environment.prod]) {
         app_config = prodAppConfig;
     } else {

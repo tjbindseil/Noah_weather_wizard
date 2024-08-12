@@ -4,7 +4,7 @@
     "description": "Server for DrawWithFriends app",
     "main": "index.js",
     "scripts": {
-        "test": "export WW_ENV='host' && jest unit --config jest.unit.config.js",
+        "test": "export WW_ENV='unit_test' && jest unit --config jest.unit.config.js",
         "dev": "export WW_ENV='dev' && concurrently \"npx tsc --watch\" \"nodemon -q build/src/index.js\"",
         "start-host": "export WW_ENV='host' && concurrently \"npx tsc --watch\" \"nodemon -q src/index.ts\"",
         "start-laptopIT": "export WW_ENV='laptopIT' && ts-node src/index.ts",
