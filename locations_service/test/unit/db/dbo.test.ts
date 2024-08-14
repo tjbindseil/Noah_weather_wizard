@@ -18,21 +18,11 @@ describe('dbo tests', () => {
     const pool = createPool(
         {
             create: async () => {
-                // console.log('TJTAG 1');
-                // ok, so we are in an infinite recursion here
-                // TJTAG 1 keeps printing,
-                // on a whim, I wanted to see if the get_app_config singleton thing was working, and its not
-                // questions:
-                // * is it working in dwf?
-                // * why is there inifinite recursion here?
                 const client = new Client(
                     get_app_config().locationDbConnectionConfig
                 );
-                console.log('TJTAG 2');
                 await client.connect();
-                console.log('TJTAG 3');
                 client.on('error', console.log);
-                console.log('TJTAG 4');
                 return client;
             },
             destroy: async (client: Client) => client.end(),
@@ -69,24 +59,18 @@ describe('dbo tests', () => {
     ];
 
     beforeAll(async () => {
-        console.log('beforeAll start');
         pgClient = await pool.acquire();
-
-        console.log('beforeAll middle');
 
         const locations = await getLocations(pgClient);
         if (locations.length > 0) {
             throw Error('Unit test table is not empty! Abandoning tests');
         }
-        console.log('beforeAll end');
     });
 
     beforeEach(async () => {
-        console.log('beforeEach start');
         for (let i = 0; i < expectedLocations.length; ++i) {
             await insertLocation(pgClient, expectedLocations[i]);
         }
-        console.log('beforeEach end');
     });
 
     it('can insert a location', async () => {
@@ -121,9 +105,7 @@ describe('dbo tests', () => {
     });
 
     afterEach(async () => {
-        console.log('afterEach start');
         await pgClient.query<Location>('TRUNCATE location');
-        console.log('afterEach end');
     });
 
     afterAll(async () => {

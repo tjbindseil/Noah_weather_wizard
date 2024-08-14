@@ -87,9 +87,6 @@ const unitTestAppConfig: AppConfig = {
     },
 };
 
-// TODO a lot these fields are a function of the enum, ie
-// * bucketName: "dwf-3-pictures-prod",
-// * pictureDbConnectionConfig.database: "prod_picture_database",
 const prodAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
@@ -106,7 +103,6 @@ const prodAppConfig: AppConfig = {
 let appConfigSet = false;
 let app_config: AppConfig;
 const set_app_config = () => {
-    console.log('TJTAG SETTING app_config');
     const env_var = process.env.WW_ENV;
 
     if (env_var === Environment[Environment.host]) {
@@ -118,7 +114,6 @@ const set_app_config = () => {
     } else if (env_var === Environment[Environment.test]) {
         app_config = testAppConfig;
     } else if (env_var === Environment[Environment.unit_test]) {
-        console.log('TJTAG setting app_config to unit test app config');
         app_config = unitTestAppConfig;
     } else if (env_var === Environment[Environment.prod]) {
         app_config = prodAppConfig;
