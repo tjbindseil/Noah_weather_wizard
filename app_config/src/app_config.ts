@@ -1,6 +1,6 @@
 import { SSL, SSLMode } from 'ts-postgres';
 
-enum _Environment {
+enum Environment {
     'host', // TODO rename to laptop
     'laptopIT',
     'dev', // TODO rename to docker
@@ -22,7 +22,7 @@ export interface AppConfig {
     };
 }
 
-const _hostAppConfig: AppConfig = {
+const hostAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
@@ -35,7 +35,7 @@ const _hostAppConfig: AppConfig = {
     },
 };
 
-const _laptopITConfig: AppConfig = {
+const laptopITConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
@@ -48,7 +48,7 @@ const _laptopITConfig: AppConfig = {
     },
 };
 
-const _devAppConfig: AppConfig = {
+const devAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
@@ -61,7 +61,7 @@ const _devAppConfig: AppConfig = {
     },
 };
 
-const _testAppConfig: AppConfig = {
+const testAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
@@ -74,7 +74,7 @@ const _testAppConfig: AppConfig = {
     },
 };
 
-const _unitTestAppConfig: AppConfig = {
+const unitTestAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
@@ -90,7 +90,7 @@ const _unitTestAppConfig: AppConfig = {
 // TODO a lot these fields are a function of the enum, ie
 // * bucketName: "dwf-3-pictures-prod",
 // * pictureDbConnectionConfig.database: "prod_picture_database",
-const _prodAppConfig: AppConfig = {
+const prodAppConfig: AppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
     locationDbConnectionConfig: {
@@ -103,36 +103,34 @@ const _prodAppConfig: AppConfig = {
     },
 };
 
-const _appConfigSet = false;
+let appConfigSet = false;
 let app_config: AppConfig;
 const set_app_config = () => {
-    console.log('TJTAG Throwing error in SETTING app_config');
-    throw Error('TJTAG SETTING app_config');
-    //     console.log('TJTAG SETTING app_config');
-    //     const env_var = process.env.DWF_ENV;
-    //
-    //     if (env_var === Environment[Environment.host]) {
-    //         app_config = hostAppConfig;
-    //     } else if (env_var === Environment[Environment.laptopIT]) {
-    //         app_config = laptopITConfig;
-    //     } else if (env_var === Environment[Environment.dev]) {
-    //         app_config = devAppConfig;
-    //     } else if (env_var === Environment[Environment.test]) {
-    //         app_config = testAppConfig;
-    //     } else if (env_var === Environment[Environment.unit_test]) {
-    //         console.log('TJTAG setting app_config to unit test app config');
-    //         app_config = unitTestAppConfig;
-    //     } else if (env_var === Environment[Environment.prod]) {
-    //         app_config = prodAppConfig;
-    //     } else {
-    //         throw Error(`issue getting app config, env_var is: ${env_var}`);
-    //     }
-    //
-    //     _appConfigSet = true;
+    console.log('TJTAG SETTING app_config');
+    const env_var = process.env.WW_ENV;
+
+    if (env_var === Environment[Environment.host]) {
+        app_config = hostAppConfig;
+    } else if (env_var === Environment[Environment.laptopIT]) {
+        app_config = laptopITConfig;
+    } else if (env_var === Environment[Environment.dev]) {
+        app_config = devAppConfig;
+    } else if (env_var === Environment[Environment.test]) {
+        app_config = testAppConfig;
+    } else if (env_var === Environment[Environment.unit_test]) {
+        console.log('TJTAG setting app_config to unit test app config');
+        app_config = unitTestAppConfig;
+    } else if (env_var === Environment[Environment.prod]) {
+        app_config = prodAppConfig;
+    } else {
+        throw Error(`issue getting app config, env_var is: ${env_var}`);
+    }
+
+    appConfigSet = true;
 };
 
 export const get_app_config = () => {
-    if (!_appConfigSet) {
+    if (!appConfigSet) {
         set_app_config();
     }
 
