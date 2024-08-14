@@ -7,5 +7,5 @@ export interface PostLocationInput {
 }
 
 export interface PostLocationOutput {
-    location: Location;
+    location_TODO_CHANGE: Location;
 }

@@ -31,6 +31,6 @@ export class PostLocation extends LooselyAuthenticatedAPI<
             longitude: input.longitude,
         });
 
-        return { location: insertedLocation };
+        return { location_TODO_CHANGE: insertedLocation };
     }
 }

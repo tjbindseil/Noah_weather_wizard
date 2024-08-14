@@ -5,11 +5,15 @@ type PostedLocation = Omit<Location, 'id'>;
 
 export const insertLocation = async (
     pgClient: Client,
-    location: PostedLocation
+    location_TODO_CHANGE: PostedLocation
 ) => {
     const result = pgClient.query<Location>(
         'insert into location("name", "latitude", "longitude") values ($1, $2, $3) returning *',
-        [location.name, location.latitude, location.longitude]
+        [
+            location_TODO_CHANGE.name,
+            location_TODO_CHANGE.latitude,
+            location_TODO_CHANGE.longitude,
+        ]
     );
 
     return await result.one();
@@ -19,8 +23,8 @@ export const getLocations = async (pgClient: Client) => {
     const result = pgClient.query<Location>('SELECT * FROM location');
 
     const locations: Location[] = [];
-    for await (const location of result) {
-        locations.push(location);
+    for await (const location_TODO_CHANGE of result) {
+        locations.push(location_TODO_CHANGE);
     }
 
     return locations;
