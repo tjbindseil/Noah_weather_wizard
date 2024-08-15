@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "outDir": "./build",
+        "rootDirs": ["./src"],
+        "strict": true,
+
+        "downlevelIteration": true,
+
+        "esModuleInterop": true,
+
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["ES2021.String"]
+    }
+}
