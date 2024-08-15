@@ -21,7 +21,7 @@ we can use do things like:
 
 ### Weather Forecast Data
 In order to get the data and make the decision on where the weather is good/bad/ugly, we will be fetching data from the
-Naurtional Weather Service. This requires us to request metadata for a lat/long point, and then that metadata will provide
+National Weather Service. This requires us to request metadata for a lat/long point, and then that metadata will provide
 URLs that will in turn provide the forecast. (A sequence diagram would probably help here...).
 
 These APIs are rate limited, and the python POC would occasionally (ie inconsistantly and unrepeatably) fail. But, even if
