@@ -22,6 +22,8 @@ var hostAppConfig = {
         password: '',
         ssl: ts_postgres_1.SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 var laptopITConfig = {
     locationServiceHost: 'localhost',
@@ -34,6 +36,8 @@ var laptopITConfig = {
         password: '',
         ssl: ts_postgres_1.SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 var devAppConfig = {
     locationServiceHost: 'localhost',
@@ -46,6 +50,8 @@ var devAppConfig = {
         password: '',
         ssl: ts_postgres_1.SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 var testAppConfig = {
     locationServiceHost: 'localhost',
@@ -58,6 +64,8 @@ var testAppConfig = {
         password: '',
         ssl: ts_postgres_1.SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 var unitTestAppConfig = {
     locationServiceHost: 'localhost',
@@ -70,10 +78,9 @@ var unitTestAppConfig = {
         password: '',
         ssl: ts_postgres_1.SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
-// TODO a lot these fields are a function of the enum, ie
-// * bucketName: "dwf-3-pictures-prod",
-// * pictureDbConnectionConfig.database: "prod_picture_database",
 var prodAppConfig = {
     locationServiceHost: 'localhost',
     locationServicePort: 8080,
@@ -85,11 +92,12 @@ var prodAppConfig = {
         password: '',
         ssl: ts_postgres_1.SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 var appConfigSet = false;
 var app_config;
 var set_app_config = function () {
-    console.log('TJTAG SETTING app_config');
     var env_var = process.env.WW_ENV;
     if (env_var === Environment[Environment.host]) {
         app_config = hostAppConfig;
@@ -104,7 +112,6 @@ var set_app_config = function () {
         app_config = testAppConfig;
     }
     else if (env_var === Environment[Environment.unit_test]) {
-        console.log('TJTAG setting app_config to unit test app config');
         app_config = unitTestAppConfig;
     }
     else if (env_var === Environment[Environment.prod]) {

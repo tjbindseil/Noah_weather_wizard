@@ -20,6 +20,8 @@ export interface AppConfig {
         password: string;
         ssl: SSLMode.Disable | SSL | undefined;
     };
+    forecastServiceHost: string;
+    forecastServiceNumber: number;
 }
 
 const hostAppConfig: AppConfig = {
@@ -33,6 +35,8 @@ const hostAppConfig: AppConfig = {
         password: '',
         ssl: SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 
 const laptopITConfig: AppConfig = {
@@ -46,6 +50,8 @@ const laptopITConfig: AppConfig = {
         password: '',
         ssl: SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 
 const devAppConfig: AppConfig = {
@@ -59,6 +65,8 @@ const devAppConfig: AppConfig = {
         password: '',
         ssl: SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 
 const testAppConfig: AppConfig = {
@@ -72,6 +80,8 @@ const testAppConfig: AppConfig = {
         password: '',
         ssl: SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 
 const unitTestAppConfig: AppConfig = {
@@ -85,6 +95,8 @@ const unitTestAppConfig: AppConfig = {
         password: '',
         ssl: SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 
 const prodAppConfig: AppConfig = {
@@ -98,6 +110,8 @@ const prodAppConfig: AppConfig = {
         password: '',
         ssl: SSLMode.Disable,
     },
+    forecastServiceHost: 'localhost',
+    forecastServiceNumber: 8081,
 };
 
 let appConfigSet = false;

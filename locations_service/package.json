@@ -1,7 +1,7 @@
 {
-    "name": "ww_picture_service",
+    "name": "ww_location_service",
     "version": "1.0.0",
-    "description": "Server for DrawWithFriends app",
+    "description": "Location Server for the Weather Wizard",
     "main": "index.js",
     "scripts": {
         "test": "export WW_ENV='unit_test' && jest unit --config jest.unit.config.js",

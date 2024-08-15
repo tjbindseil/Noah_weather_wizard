@@ -10,5 +10,7 @@ export interface AppConfig {
         password: string;
         ssl: SSLMode.Disable | SSL | undefined;
     };
+    forecastServiceHost: string;
+    forecastServiceNumber: number;
 }
 export declare const get_app_config: () => AppConfig;
