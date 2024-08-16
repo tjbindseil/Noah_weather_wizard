@@ -42,14 +42,23 @@ const pool = createPool(
 );
 const pgContextController = new PGContextController(pool);
 
-app.get('/locations', (req: Request, res: Response, next: NextFunction) => {
-    new GetLocations().call(req, res, next, pgContextController);
+app.get('/forecasts', (req: Request, res: Response, next: NextFunction) => {
+    new GetForecasts().call(req, res, next, pgContextController);
 });
-app.post('/location', (req: Request, res: Response, next: NextFunction) => {
-    new PostLocation().call(req, res, next, pgContextController);
+app.get('/possible_forecasts', (req: Request, res: Response, next: NextFunction) => {
+    new GetPossibleForecasts().call(req, res, next, pgContextController);
 });
-app.delete('/location', (req: Request, res: Response, next: NextFunction) => {
-    new DeleteLocation().call(req, res, next, pool);
+app.get('/ranked_forecasts', (req: Request, res: Response, next: NextFunction) => {
+    new GetRankedForecasts().call(req, res, next, pgContextController);
+});
+app.get('/forecasts_hourly', (req: Request, res: Response, next: NextFunction) => {
+    new GetForecastsHourly().call(req, res, next, pgContextController);
+});
+app.get('/possible_forecasts_hourly', (req: Request, res: Response, next: NextFunction) => {
+    new GetPossibleForecastsHourly().call(req, res, next, pgContextController);
+});
+app.get('/ranked_forecasts_hourly', (req: Request, res: Response, next: NextFunction) => {
+    new GetRankedForecastsHourly().call(req, res, next, pgContextController);
 });
 
 app.use(myErrorHandler);
