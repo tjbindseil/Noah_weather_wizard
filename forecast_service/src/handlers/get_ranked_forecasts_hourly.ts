@@ -1,4 +1,5 @@
 import {
+    ForecastHourly,
     GetRankedForecastsHourlyInput,
     GetRankedForecastsHourlyOutput,
     _schema,
@@ -7,6 +8,7 @@ import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { getForecastsHourly } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
+import { Processor } from '../processors/processor';
 
 export class GetRankedForecastsHourly extends LooselyAuthenticatedAPI<
     GetRankedForecastsHourlyInput,
@@ -17,7 +19,9 @@ export class GetRankedForecastsHourly extends LooselyAuthenticatedAPI<
         return this.ajv.compile(_schema.GetRankedForecastsHourlyInput);
     }
 
-    constructor() {
+    constructor(
+        private readonly forecastHourlyProcessor: Processor<ForecastHourly>
+    ) {
         super();
     }
 
@@ -26,7 +30,10 @@ export class GetRankedForecastsHourly extends LooselyAuthenticatedAPI<
         pgClient: Client
     ): Promise<GetRankedForecastsHourlyOutput> {
         return {
-            forecastsHourly: await getForecastsHourly(pgClient, input.points),
+            forecastsHourly: this.forecastHourlyProcessor.rank(
+                await getForecastsHourly(pgClient, input.points),
+                input.formulaID
+            ),
         };
     }
 }

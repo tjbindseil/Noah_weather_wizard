@@ -1,4 +1,5 @@
 import {
+    Forecast,
     GetPossibleForecastsInput,
     GetPossibleForecastsOutput,
     _schema,
@@ -7,6 +8,7 @@ import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { getForecasts } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
+import { Processor } from '../processors/processor';
 
 export class GetPossibleForecasts extends LooselyAuthenticatedAPI<
     GetPossibleForecastsInput,
@@ -17,7 +19,7 @@ export class GetPossibleForecasts extends LooselyAuthenticatedAPI<
         return this.ajv.compile(_schema.GetPossibleForecastsInput);
     }
 
-    constructor() {
+    constructor(private readonly forecastProcessor: Processor<Forecast>) {
         super();
     }
 
@@ -26,8 +28,10 @@ export class GetPossibleForecasts extends LooselyAuthenticatedAPI<
         pgClient: Client
     ): Promise<GetPossibleForecastsOutput> {
         return {
-            // TODO apply possible processor here
-            forecasts: await getForecasts(pgClient, input.points),
+            forecasts: this.forecastProcessor.filter(
+                await getForecasts(pgClient, input.points),
+                input.criteriaID
+            ),
         };
     }
 }

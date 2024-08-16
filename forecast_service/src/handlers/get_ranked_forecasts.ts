@@ -1,4 +1,5 @@
 import {
+    Forecast,
     GetRankedForecastsInput,
     GetRankedForecastsOutput,
     _schema,
@@ -7,6 +8,7 @@ import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { getForecasts } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
+import { Processor } from '../processors/processor';
 
 export class GetRankedForecasts extends LooselyAuthenticatedAPI<
     GetRankedForecastsInput,
@@ -17,7 +19,7 @@ export class GetRankedForecasts extends LooselyAuthenticatedAPI<
         return this.ajv.compile(_schema.GetRankedForecastsInput);
     }
 
-    constructor() {
+    constructor(private readonly forecastProcessor: Processor<Forecast>) {
         super();
     }
 
@@ -26,8 +28,10 @@ export class GetRankedForecasts extends LooselyAuthenticatedAPI<
         pgClient: Client
     ): Promise<GetRankedForecastsOutput> {
         return {
-            // TODO apply ranked processor here
-            forecasts: await getForecasts(pgClient, input.points),
+            forecasts: this.forecastProcessor.rank(
+                await getForecasts(pgClient, input.points),
+                input.formulaID
+            ),
         };
     }
 }

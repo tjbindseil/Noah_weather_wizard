@@ -6,21 +6,21 @@ export abstract class Processor<T> {
 }
 
 export class ForecastProcessor extends Processor<Forecast> {
-    public rank(_forecast: Forecast[], _formulaID: number) {
+    public rank(_forecasts: Forecast[], _formulaID: number) {
         return [];
     }
 
-    public filter(_forecast: Forecast[], _criteriaID: number) {
+    public filter(_forecasts: Forecast[], _criteriaID: number) {
         return [];
     }
 }
 
 export class ForecastHourlyProcessor extends Processor<ForecastHourly> {
-    public rank(_forecastHourly: ForecastHourly[], _formulaID: number) {
+    public rank(_forecastsHourly: ForecastHourly[], _formulaID: number) {
         return [];
     }
 
-    public filter(_forecastHourly: ForecastHourly[], _criteriaID: number) {
+    public filter(_forecastsHourly: ForecastHourly[], _criteriaID: number) {
         return [];
     }
 }

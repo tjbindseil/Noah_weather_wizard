@@ -13,6 +13,10 @@ import {
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
 import { createPool } from 'generic-pool';
+import {
+    ForecastHourlyProcessor,
+    ForecastProcessor,
+} from './processors/processor';
 
 const app: Express = express();
 
@@ -48,6 +52,9 @@ const pool = createPool(
     }
 );
 const pgContextController = new PGContextController(pool);
+
+const forecastHourlyProcessor = new ForecastHourlyProcessor();
+const forecastProcessor = new ForecastProcessor();
 
 app.get('/forecasts', (req: Request, res: Response, next: NextFunction) => {
     new GetForecasts().call(req, res, next, pgContextController);
