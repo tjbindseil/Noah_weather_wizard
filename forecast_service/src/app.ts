@@ -2,7 +2,14 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http';
 import { myErrorHandler, PGContextController } from 'ww-3-api-tjb';
-import { DeleteLocation, GetLocations, PostLocation } from './handlers/index';
+import {
+    GetForecasts,
+    GetForecastsHourly,
+    GetPossibleForecasts,
+    GetRankedForecasts,
+    GetPossibleForecastsHourly,
+    GetRankedForecastsHourly,
+} from './handlers/index';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
 import { createPool } from 'generic-pool';
@@ -45,21 +52,46 @@ const pgContextController = new PGContextController(pool);
 app.get('/forecasts', (req: Request, res: Response, next: NextFunction) => {
     new GetForecasts().call(req, res, next, pgContextController);
 });
-app.get('/possible_forecasts', (req: Request, res: Response, next: NextFunction) => {
-    new GetPossibleForecasts().call(req, res, next, pgContextController);
-});
-app.get('/ranked_forecasts', (req: Request, res: Response, next: NextFunction) => {
-    new GetRankedForecasts().call(req, res, next, pgContextController);
-});
-app.get('/forecasts_hourly', (req: Request, res: Response, next: NextFunction) => {
-    new GetForecastsHourly().call(req, res, next, pgContextController);
-});
-app.get('/possible_forecasts_hourly', (req: Request, res: Response, next: NextFunction) => {
-    new GetPossibleForecastsHourly().call(req, res, next, pgContextController);
-});
-app.get('/ranked_forecasts_hourly', (req: Request, res: Response, next: NextFunction) => {
-    new GetRankedForecastsHourly().call(req, res, next, pgContextController);
-});
+app.get(
+    '/possible_forecasts',
+    (req: Request, res: Response, next: NextFunction) => {
+        new GetPossibleForecasts().call(req, res, next, pgContextController);
+    }
+);
+app.get(
+    '/ranked_forecasts',
+    (req: Request, res: Response, next: NextFunction) => {
+        new GetRankedForecasts().call(req, res, next, pgContextController);
+    }
+);
+app.get(
+    '/forecasts_hourly',
+    (req: Request, res: Response, next: NextFunction) => {
+        new GetForecastsHourly().call(req, res, next, pgContextController);
+    }
+);
+app.get(
+    '/possible_forecasts_hourly',
+    (req: Request, res: Response, next: NextFunction) => {
+        new GetPossibleForecastsHourly().call(
+            req,
+            res,
+            next,
+            pgContextController
+        );
+    }
+);
+app.get(
+    '/ranked_forecasts_hourly',
+    (req: Request, res: Response, next: NextFunction) => {
+        new GetRankedForecastsHourly().call(
+            req,
+            res,
+            next,
+            pgContextController
+        );
+    }
+);
 
 app.use(myErrorHandler);
 
