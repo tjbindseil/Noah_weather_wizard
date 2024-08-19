@@ -29,7 +29,7 @@ export class GetRankedForecasts extends LooselyAuthenticatedAPI<
     ): Promise<GetRankedForecastsOutput> {
         return {
             forecasts: this.forecastProcessor.rank(
-                await getForecasts(pgClient, input.points),
+                await getForecasts(pgClient, input.pointIDs),
                 input.formulaID
             ),
         };

@@ -35,7 +35,6 @@ export {
     GetRankedForecastsHourlyInput,
     GetRankedForecastsHourlyOutput,
 } from './forecast_service_models/get_ranked_forecasts_hourly';
-export { LatLong } from './forecast_service_models/lat_long';
 export { Forecast, ForecastHourly } from './forecast_service_models/forecast';
 import _schema from './schema_validation/_schema';
 export { _schema };

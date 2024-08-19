@@ -26,7 +26,7 @@ export class GetForecastsHourly extends LooselyAuthenticatedAPI<
         pgClient: Client
     ): Promise<GetForecastsHourlyOutput> {
         return {
-            forecastsHourly: await getForecastsHourly(pgClient, input.points),
+            forecastsHourly: await getForecastsHourly(pgClient, input.pointIDs),
         };
     }
 }

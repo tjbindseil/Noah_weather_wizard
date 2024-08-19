@@ -1,8 +1,7 @@
 import { ForecastHourly } from './forecast';
-import { LatLong } from './lat_long';
 
 export interface GetForecastsHourlyInput {
-    points: LatLong[];
+    pointIDs: number[];
 }
 
 export interface GetForecastsHourlyOutput {

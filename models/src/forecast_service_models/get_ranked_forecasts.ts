@@ -1,8 +1,7 @@
 import { Forecast } from './forecast';
-import { LatLong } from './lat_long';
 
 export interface GetRankedForecastsInput {
-    points: LatLong[];
+    pointIDs: number[];
     formulaID: number;
 }
 

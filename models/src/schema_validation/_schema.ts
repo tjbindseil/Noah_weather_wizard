@@ -62,30 +62,12 @@ const schema = {
             properties: { sunny_hourly: { type: 'boolean' } },
             required: ['sunny_hourly'],
         },
-        LatLong: {
-            type: 'object',
-            properties: {
-                latitude: { type: 'number' },
-                longitude: { type: 'number' },
-            },
-            required: ['latitude', 'longitude'],
-        },
         GetForecastsInput: {
             type: 'object',
             properties: {
-                points: {
-                    type: 'array',
-                    items: {
-                        type: 'object',
-                        properties: {
-                            latitude: { type: 'number' },
-                            longitude: { type: 'number' },
-                        },
-                        required: ['latitude', 'longitude'],
-                    },
-                },
+                pointIDs: { type: 'array', items: { type: 'number' } },
             },
-            required: ['points'],
+            required: ['pointIDs'],
         },
         GetForecastsOutput: {
             type: 'object',
@@ -104,20 +86,10 @@ const schema = {
         GetPossibleForecastsInput: {
             type: 'object',
             properties: {
-                points: {
-                    type: 'array',
-                    items: {
-                        type: 'object',
-                        properties: {
-                            latitude: { type: 'number' },
-                            longitude: { type: 'number' },
-                        },
-                        required: ['latitude', 'longitude'],
-                    },
-                },
+                pointIDs: { type: 'array', items: { type: 'number' } },
                 criteriaID: { type: 'number' },
             },
-            required: ['criteriaID', 'points'],
+            required: ['criteriaID', 'pointIDs'],
         },
         GetPossibleForecastsOutput: {
             type: 'object',
@@ -136,20 +108,10 @@ const schema = {
         GetRankedForecastsInput: {
             type: 'object',
             properties: {
-                points: {
-                    type: 'array',
-                    items: {
-                        type: 'object',
-                        properties: {
-                            latitude: { type: 'number' },
-                            longitude: { type: 'number' },
-                        },
-                        required: ['latitude', 'longitude'],
-                    },
-                },
+                pointIDs: { type: 'array', items: { type: 'number' } },
                 formulaID: { type: 'number' },
             },
-            required: ['formulaID', 'points'],
+            required: ['formulaID', 'pointIDs'],
         },
         GetRankedForecastsOutput: {
             type: 'object',
@@ -168,19 +130,9 @@ const schema = {
         GetForecastsHourlyInput: {
             type: 'object',
             properties: {
-                points: {
-                    type: 'array',
-                    items: {
-                        type: 'object',
-                        properties: {
-                            latitude: { type: 'number' },
-                            longitude: { type: 'number' },
-                        },
-                        required: ['latitude', 'longitude'],
-                    },
-                },
+                pointIDs: { type: 'array', items: { type: 'number' } },
             },
-            required: ['points'],
+            required: ['pointIDs'],
         },
         GetForecastsHourlyOutput: {
             type: 'object',
@@ -199,20 +151,10 @@ const schema = {
         GetPossibleForecastsHourlyInput: {
             type: 'object',
             properties: {
-                points: {
-                    type: 'array',
-                    items: {
-                        type: 'object',
-                        properties: {
-                            latitude: { type: 'number' },
-                            longitude: { type: 'number' },
-                        },
-                        required: ['latitude', 'longitude'],
-                    },
-                },
+                pointIDs: { type: 'array', items: { type: 'number' } },
                 criteriaID: { type: 'number' },
             },
-            required: ['criteriaID', 'points'],
+            required: ['criteriaID', 'pointIDs'],
         },
         GetPossibleForecastsHourlyOutput: {
             type: 'object',
@@ -231,20 +173,10 @@ const schema = {
         GetRankedForecastsHourlyInput: {
             type: 'object',
             properties: {
-                points: {
-                    type: 'array',
-                    items: {
-                        type: 'object',
-                        properties: {
-                            latitude: { type: 'number' },
-                            longitude: { type: 'number' },
-                        },
-                        required: ['latitude', 'longitude'],
-                    },
-                },
+                pointIDs: { type: 'array', items: { type: 'number' } },
                 formulaID: { type: 'number' },
             },
-            required: ['formulaID', 'points'],
+            required: ['formulaID', 'pointIDs'],
         },
         GetRankedForecastsHourlyOutput: {
             type: 'object',

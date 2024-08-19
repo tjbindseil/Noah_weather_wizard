@@ -62,13 +62,23 @@ app.get('/forecasts', (req: Request, res: Response, next: NextFunction) => {
 app.get(
     '/possible_forecasts',
     (req: Request, res: Response, next: NextFunction) => {
-        new GetPossibleForecasts().call(req, res, next, pgContextController);
+        new GetPossibleForecasts(forecastProcessor).call(
+            req,
+            res,
+            next,
+            pgContextController
+        );
     }
 );
 app.get(
     '/ranked_forecasts',
     (req: Request, res: Response, next: NextFunction) => {
-        new GetRankedForecasts().call(req, res, next, pgContextController);
+        new GetRankedForecasts(forecastProcessor).call(
+            req,
+            res,
+            next,
+            pgContextController
+        );
     }
 );
 app.get(
@@ -80,7 +90,7 @@ app.get(
 app.get(
     '/possible_forecasts_hourly',
     (req: Request, res: Response, next: NextFunction) => {
-        new GetPossibleForecastsHourly().call(
+        new GetPossibleForecastsHourly(forecastHourlyProcessor).call(
             req,
             res,
             next,
@@ -91,7 +101,7 @@ app.get(
 app.get(
     '/ranked_forecasts_hourly',
     (req: Request, res: Response, next: NextFunction) => {
-        new GetRankedForecastsHourly().call(
+        new GetRankedForecastsHourly(forecastHourlyProcessor).call(
             req,
             res,
             next,

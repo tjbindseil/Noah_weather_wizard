@@ -29,7 +29,7 @@ export class GetPossibleForecasts extends LooselyAuthenticatedAPI<
     ): Promise<GetPossibleForecastsOutput> {
         return {
             forecasts: this.forecastProcessor.filter(
-                await getForecasts(pgClient, input.points),
+                await getForecasts(pgClient, input.pointIDs),
                 input.criteriaID
             ),
         };

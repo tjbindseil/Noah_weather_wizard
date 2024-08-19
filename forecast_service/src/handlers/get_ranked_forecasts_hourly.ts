@@ -31,7 +31,7 @@ export class GetRankedForecastsHourly extends LooselyAuthenticatedAPI<
     ): Promise<GetRankedForecastsHourlyOutput> {
         return {
             forecastsHourly: this.forecastHourlyProcessor.rank(
-                await getForecastsHourly(pgClient, input.points),
+                await getForecastsHourly(pgClient, input.pointIDs),
                 input.formulaID
             ),
         };

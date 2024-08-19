@@ -61,7 +61,8 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 
 
 ## Forecast data fetching
-* input to forecast apis needs to be location ID
+* input to forecast apis needs to be location ID - done
+* change location to ... spot?
 * fetch polygonID as a part of location posting
 * save bew polygons as part of location posting
 * ensure polygons are consistent

@@ -1,8 +1,7 @@
 import { Forecast } from './forecast';
-import { LatLong } from './lat_long';
 
 export interface GetPossibleForecastsInput {
-    points: LatLong[];
+    pointIDs: number[];
     criteriaID: number;
 }
 
