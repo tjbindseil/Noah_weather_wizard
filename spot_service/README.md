@@ -1,8 +1,8 @@
-# Locations Plan
-Well, this is basically a CRUD service for "locations".
+# Spots Plan
+Well, this is basically a CRUD service for "spots".
 
-## Location
-A location is:
+## Spot
+A spot is:
 ```
 {
   name: string,
@@ -11,7 +11,7 @@ A location is:
 }
 ```
 
-In addition, there could be groupings of locations, hidden locations, etc. But, initially, just a table here will do.
+In addition, there could be groupings of spots, hidden spots, etc. But, initially, just a table here will do.
 
 
 ## Implementation

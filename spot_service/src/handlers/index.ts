@@ -1,3 +1,3 @@
-export * from './get_locations';
-export * from './post_location';
-export * from './delete_location';
+export * from './get_spots';
+export * from './post_spot';
+export * from './delete_spot';
