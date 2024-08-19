@@ -1,38 +1,31 @@
 import { Client } from 'ts-postgres';
-import { Location } from 'ww-3-models-tjb';
+import { Spot } from 'ww-3-models-tjb';
 
-type PostedLocation = Omit<Location, 'id'>;
+type PostedSpot = Omit<Spot, 'id'>;
 
-export const insertLocation = async (
-    pgClient: Client,
-    location_TODO_CHANGE: PostedLocation
-) => {
-    const result = pgClient.query<Location>(
-        'insert into location("name", "latitude", "longitude") values ($1, $2, $3) returning *',
-        [
-            location_TODO_CHANGE.name,
-            location_TODO_CHANGE.latitude,
-            location_TODO_CHANGE.longitude,
-        ]
+export const insertSpot = async (pgClient: Client, spot: PostedSpot) => {
+    const result = pgClient.query<Spot>(
+        'insert into spot("name", "latitude", "longitude") values ($1, $2, $3) returning *',
+        [spot.name, spot.latitude, spot.longitude]
     );
 
     return await result.one();
 };
 
-export const getLocations = async (pgClient: Client) => {
-    const result = pgClient.query<Location>('SELECT * FROM location');
+export const getSpots = async (pgClient: Client) => {
+    const result = pgClient.query<Spot>('SELECT * FROM spot');
 
-    const locations: Location[] = [];
-    for await (const location_TODO_CHANGE of result) {
-        locations.push(location_TODO_CHANGE);
+    const spots: Spot[] = [];
+    for await (const spot of result) {
+        spots.push(spot);
     }
 
-    return locations;
+    return spots;
 };
 
-export const deleteLocation = async (pgClient: Client, id: number) => {
-    const result = pgClient.query<Location>(
-        'DELETE FROM location WHERE id = $1 returning *',
+export const deleteSpot = async (pgClient: Client, id: number) => {
+    const result = pgClient.query<Spot>(
+        'DELETE FROM spot WHERE id = $1 returning *',
         [id]
     );
 

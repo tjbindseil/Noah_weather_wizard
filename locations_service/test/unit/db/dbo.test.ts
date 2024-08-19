@@ -1,17 +1,13 @@
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
 import { createPool } from 'generic-pool';
-import { Location } from 'ww-3-models-tjb';
-import {
-    deleteLocation,
-    getLocations,
-    insertLocation,
-} from '../../../src/db/dbo';
+import { Spot } from 'ww-3-models-tjb';
+import { deleteSpot, getSpots, insertSpot } from '../../../src/db/dbo';
 
 // these tests will actually interface with a pg database on my local machine
 // see src/db/index.ts for a command to make the database
 
-type PostedLocation = Omit<Location, 'id'>;
+type PostedSpot = Omit<Spot, 'id'>;
 
 describe('dbo tests', () => {
     let pgClient: Client;
@@ -19,7 +15,7 @@ describe('dbo tests', () => {
         {
             create: async () => {
                 const client = new Client(
-                    get_app_config().locationDbConnectionConfig
+                    get_app_config().spotDbConnectionConfig
                 );
                 await client.connect();
                 client.on('error', console.log);
@@ -37,75 +33,71 @@ describe('dbo tests', () => {
         }
     );
 
-    const longsPeakLocation: PostedLocation = {
+    const longsPeakSpot: PostedSpot = {
         name: 'Longs Peak',
         latitude: 40.255014,
         longitude: -105.615115,
     };
-    const crestoneNeedleLocation: PostedLocation = {
+    const crestoneNeedleSpot: PostedSpot = {
         name: 'Crestone Needle',
         latitude: 37.964722,
         longitude: -105.576675,
     };
-    const mtWhitneyLocation: PostedLocation = {
+    const mtWhitneySpot: PostedSpot = {
         name: 'Mount Whitney',
         latitude: 36.578581,
         longitude: -118.291995,
     };
-    const expectedLocations = [
-        longsPeakLocation,
-        crestoneNeedleLocation,
-        mtWhitneyLocation,
-    ];
+    const expectedSpots = [longsPeakSpot, crestoneNeedleSpot, mtWhitneySpot];
 
     beforeAll(async () => {
         pgClient = await pool.acquire();
 
-        const locations = await getLocations(pgClient);
-        if (locations.length > 0) {
+        const spots = await getSpots(pgClient);
+        if (spots.length > 0) {
             throw Error('Unit test table is not empty! Abandoning tests');
         }
     });
 
     beforeEach(async () => {
-        for (let i = 0; i < expectedLocations.length; ++i) {
-            await insertLocation(pgClient, expectedLocations[i]);
+        for (let i = 0; i < expectedSpots.length; ++i) {
+            await insertSpot(pgClient, expectedSpots[i]);
         }
     });
 
-    it('can insert a location', async () => {
-        const initialLocations = await getLocations(pgClient);
-        expect(initialLocations.length).toEqual(expectedLocations.length);
+    it('can insert a spot', async () => {
+        const initialSpots = await getSpots(pgClient);
+        expect(initialSpots.length).toEqual(expectedSpots.length);
 
-        const grandTetonLocation = {
+        const grandTetonSpot = {
             name: 'Grand Teton',
             latitude: 43.741208,
             longitude: -110.802414,
         };
 
-        await insertLocation(pgClient, grandTetonLocation);
+        await insertSpot(pgClient, grandTetonSpot);
 
-        const finalLocations = await getLocations(pgClient);
-        expect(finalLocations.length).toEqual(expectedLocations.length + 1);
+        const finalSpots = await getSpots(pgClient);
+        expect(finalSpots.length).toEqual(expectedSpots.length + 1);
     });
 
-    it('can get all locations', async () => {
-        const initialLocations = await getLocations(pgClient);
-        expect(initialLocations.length).toEqual(expectedLocations.length);
+    it('can get all spots', async () => {
+        const initialSpots = await getSpots(pgClient);
+        expect(initialSpots.length).toEqual(expectedSpots.length);
     });
 
-    it('can delete a location', async () => {
-        const initialLocations = await getLocations(pgClient);
-        expect(initialLocations.length).toEqual(expectedLocations.length);
+    it('can delete a spot', async () => {
+        const initialSpots = await getSpots(pgClient);
+        expect(initialSpots.length).toEqual(expectedSpots.length);
 
-        await deleteLocation(pgClient, initialLocations[0].id);
+        await deleteSpot(pgClient, initialSpots[0].id);
 
-        const finalLocations = await getLocations(pgClient);
-        expect(finalLocations.length).toEqual(expectedLocations.length - 1);
+        const finalSpots = await getSpots(pgClient);
+        expect(finalSpots.length).toEqual(expectedSpots.length - 1);
     });
 
     afterEach(async () => {
-        await pgClient.query<Location>('TRUNCATE location');
+        await pgClient.query<Spot>('TRUNCATE spot');
     });
 
     afterAll(async () => {

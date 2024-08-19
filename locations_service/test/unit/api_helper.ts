@@ -1,18 +1,18 @@
-import { GetLocations, PostLocation, DeleteLocation } from '../../src/handlers';
+import { GetSpots, PostSpot, DeleteSpot } from '../../src/handlers';
 
-export class GetLocations_WithValidatedUserSetter extends GetLocations {
+export class GetSpots_WithValidatedUserSetter extends GetSpots {
     public setValidatedUsername(validatedUsername: string) {
         this.validatedUsername = validatedUsername;
     }
 }
 
-export class PostLocation_WithValidatedUserSetter extends PostLocation {
+export class PostSpot_WithValidatedUserSetter extends PostSpot {
     public setValidatedUsername(validatedUsername: string) {
         this.validatedUsername = validatedUsername;
     }
 }
 
-export class DeleteLocation_WithValidatedUserSetter extends DeleteLocation {
+export class DeleteSpot_WithValidatedUserSetter extends DeleteSpot {
     public setValidatedUsername(validatedUsername: string) {
         this.validatedUsername = validatedUsername;
     }

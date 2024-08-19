@@ -1,20 +1,16 @@
-import {
-    PostLocationInput,
-    PostLocationOutput,
-    _schema,
-} from 'ww-3-models-tjb';
+import { PostSpotInput, PostSpotOutput, _schema } from 'ww-3-models-tjb';
 import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
-import { insertLocation } from '../db/dbo';
+import { insertSpot } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 
-export class PostLocation extends LooselyAuthenticatedAPI<
-    PostLocationInput,
-    PostLocationOutput,
+export class PostSpot extends LooselyAuthenticatedAPI<
+    PostSpotInput,
+    PostSpotOutput,
     Client
 > {
     public provideInputValidationSchema(): ValidateFunction {
-        return this.ajv.compile(_schema.PostLocationInput);
+        return this.ajv.compile(_schema.PostSpotInput);
     }
 
     constructor() {
@@ -22,17 +18,17 @@ export class PostLocation extends LooselyAuthenticatedAPI<
     }
 
     public async process(
-        input: PostLocationInput,
+        input: PostSpotInput,
         pgClient: Client
-    ): Promise<PostLocationOutput> {
+    ): Promise<PostSpotOutput> {
         // first, take the lat/long and get some (polygon ID) from NOAA API
 
-        const insertedLocation = await insertLocation(pgClient, {
+        const insertedSpot = await insertSpot(pgClient, {
             name: input.name,
             latitude: input.latitude,
             longitude: input.longitude,
         });
 
-        return { location_TODO_CHANGE: insertedLocation };
+        return { spot: insertedSpot };
     }
 }

@@ -1,4 +1,4 @@
-export class Location {
+export class Spot {
     constructor(
         public readonly id: number,
         public readonly name: string,

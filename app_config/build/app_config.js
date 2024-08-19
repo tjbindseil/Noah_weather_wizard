@@ -12,9 +12,9 @@ var Environment;
     Environment[Environment["prod"] = 5] = "prod";
 })(Environment || (Environment = {}));
 var hostAppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww',
         host: 'localhost',
         port: 5469,
@@ -26,9 +26,9 @@ var hostAppConfig = {
     forecastServiceNumber: 8081,
 };
 var laptopITConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww-laptop',
         host: 'localhost',
         port: 5469,
@@ -40,9 +40,9 @@ var laptopITConfig = {
     forecastServiceNumber: 8081,
 };
 var devAppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww-dev',
         host: 'localhost',
         port: 5469,
@@ -54,9 +54,9 @@ var devAppConfig = {
     forecastServiceNumber: 8081,
 };
 var testAppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww-test',
         host: 'localhost',
         port: 5469,
@@ -68,9 +68,9 @@ var testAppConfig = {
     forecastServiceNumber: 8081,
 };
 var unitTestAppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww-unit-test',
         host: 'localhost',
         port: 5469,
@@ -82,9 +82,9 @@ var unitTestAppConfig = {
     forecastServiceNumber: 8081,
 };
 var prodAppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww-prod',
         host: 'localhost',
         port: 5469,

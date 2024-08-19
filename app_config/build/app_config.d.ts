@@ -1,8 +1,8 @@
 import { SSL, SSLMode } from 'ts-postgres';
 export interface AppConfig {
-    locationServiceHost: string;
-    locationServicePort: number;
-    locationDbConnectionConfig: {
+    spotServiceHost: string;
+    spotServicePort: number;
+    spotDbConnectionConfig: {
         database: string;
         host: string;
         port: number;

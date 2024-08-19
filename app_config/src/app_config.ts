@@ -10,9 +10,9 @@ enum Environment {
 }
 
 export interface AppConfig {
-    locationServiceHost: string;
-    locationServicePort: number;
-    locationDbConnectionConfig: {
+    spotServiceHost: string;
+    spotServicePort: number;
+    spotDbConnectionConfig: {
         database: string;
         host: string;
         port: number;
@@ -25,9 +25,9 @@ export interface AppConfig {
 }
 
 const hostAppConfig: AppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww',
         host: 'localhost',
         port: 5469,
@@ -40,9 +40,9 @@ const hostAppConfig: AppConfig = {
 };
 
 const laptopITConfig: AppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww-laptop',
         host: 'localhost',
         port: 5469,
@@ -55,9 +55,9 @@ const laptopITConfig: AppConfig = {
 };
 
 const devAppConfig: AppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww-dev',
         host: 'localhost',
         port: 5469,
@@ -70,9 +70,9 @@ const devAppConfig: AppConfig = {
 };
 
 const testAppConfig: AppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww-test',
         host: 'localhost',
         port: 5469,
@@ -85,9 +85,9 @@ const testAppConfig: AppConfig = {
 };
 
 const unitTestAppConfig: AppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww-unit-test',
         host: 'localhost',
         port: 5469,
@@ -100,9 +100,9 @@ const unitTestAppConfig: AppConfig = {
 };
 
 const prodAppConfig: AppConfig = {
-    locationServiceHost: 'localhost',
-    locationServicePort: 8080,
-    locationDbConnectionConfig: {
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
         database: 'ww-prod',
         host: 'localhost',
         port: 5469,

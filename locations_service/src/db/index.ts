@@ -1,5 +1,5 @@
-// create location table sql:
-// CREATE TABLE location (
+// create spot table sql:
+// CREATE TABLE spot (
 //      "id" serial PRIMARY KEY,
 //      "name" varchar (256) NOT NULL,
 //      "latitude" real NOT NULL,

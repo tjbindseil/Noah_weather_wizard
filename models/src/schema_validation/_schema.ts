@@ -1,11 +1,21 @@
 const schema = {
     $schema: 'http://json-schema.org/draft-07/schema#',
     definitions: {
-        GetLocationsInput: { type: 'object' },
-        GetLocationsOutput: {
+        Spot: {
             type: 'object',
             properties: {
-                locations: {
+                id: { type: 'number' },
+                name: { type: 'string' },
+                latitude: { type: 'number' },
+                longitude: { type: 'number' },
+            },
+            required: ['id', 'latitude', 'longitude', 'name'],
+        },
+        GetSpotsInput: { type: 'object' },
+        GetSpotsOutput: {
+            type: 'object',
+            properties: {
+                spots: {
                     type: 'array',
                     items: {
                         type: 'object',
@@ -19,9 +29,9 @@ const schema = {
                     },
                 },
             },
-            required: ['locations'],
+            required: ['spots'],
         },
-        PostLocationInput: {
+        PostSpotInput: {
             type: 'object',
             properties: {
                 name: { type: 'string' },
@@ -30,10 +40,10 @@ const schema = {
             },
             required: ['latitude', 'longitude', 'name'],
         },
-        PostLocationOutput: {
+        PostSpotOutput: {
             type: 'object',
             properties: {
-                location_TODO_CHANGE: {
+                spot: {
                     type: 'object',
                     properties: {
                         id: { type: 'number' },
@@ -44,14 +54,14 @@ const schema = {
                     required: ['id', 'latitude', 'longitude', 'name'],
                 },
             },
-            required: ['location_TODO_CHANGE'],
+            required: ['spot'],
         },
-        DeleteLocationInput: {
+        DeleteSpotInput: {
             type: 'object',
             properties: { id: { type: 'number' } },
             required: ['id'],
         },
-        DeleteLocationOutput: { type: 'object' },
+        DeleteSpotOutput: { type: 'object' },
         Forecast: {
             type: 'object',
             properties: { sunny: { type: 'boolean' } },

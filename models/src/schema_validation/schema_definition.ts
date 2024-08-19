@@ -1,6 +1,6 @@
-export { GetLocationsInput } from '../location_service_models/get_locations';
-export { PostLocationInput } from '../location_service_models/post_location';
-export { DeleteLocationInput } from '../location_service_models/delete_location';
+export { GetSpotsInput } from '../spot_service_models/get_spots';
+export { PostSpotInput } from '../spot_service_models/post_spot';
+export { DeleteSpotInput } from '../spot_service_models/delete_spot';
 export { GetForecastsInput } from '../forecast_service_models/get_forecasts';
 export { GetPossibleForecastsInput } from '../forecast_service_models/get_possible_forecasts';
 export { GetRankedForecastsInput } from '../forecast_service_models/get_ranked_forecasts';

@@ -1,27 +1,23 @@
-import {
-    DeleteLocationInput,
-    DeleteLocationOutput,
-    _schema,
-} from 'ww-3-models-tjb';
+import { DeleteSpotInput, DeleteSpotOutput, _schema } from 'ww-3-models-tjb';
 import { StrictlyAuthenticatedAPI } from 'ww-3-api-tjb';
-import { deleteLocation } from '../db/dbo';
+import { deleteSpot } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 
-export class DeleteLocation extends StrictlyAuthenticatedAPI<
-    DeleteLocationInput,
-    DeleteLocationOutput,
+export class DeleteSpot extends StrictlyAuthenticatedAPI<
+    DeleteSpotInput,
+    DeleteSpotOutput,
     Client
 > {
     public provideInputValidationSchema(): ValidateFunction {
-        return this.ajv.compile(_schema.DeleteLocationInput);
+        return this.ajv.compile(_schema.DeleteSpotInput);
     }
 
     public async process(
-        input: DeleteLocationInput,
+        input: DeleteSpotInput,
         pgClient: Client
-    ): Promise<DeleteLocationOutput> {
-        await deleteLocation(pgClient, input.id);
+    ): Promise<DeleteSpotOutput> {
+        await deleteSpot(pgClient, input.id);
 
         return {};
     }

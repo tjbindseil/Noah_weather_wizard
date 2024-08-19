@@ -2,7 +2,7 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http';
 import { myErrorHandler, PGContextController } from 'ww-3-api-tjb';
-import { DeleteLocation, GetLocations, PostLocation } from './handlers/index';
+import { DeleteSpot, GetSpots, PostSpot } from './handlers/index';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
 import { createPool } from 'generic-pool';
@@ -22,9 +22,7 @@ app.get('/', (_req: Request, res: Response, _next: NextFunction) => {
 const pool = createPool(
     {
         create: async () => {
-            const client = new Client(
-                get_app_config().locationDbConnectionConfig
-            );
+            const client = new Client(get_app_config().spotDbConnectionConfig);
             await client.connect();
             client.on('error', console.log);
             return client;
@@ -42,14 +40,14 @@ const pool = createPool(
 );
 const pgContextController = new PGContextController(pool);
 
-app.get('/locations', (req: Request, res: Response, next: NextFunction) => {
-    new GetLocations().call(req, res, next, pgContextController);
+app.get('/spots', (req: Request, res: Response, next: NextFunction) => {
+    new GetSpots().call(req, res, next, pgContextController);
 });
-app.post('/location', (req: Request, res: Response, next: NextFunction) => {
-    new PostLocation().call(req, res, next, pgContextController);
+app.post('/spot', (req: Request, res: Response, next: NextFunction) => {
+    new PostSpot().call(req, res, next, pgContextController);
 });
-app.delete('/location', (req: Request, res: Response, next: NextFunction) => {
-    new DeleteLocation().call(req, res, next, pool);
+app.delete('/spot', (req: Request, res: Response, next: NextFunction) => {
+    new DeleteSpot().call(req, res, next, pool);
 });
 
 app.use(myErrorHandler);

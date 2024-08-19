@@ -1,16 +1,10 @@
-export { Location } from './location_service_models/location';
+export { Spot } from './spot_service_models/spot';
+export { GetSpotsInput, GetSpotsOutput } from './spot_service_models/get_spots';
+export { PostSpotInput, PostSpotOutput } from './spot_service_models/post_spot';
 export {
-    GetLocationsInput,
-    GetLocationsOutput,
-} from './location_service_models/get_locations';
-export {
-    PostLocationInput,
-    PostLocationOutput,
-} from './location_service_models/post_location';
-export {
-    DeleteLocationInput,
-    DeleteLocationOutput,
-} from './location_service_models/delete_location';
+    DeleteSpotInput,
+    DeleteSpotOutput,
+} from './spot_service_models/delete_spot';
 export {
     GetForecastsInput,
     GetForecastsOutput,
