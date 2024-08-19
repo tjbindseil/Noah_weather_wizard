@@ -527,3 +527,7 @@ The above is some rambly thoughts I had when I realized the importance of the in
 It appears that it is possible to determine which polygon a lat/long location belongs to based on the polygon's vertices,
 but I think that will be difficult to code, and honestly not worth the trade off of remembering the location's polygon's ID
 upon initially getting it from NOAA. Assuming that the polygons are constant...
+
+#### Gotcha
+Well, this sort of steps on one thing. Now, instead of forecast service accepting a list of lat/long points,
+it needs to accept a list of locations.

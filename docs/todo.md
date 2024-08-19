@@ -56,3 +56,18 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
   return appConfigMap.get(env_var);
 };
 ```
+
+
+
+
+## Forecast data fetching
+* input to forecast apis needs to be location ID
+* fetch polygonID as a part of location posting
+* save bew polygons as part of location posting
+* ensure polygons are consistent
+* write up forecast model
+* on a four hour interval, fetch forecast for each polygon
+* wire up forecast provider
+* write up a forecast hourly model
+* on a four hour interval, fetch forecast hourly for each polygon
+* wire up forecast hourly provider
