@@ -25,6 +25,8 @@ export class PostLocation extends LooselyAuthenticatedAPI<
         input: PostLocationInput,
         pgClient: Client
     ): Promise<PostLocationOutput> {
+        // first, take the lat/long and get some (polygon ID) from NOAA API
+
         const insertedLocation = await insertLocation(pgClient, {
             name: input.name,
             latitude: input.latitude,

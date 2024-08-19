@@ -6,8 +6,8 @@ export const getForecasts = async (
     _latLongs: LatLong[]
 ): Promise<Forecast[]> => {
     // ... hmm should we make multiple requests? nope, find max and min somehow?
-    const result = pgClient.query<Forecast>(
-        'select * from forecast where 
+    // const result = pgClient.query<Forecast>(
+    // 'select * from forecast where
     return [];
     //     const result = pgClient.query<Location>(
     //         'insert into location("name", "latitude", "longitude") values ($1, $2, $3) returning *',

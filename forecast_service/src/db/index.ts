@@ -9,7 +9,8 @@
 // create polygon table sql:
 // CREATE TABLE polygon (
 //      "id" serial PRIMARY KEY,
-//      "lat
+//      "url" varchar (256) NOT NULL
+// );
 //
 // create forecastHourly table sql:
 // CREATE TABLE forecastHourly (
