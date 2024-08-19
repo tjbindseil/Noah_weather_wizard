@@ -33,9 +33,7 @@ app.get('/', (_req: Request, res: Response, _next: NextFunction) => {
 const pool = createPool(
     {
         create: async () => {
-            const client = new Client(
-                get_app_config().locationDbConnectionConfig
-            );
+            const client = new Client(get_app_config().spotDbConnectionConfig);
             await client.connect();
             client.on('error', console.log);
             return client;

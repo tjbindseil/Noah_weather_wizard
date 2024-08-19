@@ -14,15 +14,15 @@ What is interesting (and currently undecided), is the details of this.
 
 The forecast model will be returned. See below. There are two obvious options here:
 
-### Location ID
+### Spot ID
 ### Latitude, Longitude
 
 ### Answer Why not both??
 The draw back to both is the duplicity of API classes that need to be made.
-The should be quick and just have the location ID version all call location service to get the lat/long, then call in to the lat/long apis
+The should be quick and just have the spot ID version all call spot service to get the lat/long, then call in to the lat/long apis
 composition
 but, even better, not using
-just have the location be passed as a struct, its not that big
+just have the spot be passed as a struct, its not that big
 
 so, i guess the answer is lat/long
 
@@ -484,37 +484,37 @@ curl https://api.weather.gov/gridpoints/BOU/43,87/forecast
 
 
 ### Polygons
-well, thinking a bit more, it doesn't even make sense to link location to a forecast
-there is an intermediate step. location leads to polygon, and polygon leads to forecast
+well, thinking a bit more, it doesn't even make sense to link spot to a forecast
+there is an intermediate step. spot leads to polygon, and polygon leads to forecast
 
-so, maybe we need to maintain a location to polygon map
+so, maybe we need to maintain a spot to polygon map
 
 ??? does the polygon remain constant?
 
 so, what does the process for fetching / caching the forecasts look like?
 
 chron job -> every 4 hours (12 am, 4 am, 8 am, 12 pm, 4 pm, 8 pm)
-for each point in locations, wait no, not locations, but polygons
+for each point in spots, wait no, not spots, but polygons
 
-how do we know what all the locations are?
+how do we know what all the spots are?
 
 I think this is the interesting part
 
-so, for each location, we want to find the ,,,,
-more elegantly, we need to reduce the locations to their polygons
+so, for each spot, we want to find the ,,,,
+more elegantly, we need to reduce the spots to their polygons
 
 
 @@ ASSUMES THAT polygon shapes and IDs are consistent @@
-so, a location is a lat/long, and we need to determine
+so, a spot is a lat/long, and we need to determine
 if it fits in any of the existing polygons, if so, move on
 if it doesn't fit, fetch its polygon and add it to the list of polygons
 
 so, that begs the question of how to determine if a lat/long fits in a polygon
 options:
 1. each polygon has a list of lat/long points associated with it, just remember after fetching
-probably better is to just have the polygon ID as part of the location model
+probably better is to just have the polygon ID as part of the spot model
 
-2. search the polygons and determine if the current location fits in any of them
+2. search the polygons and determine if the current spot fits in any of them
 I think we could reaosnably assume that lat/long are interchangable in this case (maybe we have to figure out which is ideal but still)
 so something like, sort (index) the polygons on their furthest notrth lat, then we can find all where the current point is valid,
 then end lats, then start long, then end long
@@ -524,10 +524,10 @@ but... that's pretty hard, and it would be way easier to just track and remember
 #### Conclusion
 The above is some rambly thoughts I had when I realized the importance of the intermediate model of the polygon.
 
-It appears that it is possible to determine which polygon a lat/long location belongs to based on the polygon's vertices,
-but I think that will be difficult to code, and honestly not worth the trade off of remembering the location's polygon's ID
+It appears that it is possible to determine which polygon a lat/long spot belongs to based on the polygon's vertices,
+but I think that will be difficult to code, and honestly not worth the trade off of remembering the spot's polygon's ID
 upon initially getting it from NOAA. Assuming that the polygons are constant...
 
 #### Gotcha
 Well, this sort of steps on one thing. Now, instead of forecast service accepting a list of lat/long points,
-it needs to accept a list of locations.
+it needs to accept a list of spots.

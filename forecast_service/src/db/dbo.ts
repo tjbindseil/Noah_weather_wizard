@@ -1,10 +1,10 @@
 import { Client } from 'ts-postgres';
 import { Forecast, ForecastHourly } from 'ww-3-models-tjb';
 
-// given a list of locationIDs
-// get the (unique) list of polygon IDs (these are members of the location table)
+// given a list of spotIDs
+// get the (unique) list of polygon IDs (these are members of the spot table)
 // then, get the forecasts where the polygonID is in the set
-// TODO consider matching all locations
+// TODO consider matching all spots
 export const getForecasts = async (
     _pgClient: Client,
     _pointIDs: number[]
@@ -13,12 +13,12 @@ export const getForecasts = async (
     // const result = pgClient.query<Forecast>(
     // 'select * from forecast where
     return [];
-    //     const result = pgClient.query<Location>(
-    //         'insert into location("name", "latitude", "longitude") values ($1, $2, $3) returning *',
+    //     const result = pgClient.query<Spot>(
+    //         'insert into spot("name", "latitude", "longitude") values ($1, $2, $3) returning *',
     //         [
-    //             location_TODO_CHANGE.name,
-    //             location_TODO_CHANGE.latitude,
-    //             location_TODO_CHANGE.longitude,
+    //             spot.name,
+    //             spot.latitude,
+    //             spot.longitude,
     //         ]
     //     );
     //
@@ -30,12 +30,12 @@ export const getForecastsHourly = async (
     _pointIDs: number[]
 ): Promise<ForecastHourly[]> => {
     return [];
-    //     const result = pgClient.query<Location>(
-    //         'insert into location("name", "latitude", "longitude") values ($1, $2, $3) returning *',
+    //     const result = pgClient.query<Spot>(
+    //         'insert into spot("name", "latitude", "longitude") values ($1, $2, $3) returning *',
     //         [
-    //             location_TODO_CHANGE.name,
-    //             location_TODO_CHANGE.latitude,
-    //             location_TODO_CHANGE.longitude,
+    //             spot.name,
+    //             spot.latitude,
+    //             spot.longitude,
     //         ]
     //     );
     //
