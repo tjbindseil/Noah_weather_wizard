@@ -481,6 +481,330 @@ curl https://api.weather.gov/gridpoints/BOU/43,87/forecast
     }
 }
 ```
+### later, I retry the curl request to compare the shape
+```
+{
+    "@context": [
+        "https://geojson.org/geojson-ld/geojson-context.jsonld",
+        {
+            "@version": "1.1",
+            "wx": "https://api.weather.gov/ontology#",
+            "geo": "http://www.opengis.net/ont/geosparql#",
+            "unit": "http://codes.wmo.int/common/unit/",
+            "@vocab": "https://api.weather.gov/ontology#"
+        }
+    ],
+    "type": "Feature",
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [
+                    -105.6348022,
+                    40.275825400000002
+                ],
+                [
+                    -105.6325437,
+                    40.253898100000001
+                ],
+                [
+                    -105.6038373,
+                    40.2556175
+                ],
+                [
+                    -105.60608979999999,
+                    40.277544999999996
+                ],
+                [
+                    -105.6348022,
+                    40.275825400000002
+                ]
+            ]
+        ]
+    },
+    "properties": {
+        "units": "us",
+        "forecastGenerator": "BaselineForecastGenerator",
+        "generatedAt": "2024-08-20T01:35:31+00:00",
+        "updateTime": "2024-08-19T20:39:19+00:00",
+        "validTimes": "2024-08-19T14:00:00+00:00/P7DT11H",
+        "elevation": {
+            "unitCode": "wmoUnit:m",
+            "value": 3962.0952000000002
+        },
+        "periods": [
+            {
+                "number": 1,
+                "name": "Tonight",
+                "startTime": "2024-08-19T19:00:00-06:00",
+                "endTime": "2024-08-20T06:00:00-06:00",
+                "isDaytime": false,
+                "temperature": 43,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 30
+                },
+                "windSpeed": "10 to 16 mph",
+                "windDirection": "W",
+                "icon": "https://api.weather.gov/icons/land/night/tsra_hi,30/sct?size=medium",
+                "shortForecast": "Chance Showers And Thunderstorms then Partly Cloudy",
+                "detailedForecast": "A chance of showers and thunderstorms before 11pm. Partly cloudy, with a low around 43. West wind 10 to 16 mph, with gusts as high as 26 mph. Chance of precipitation is 30%. New rainfall amounts less than a tenth of an inch possible."
+            },
+            {
+                "number": 2,
+                "name": "Tuesday",
+                "startTime": "2024-08-20T06:00:00-06:00",
+                "endTime": "2024-08-20T18:00:00-06:00",
+                "isDaytime": true,
+                "temperature": 55,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 20
+                },
+                "windSpeed": "7 to 17 mph",
+                "windDirection": "W",
+                "icon": "https://api.weather.gov/icons/land/day/few/tsra_hi,20?size=medium",
+                "shortForecast": "Sunny then Slight Chance Showers And Thunderstorms",
+                "detailedForecast": "A slight chance of showers and thunderstorms after noon. Sunny, with a high near 55. West wind 7 to 17 mph, with gusts as high as 26 mph. Chance of precipitation is 20%."
+            },
+            {
+                "number": 3,
+                "name": "Tuesday Night",
+                "startTime": "2024-08-20T18:00:00-06:00",
+                "endTime": "2024-08-21T06:00:00-06:00",
+                "isDaytime": false,
+                "temperature": 45,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": null
+                },
+                "windSpeed": "7 to 14 mph",
+                "windDirection": "WSW",
+                "icon": "https://api.weather.gov/icons/land/night/few?size=medium",
+                "shortForecast": "Mostly Clear",
+                "detailedForecast": "Mostly clear, with a low around 45. West southwest wind 7 to 14 mph, with gusts as high as 22 mph."
+            },
+            {
+                "number": 4,
+                "name": "Wednesday",
+                "startTime": "2024-08-21T06:00:00-06:00",
+                "endTime": "2024-08-21T18:00:00-06:00",
+                "isDaytime": true,
+                "temperature": 55,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 80
+                },
+                "windSpeed": "12 to 18 mph",
+                "windDirection": "WSW",
+                "icon": "https://api.weather.gov/icons/land/day/sct/tsra_hi,80?size=medium",
+                "shortForecast": "Mostly Sunny then Showers And Thunderstorms",
+                "detailedForecast": "Showers and thunderstorms after noon. Mostly sunny, with a high near 55. West southwest wind 12 to 18 mph, with gusts as high as 25 mph. Chance of precipitation is 80%."
+            },
+            {
+                "number": 5,
+                "name": "Wednesday Night",
+                "startTime": "2024-08-21T18:00:00-06:00",
+                "endTime": "2024-08-22T06:00:00-06:00",
+                "isDaytime": false,
+                "temperature": 44,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 40
+                },
+                "windSpeed": "13 to 24 mph",
+                "windDirection": "W",
+                "icon": "https://api.weather.gov/icons/land/night/tsra_sct,40/wind_bkn?size=medium",
+                "shortForecast": "Chance Showers And Thunderstorms then Mostly Cloudy",
+                "detailedForecast": "A chance of showers and thunderstorms before midnight. Mostly cloudy, with a low around 44. West wind 13 to 24 mph, with gusts as high as 31 mph. Chance of precipitation is 40%."
+            },
+            {
+                "number": 6,
+                "name": "Thursday",
+                "startTime": "2024-08-22T06:00:00-06:00",
+                "endTime": "2024-08-22T18:00:00-06:00",
+                "isDaytime": true,
+                "temperature": 48,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 80
+                },
+                "windSpeed": "10 to 24 mph",
+                "windDirection": "WSW",
+                "icon": "https://api.weather.gov/icons/land/day/tsra,20/tsra,80?size=medium",
+                "shortForecast": "Slight Chance Showers And Thunderstorms then Showers And Thunderstorms",
+                "detailedForecast": "A slight chance of rain showers before 9am, then a slight chance of showers and thunderstorms between 9am and noon, then showers and thunderstorms. Mostly cloudy, with a high near 48. Chance of precipitation is 80%."
+            },
+            {
+                "number": 7,
+                "name": "Thursday Night",
+                "startTime": "2024-08-22T18:00:00-06:00",
+                "endTime": "2024-08-23T06:00:00-06:00",
+                "isDaytime": false,
+                "temperature": 40,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": 60
+                },
+                "windSpeed": "12 to 16 mph",
+                "windDirection": "WSW",
+                "icon": "https://api.weather.gov/icons/land/night/tsra_sct,60/tsra_sct,20?size=medium",
+                "shortForecast": "Showers And Thunderstorms Likely",
+                "detailedForecast": "Showers and thunderstorms likely. Mostly cloudy, with a low around 40. Chance of precipitation is 60%."
+            },
+            {
+                "number": 8,
+                "name": "Friday",
+                "startTime": "2024-08-23T06:00:00-06:00",
+                "endTime": "2024-08-23T18:00:00-06:00",
+                "isDaytime": true,
+                "temperature": 49,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": null
+                },
+                "windSpeed": "14 to 20 mph",
+                "windDirection": "W",
+                "icon": "https://api.weather.gov/icons/land/day/bkn/tsra?size=medium",
+                "shortForecast": "Mostly Cloudy then Showers And Thunderstorms",
+                "detailedForecast": "Showers and thunderstorms after noon. Mostly cloudy, with a high near 49."
+            },
+            {
+                "number": 9,
+                "name": "Friday Night",
+                "startTime": "2024-08-23T18:00:00-06:00",
+                "endTime": "2024-08-24T06:00:00-06:00",
+                "isDaytime": false,
+                "temperature": 44,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": null
+                },
+                "windSpeed": "14 to 23 mph",
+                "windDirection": "WSW",
+                "icon": "https://api.weather.gov/icons/land/night/tsra_hi/wind_bkn?size=medium",
+                "shortForecast": "Chance Showers And Thunderstorms then Mostly Cloudy",
+                "detailedForecast": "A chance of showers and thunderstorms before midnight. Mostly cloudy, with a low around 44."
+            },
+            {
+                "number": 10,
+                "name": "Saturday",
+                "startTime": "2024-08-24T06:00:00-06:00",
+                "endTime": "2024-08-24T18:00:00-06:00",
+                "isDaytime": true,
+                "temperature": 50,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": null
+                },
+                "windSpeed": "21 to 25 mph",
+                "windDirection": "WSW",
+                "icon": "https://api.weather.gov/icons/land/day/wind_bkn/tsra_hi?size=medium",
+                "shortForecast": "Partly Sunny then Chance Showers And Thunderstorms",
+                "detailedForecast": "A chance of showers and thunderstorms after noon. Partly sunny, with a high near 50."
+            },
+            {
+                "number": 11,
+                "name": "Saturday Night",
+                "startTime": "2024-08-24T18:00:00-06:00",
+                "endTime": "2024-08-25T06:00:00-06:00",
+                "isDaytime": false,
+                "temperature": 40,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": null
+                },
+                "windSpeed": "21 to 24 mph",
+                "windDirection": "WSW",
+                "icon": "https://api.weather.gov/icons/land/night/snow/wind_sct?size=medium",
+                "shortForecast": "Slight Chance T-storms then Partly Cloudy",
+                "detailedForecast": "A chance of showers and thunderstorms before 11pm, then a slight chance of thunderstorms and a chance of rain and snow showers between 11pm and midnight. Partly cloudy, with a low around 40."
+            },
+            {
+                "number": 12,
+                "name": "Sunday",
+                "startTime": "2024-08-25T06:00:00-06:00",
+                "endTime": "2024-08-25T18:00:00-06:00",
+                "isDaytime": true,
+                "temperature": 47,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": null
+                },
+                "windSpeed": "24 mph",
+                "windDirection": "WSW",
+                "icon": "https://api.weather.gov/icons/land/day/wind_sct/snow?size=medium",
+                "shortForecast": "Mostly Sunny then Chance Snow Showers",
+                "detailedForecast": "A chance of snow showers and a chance of thunderstorms between noon and 4pm, then a chance of thunderstorms and a chance of rain and snow showers. Mostly sunny, with a high near 47."
+            },
+            {
+                "number": 13,
+                "name": "Sunday Night",
+                "startTime": "2024-08-25T18:00:00-06:00",
+                "endTime": "2024-08-26T06:00:00-06:00",
+                "isDaytime": false,
+                "temperature": 36,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": null
+                },
+                "windSpeed": "18 mph",
+                "windDirection": "W",
+                "icon": "https://api.weather.gov/icons/land/night/snow/few?size=medium",
+                "shortForecast": "Slight Chance T-storms then Mostly Clear",
+                "detailedForecast": "A slight chance of thunderstorms and a slight chance of rain and snow showers before midnight. Mostly clear, with a low around 36."
+            },
+            {
+                "number": 14,
+                "name": "Monday",
+                "startTime": "2024-08-26T06:00:00-06:00",
+                "endTime": "2024-08-26T18:00:00-06:00",
+                "isDaytime": true,
+                "temperature": 49,
+                "temperatureUnit": "F",
+                "temperatureTrend": "",
+                "probabilityOfPrecipitation": {
+                    "unitCode": "wmoUnit:percent",
+                    "value": null
+                },
+                "windSpeed": "17 mph",
+                "windDirection": "WSW",
+                "icon": "https://api.weather.gov/icons/land/day/few/snow?size=medium",
+                "shortForecast": "Sunny then Slight Chance Snow Showers",
+                "detailedForecast": "A slight chance of snow showers and a slight chance of thunderstorms between noon and 2pm, then a slight chance of thunderstorms and a slight chance of rain and snow showers. Sunny, with a high near 49."
+            }
+        ]
+    }
+}
+```
+
+upon retry, the polygon's coordinates were the same. This bodes well for my plan.
 
 
 ### Polygons
