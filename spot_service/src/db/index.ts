@@ -30,3 +30,13 @@
 //
 // bucket: ww-dev-forecasts
 // key: /ABC/forecast.json or /ABC/forecastHourly.json or /ABC/shape.json
+//
+//
+// hmmm, how will this effect perfomance when fetching?
+// well, without radius, its a hashmap
+// so we need some way to potentially speed up the fetching of the lat long in a radius
+// like, how do we show the locatinos on the map
+// well, this index woudl actually be on the spot RDS table
+// so i think that still works
+//
+// so, onward
