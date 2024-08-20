@@ -3,6 +3,7 @@ import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { insertSpot } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
+import * as noaa_api from '../noaa_api';
 
 export class PostSpot extends LooselyAuthenticatedAPI<
     PostSpotInput,
@@ -21,12 +22,15 @@ export class PostSpot extends LooselyAuthenticatedAPI<
         input: PostSpotInput,
         pgClient: Client
     ): Promise<PostSpotOutput> {
-        // first, take the lat/long and get some (polygon ID) from NOAA API
-
+        const polygonID = await noaa_api.getPolygonID(
+            input.latitude,
+            input.longitude
+        );
         const insertedSpot = await insertSpot(pgClient, {
             name: input.name,
             latitude: input.latitude,
             longitude: input.longitude,
+            polygonID,
         });
 
         return { spot: insertedSpot };

@@ -37,16 +37,19 @@ describe('dbo tests', () => {
         name: 'Longs Peak',
         latitude: 40.255014,
         longitude: -105.615115,
+        polygonID: 'abc',
     };
     const crestoneNeedleSpot: PostedSpot = {
         name: 'Crestone Needle',
         latitude: 37.964722,
         longitude: -105.576675,
+        polygonID: 'def',
     };
     const mtWhitneySpot: PostedSpot = {
         name: 'Mount Whitney',
         latitude: 36.578581,
         longitude: -118.291995,
+        polygonID: 'ghi',
     };
     const expectedSpots = [longsPeakSpot, crestoneNeedleSpot, mtWhitneySpot];
 
@@ -73,6 +76,7 @@ describe('dbo tests', () => {
             name: 'Grand Teton',
             latitude: 43.741208,
             longitude: -110.802414,
+            polygonID: 'jkl',
         };
 
         await insertSpot(pgClient, grandTetonSpot);

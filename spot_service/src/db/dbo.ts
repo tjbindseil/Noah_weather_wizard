@@ -5,8 +5,8 @@ type PostedSpot = Omit<Spot, 'id'>;
 
 export const insertSpot = async (pgClient: Client, spot: PostedSpot) => {
     const result = pgClient.query<Spot>(
-        'insert into spot("name", "latitude", "longitude") values ($1, $2, $3) returning *',
-        [spot.name, spot.latitude, spot.longitude]
+        'insert into spot("name", "latitude", "longitude", "polygonID") values ($1, $2, $3, $4) returning *',
+        [spot.name, spot.latitude, spot.longitude, spot.polygonID]
     );
 
     return await result.one();

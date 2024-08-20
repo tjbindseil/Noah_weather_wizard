@@ -61,10 +61,10 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 
 
 ## Forecast data fetching
-* input to forecast apis needs to be location ID - done
-* change location to ... spot? - done
-* fetch polygonID as a part of location posting
-* save bew polygons as part of location posting
+* input to forecast apis needs to be spot ID - done
+* change spot to ... spot? - done
+* fetch polygonID as a part of spot posting
+* save bew polygons as part of spot posting
 * ensure polygons are consistent
 * write up forecast model
 * on a four hour interval, fetch forecast for each polygon
