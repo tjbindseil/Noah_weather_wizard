@@ -1,3 +1,4 @@
+import { S3Client } from '@aws-sdk/client-s3';
 import express, { Express, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http';
@@ -17,6 +18,11 @@ app.use(express.json());
 
 app.get('/', (_req: Request, res: Response, _next: NextFunction) => {
     res.send('HERE TJTAG');
+});
+
+const bucketName = get_app_config().forecastBucketName;
+const s3Client = new S3Client({
+    region: 'us-east-1',
 });
 
 const pool = createPool(
@@ -44,7 +50,12 @@ app.get('/spots', (req: Request, res: Response, next: NextFunction) => {
     new GetSpots().call(req, res, next, pgContextController);
 });
 app.post('/spot', (req: Request, res: Response, next: NextFunction) => {
-    new PostSpot().call(req, res, next, pgContextController);
+    new PostSpot(s3Client, bucketName).call(
+        req,
+        res,
+        next,
+        pgContextController
+    );
 });
 app.delete('/spot', (req: Request, res: Response, next: NextFunction) => {
     new DeleteSpot().call(req, res, next, pool);

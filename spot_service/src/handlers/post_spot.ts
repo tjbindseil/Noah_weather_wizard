@@ -4,6 +4,11 @@ import { insertSpot } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 import * as noaa_api from '../noaa_api';
+import {
+    HeadObjectCommand,
+    PutObjectCommand,
+    S3Client,
+} from '@aws-sdk/client-s3';
 
 export class PostSpot extends LooselyAuthenticatedAPI<
     PostSpotInput,
@@ -14,47 +19,68 @@ export class PostSpot extends LooselyAuthenticatedAPI<
         return this.ajv.compile(_schema.PostSpotInput);
     }
 
-    constructor() {
+    constructor(
+        private readonly s3Client: S3Client,
+        private readonly bucketName: string
+    ) {
         super();
+    }
+
+    private trim(n: number) {
+        return Number.parseFloat(n.toFixed(4));
     }
 
     public async process(
         input: PostSpotInput,
         pgClient: Client
     ): Promise<PostSpotOutput> {
-        const polygonID = await noaa_api.getPolygonID(
-            input.latitude,
-            input.longitude
+        const trimmedLat = this.trim(input.latitude);
+        const trimmedLong = this.trim(input.longitude);
+        const [polygonID, forecastUrl] = await noaa_api.makeInitialCall(
+            trimmedLat,
+            trimmedLong
         );
-        // first, check if polygon with this ID exists in db
-        // if (!polygonInDatabase(polygonID)) {
-        //   fetch forecast
-        //   put polygon and forecast in database in same table
-        //
-        //   that s3 thing sounds kinda cool
-        //   to make sure the data is randombly distributed, maybe hash the polygonID as it is the beginning of the key
-        //   https://stackoverflow.com/questions/22167125/amazon-aws-s3-directory-structure-efficiency
-        //   but not needed at first
-        //
-        //   // ... hmmm, forecast and polygon are 1:1
-        //   // are they the same thing?
-        // }
+
+        try {
+            await this.s3Client.send(
+                new HeadObjectCommand({
+                    Bucket: this.bucketName,
+                    Key: `${polygonID}/forecast.json`,
+                })
+            );
+        } catch (error: any) {
+            if (error.name === 'NotFound') {
+                const [forecastJson, geometryJson] = await noaa_api.getForecast(
+                    forecastUrl
+                );
+
+                await this.s3Client.send(
+                    new PutObjectCommand({
+                        Bucket: this.bucketName,
+                        Key: `${polygonID}/forecast.json`,
+                        Body: forecastJson,
+                        ContentType: 'json',
+                    })
+                );
+                await this.s3Client.send(
+                    new PutObjectCommand({
+                        Bucket: this.bucketName,
+                        Key: `${polygonID}/geometry.json`,
+                        Body: geometryJson,
+                        ContentType: 'json',
+                    })
+                );
+            } else {
+                throw error;
+            }
+        }
+
         const insertedSpot = await insertSpot(pgClient, {
             name: input.name,
-            latitude: input.latitude,
-            longitude: input.longitude,
+            latitude: trimmedLat,
+            longitude: trimmedLong,
             polygonID,
         });
-
-        // first, check if polygon with this ID exists in db
-        // if (!polygonInDatabase(polygonID)) {
-        //   fetch forecast
-        //   put polygon in database
-        //   put forecast in database
-        //
-        //   // ... hmmm, forecast and polygon are 1:1
-        //   // are they the same thing?
-        // }
 
         return { spot: insertedSpot };
     }

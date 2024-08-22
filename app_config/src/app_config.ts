@@ -10,6 +10,7 @@ enum Environment {
 }
 
 export interface AppConfig {
+    forecastBucketName: string;
     spotServiceHost: string;
     spotServicePort: number;
     spotDbConnectionConfig: {
@@ -25,6 +26,7 @@ export interface AppConfig {
 }
 
 const hostAppConfig: AppConfig = {
+    forecastBucketName: 'ww-host-forecast',
     spotServiceHost: 'localhost',
     spotServicePort: 8080,
     spotDbConnectionConfig: {
@@ -40,6 +42,7 @@ const hostAppConfig: AppConfig = {
 };
 
 const laptopITConfig: AppConfig = {
+    forecastBucketName: 'ww-laptopIT-forecast',
     spotServiceHost: 'localhost',
     spotServicePort: 8080,
     spotDbConnectionConfig: {
@@ -55,6 +58,7 @@ const laptopITConfig: AppConfig = {
 };
 
 const devAppConfig: AppConfig = {
+    forecastBucketName: 'ww-dev-forecast',
     spotServiceHost: 'localhost',
     spotServicePort: 8080,
     spotDbConnectionConfig: {
@@ -70,6 +74,7 @@ const devAppConfig: AppConfig = {
 };
 
 const testAppConfig: AppConfig = {
+    forecastBucketName: 'ww-test-forecast',
     spotServiceHost: 'localhost',
     spotServicePort: 8080,
     spotDbConnectionConfig: {
@@ -85,6 +90,7 @@ const testAppConfig: AppConfig = {
 };
 
 const unitTestAppConfig: AppConfig = {
+    forecastBucketName: 'ww-unitTest-forecast',
     spotServiceHost: 'localhost',
     spotServicePort: 8080,
     spotDbConnectionConfig: {
@@ -100,6 +106,7 @@ const unitTestAppConfig: AppConfig = {
 };
 
 const prodAppConfig: AppConfig = {
+    forecastBucketName: 'ww-prod-forecast',
     spotServiceHost: 'localhost',
     spotServicePort: 8080,
     spotDbConnectionConfig: {
