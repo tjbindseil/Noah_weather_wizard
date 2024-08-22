@@ -57,24 +57,31 @@ export class PostSpot extends LooselyAuthenticatedAPI<
             );
 
             const existingGeometry =
-                existingGeometryResponse.Body?.transformToString;
-
+                await existingGeometryResponse.Body?.transformToString();
             console.log(
                 '@@ TJTAG @@ comparing existing geometryJson to newest geometryJson'
             );
             console.log(
-                `@@ TJTAG @@ existing geometryJson: ${existingGeometry}`
+                `@@ TJTAG @@ existing geometryJson: ${JSON.stringify(
+                    existingGeometry
+                )}`
             );
-            console.log(`@@ TJTAG @@ fetched geometryJson: ${geometryJson}`);
+            console.log(
+                `@@ TJTAG @@ fetched geometryJson: ${JSON.stringify(
+                    geometryJson
+                )}`
+            );
 
-            if (geometryJson !== existingGeometry) {
+            if (JSON.stringify(geometryJson) !== existingGeometry) {
                 console.error(
-                    `HEADS UP! geometry for this polygon has changed. existing: ${existingGeometry} and fetched: ${geometryJson}`
+                    `HEADS UP! geometry for this polygon has changed. existing: ${existingGeometry} and fetched: ${JSON.stringify(
+                        geometryJson
+                    )}`
                 );
                 throw new APIError(500, 'assumptions failed');
             }
         } catch (error: any) {
-            if (error.name === 'NotFound') {
+            if (error.name === 'NoSuchKey') {
                 console.log('@@ TJTAG @@ existing geometry not found');
                 const [forecastJson, geometryJson] = await noaa_api.getForecast(
                     forecastUrl
@@ -84,7 +91,7 @@ export class PostSpot extends LooselyAuthenticatedAPI<
                     new PutObjectCommand({
                         Bucket: this.bucketName,
                         Key: `${polygonID}/forecast.json`,
-                        Body: forecastJson,
+                        Body: JSON.stringify(forecastJson),
                         ContentType: 'application/json; charset=utf-8',
                     })
                 );
@@ -92,7 +99,7 @@ export class PostSpot extends LooselyAuthenticatedAPI<
                     new PutObjectCommand({
                         Bucket: this.bucketName,
                         Key: `${polygonID}/geometry.json`,
-                        Body: geometryJson,
+                        Body: JSON.stringify(geometryJson),
                         ContentType: 'application/json; charset=utf-8',
                     })
                 );
