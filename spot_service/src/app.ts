@@ -7,6 +7,7 @@ import { DeleteSpot, GetSpots, PostSpot } from './handlers';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
 import { createPool } from 'generic-pool';
+import S3Adapter from './s3_adapter';
 
 const app: Express = express();
 
@@ -24,6 +25,7 @@ const bucketName = get_app_config().forecastBucketName;
 const s3Client = new S3Client({
     region: 'us-east-1',
 });
+const s3Adapter = new S3Adapter(s3Client, bucketName);
 
 const pool = createPool(
     {
@@ -50,12 +52,7 @@ app.get('/spots', (req: Request, res: Response, next: NextFunction) => {
     new GetSpots().call(req, res, next, pgContextController);
 });
 app.post('/spot', (req: Request, res: Response, next: NextFunction) => {
-    new PostSpot(s3Client, bucketName).call(
-        req,
-        res,
-        next,
-        pgContextController
-    );
+    new PostSpot(s3Adapter).call(req, res, next, pgContextController);
 });
 app.delete('/spot', (req: Request, res: Response, next: NextFunction) => {
     new DeleteSpot().call(req, res, next, pool);

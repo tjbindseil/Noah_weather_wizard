@@ -4,11 +4,7 @@ import { insertSpot } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 import * as noaa_api from '../noaa_api';
-import {
-    GetObjectCommand,
-    PutObjectCommand,
-    S3Client,
-} from '@aws-sdk/client-s3';
+import S3Adapter from '../s3_adapter';
 
 export class PostSpot extends LooselyAuthenticatedAPI<
     PostSpotInput,
@@ -19,10 +15,7 @@ export class PostSpot extends LooselyAuthenticatedAPI<
         return this.ajv.compile(_schema.PostSpotInput);
     }
 
-    constructor(
-        private readonly s3Client: S3Client,
-        private readonly bucketName: string
-    ) {
+    constructor(private readonly s3Adapter: S3Adapter) {
         super();
     }
 
@@ -42,34 +35,14 @@ export class PostSpot extends LooselyAuthenticatedAPI<
         );
 
         try {
-            const existingGeometryResponse = await this.s3Client.send(
-                new GetObjectCommand({
-                    Bucket: this.bucketName,
-                    Key: `${polygonID}/geometry.json`, // TODO geometry.Json is repeated
-                })
+            const existingGeometry = await this.s3Adapter.getGeometryJson(
+                polygonID
             );
-            console.log('@@ TJTAG @@ existing geometry found');
 
             // for now, we are checking existing geometry to make sure it doesn't change
             // this will ultimately be removed once it is clear that they don't change (fingers crossed)
             const [_forecastJson, geometryJson] = await noaa_api.getForecast(
                 forecastUrl
-            );
-
-            const existingGeometry =
-                await existingGeometryResponse.Body?.transformToString();
-            console.log(
-                '@@ TJTAG @@ comparing existing geometryJson to newest geometryJson'
-            );
-            console.log(
-                `@@ TJTAG @@ existing geometryJson: ${JSON.stringify(
-                    existingGeometry
-                )}`
-            );
-            console.log(
-                `@@ TJTAG @@ fetched geometryJson: ${JSON.stringify(
-                    geometryJson
-                )}`
             );
 
             if (JSON.stringify(geometryJson) !== existingGeometry) {
@@ -82,29 +55,13 @@ export class PostSpot extends LooselyAuthenticatedAPI<
             }
         } catch (error: any) {
             if (error.name === 'NoSuchKey') {
-                console.log('@@ TJTAG @@ existing geometry not found');
                 const [forecastJson, geometryJson] = await noaa_api.getForecast(
                     forecastUrl
                 );
 
-                await this.s3Client.send(
-                    new PutObjectCommand({
-                        Bucket: this.bucketName,
-                        Key: `${polygonID}/forecast.json`,
-                        Body: JSON.stringify(forecastJson),
-                        ContentType: 'application/json; charset=utf-8',
-                    })
-                );
-                await this.s3Client.send(
-                    new PutObjectCommand({
-                        Bucket: this.bucketName,
-                        Key: `${polygonID}/geometry.json`,
-                        Body: JSON.stringify(geometryJson),
-                        ContentType: 'application/json; charset=utf-8',
-                    })
-                );
+                await this.s3Adapter.putForecastJson(polygonID, forecastJson);
+                await this.s3Adapter.putGeometryJson(polygonID, geometryJson);
             } else {
-                console.error('@@ TJTAG @@ other error...');
                 throw error;
             }
         }

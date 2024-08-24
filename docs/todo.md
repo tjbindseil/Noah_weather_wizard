@@ -64,14 +64,14 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 * input to forecast apis needs to be spot ID - done
 * change spot to ... spot? - done
 * fetch polygonID as a part of spot posting - done
-* save new polygons as part of spot posting
+* save new polygons as part of spot posting - done
   * create s3 buckets, add to app_config - done
-  * put forecast, forecastHourly, and polygon into s3 bucket, each prefixed with polygon ID
+  * put forecast, forecastHourly, and polygon into s3 bucket, each prefixed with polygon ID - done
 ```
 // bucket: ww-dev-forecasts
 // key: /ABC/forecast.json or /ABC/forecastHourly.json or /ABC/shape.json
 ```
-* ensure polygons are consistent - seems good, write something that verifies though
+* ensure polygons are consistent - seems good, write something that verifies though - done
 * write up forecast model
 * on a four hour interval, fetch forecast for each polygon
 * wire up forecast provider
