@@ -7,6 +7,7 @@ const mockInsertSpot = jest.mocked(insertSpot, true);
 
 import { makeInitialCall, getForecast } from '../../../src/noaa_api';
 import S3Adapter from '../../../src/s3_adapter';
+import { APIError } from 'ww-3-api-tjb';
 jest.mock('../../../src/noaa_api');
 const mockMakeInitialCall = jest.mocked(makeInitialCall, true);
 const mockGetForecast = jest.mocked(getForecast, true);
@@ -26,6 +27,10 @@ describe('PostSpot tests', () => {
     const postedSpot = { name: 'name', latitude: 1, longitude: 2 };
     const polygonID = 'ABC';
     const forecastUrl = 'forecastURL';
+    const forecast = { forecast: 'clear' };
+    const existingGeometry = { g: 'om' };
+
+    const postSpot = new PostSpot(mockS3Adapter);
 
     beforeEach(() => {
         mockGetGeometryJson.mockClear();
@@ -36,16 +41,32 @@ describe('PostSpot tests', () => {
         mockMakeInitialCall.mockClear();
         mockGetForecast.mockClear();
 
+        mockGetGeometryJson.mockResolvedValue(JSON.stringify(existingGeometry));
+        mockGetForecast.mockResolvedValue([forecast, existingGeometry]);
         mockMakeInitialCall.mockResolvedValue([polygonID, forecastUrl]);
     });
 
+    it('trims lat and long before using them', async () => {
+        const untrimmedPostedSpot = {
+            name: 'name',
+            latitude: 1.1111111,
+            longitude: 2.2222222222,
+        };
+        const trimmedLat = 1.1111;
+        const trimmedLong = 2.2222;
+
+        await postSpot.process(untrimmedPostedSpot, mockDbClient);
+
+        expect(mockMakeInitialCall).toBeCalledWith(trimmedLat, trimmedLong);
+        expect(mockInsertSpot).toBeCalledWith(mockDbClient, {
+            name: untrimmedPostedSpot.name,
+            latitude: trimmedLat,
+            longitude: trimmedLong,
+            polygonID,
+        });
+    });
+
     it('checks the presence of geometery, and if already present and unchanged, posts the spot to the db', async () => {
-        const existingGeometry = { g: 'om' };
-        mockGetGeometryJson.mockResolvedValue(JSON.stringify(existingGeometry));
-        mockGetForecast.mockResolvedValue(['unused', existingGeometry]);
-
-        const postSpot = new PostSpot(mockS3Adapter);
-
         await postSpot.process(postedSpot, mockDbClient);
 
         expect(mockInsertSpot).toBeCalledWith(mockDbClient, {
@@ -54,11 +75,37 @@ describe('PostSpot tests', () => {
         });
     });
 
-    // it trims the lat/long input to 4 decimals
-    //
-    // when getting the existing geometry, if it doesn't exist, it gets the geometry and forecast and saves those to s3
-    //
-    // when getting the existing geometry, if it does exist, it compareas the existiung to the latest fetched geometry and throws when they are different
-    //
-    // when there is an issue getting the existing geometry (other than 404), the error is bubbled up
+    it('checks the presence of geometry, and if already present but different, throws 500', async () => {
+        const fetchedGeometry = { g: 'DIFFERENT' };
+        mockGetForecast.mockClear();
+        mockGetForecast.mockResolvedValue(['unused', fetchedGeometry]);
+
+        await expect(
+            postSpot.process(postedSpot, mockDbClient)
+        ).rejects.toThrow(new APIError(500, 'assumptions failed'));
+    });
+
+    it('checks the presence of geometry, and if not already present, saves the geometry and forecast before inserting the spot into the database', async () => {
+        mockGetGeometryJson.mockClear();
+        mockGetGeometryJson.mockRejectedValue({ name: 'NoSuchKey' });
+
+        await postSpot.process(postedSpot, mockDbClient);
+
+        expect(mockPutForecastJson).toBeCalledWith(polygonID, forecast);
+        expect(mockPutGeometryJson).toBeCalledWith(polygonID, existingGeometry);
+        expect(mockInsertSpot).toBeCalledWith(mockDbClient, {
+            ...postedSpot,
+            polygonID,
+        });
+    });
+
+    it('bubbles up other errors that occur when getting geometry', async () => {
+        const unexpectedError = new Error('NOT_NoSuchKey');
+        mockGetGeometryJson.mockClear();
+        mockGetGeometryJson.mockRejectedValue(unexpectedError);
+
+        await expect(
+            postSpot.process(postedSpot, mockDbClient)
+        ).rejects.toThrow(unexpectedError);
+    });
 });

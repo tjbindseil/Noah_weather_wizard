@@ -55,6 +55,7 @@ export class PostSpot extends LooselyAuthenticatedAPI<
             }
         } catch (error: any) {
             if (error.name === 'NoSuchKey') {
+                // TODO hmm, this is done twice, maybe move?
                 const [forecastJson, geometryJson] = await noaa_api.getForecast(
                     forecastUrl
                 );
