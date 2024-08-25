@@ -29,6 +29,10 @@ export {
     GetRankedForecastsHourlyInput,
     GetRankedForecastsHourlyOutput,
 } from './forecast_service_models/get_ranked_forecasts_hourly';
-export { Forecast, ForecastHourly } from './forecast_service_models/forecast';
+export {
+    Period,
+    Forecast,
+    ForecastHourly,
+} from './forecast_service_models/forecast';
 import _schema from './schema_validation/_schema';
 export { _schema };

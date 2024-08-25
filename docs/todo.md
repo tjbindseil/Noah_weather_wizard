@@ -72,9 +72,11 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 // key: /ABC/forecast.json or /ABC/forecastHourly.json or /ABC/shape.json
 ```
 * ensure polygons are consistent - seems good, write something that verifies though - done
-* write up forecast model
+* write up forecast model - done
 * on a four hour interval, fetch forecast for each polygon
-* wire up forecast provider
+  * this will require reuse in forecast_service of some of the utilities currently residing in spot_service, so move these to a lib
+  * this will also require a piece of code that is not call and response, some kind of cron job thing, figure out this
+* wire up forecast provider (just the one that gets them all, not filter or sort)
 * write up a forecast hourly model
 * on a four hour interval, fetch forecast hourly for each polygon
-* wire up forecast hourly provider
+* wire up forecast hourly provider (just the one that gets them all, not filter or sort)
