@@ -12,7 +12,7 @@ describe('GetSpots tests', () => {
         mockGetSpots.mockClear();
     });
 
-    it('posts the spot', async () => {
+    it('gets the spots', async () => {
         const getSpots = new GetSpots();
 
         await getSpots.process({}, mockDbClient);

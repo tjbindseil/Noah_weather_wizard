@@ -13,7 +13,7 @@ describe('DeleteSpot tests', () => {
         mockDeleteSpot.mockClear();
     });
 
-    it('posts the spot', async () => {
+    it('deletes the spot', async () => {
         const deleteSpot = new DeleteSpot();
 
         await deleteSpot.process({ id }, mockDbClient);

@@ -14,14 +14,24 @@ const mockGetForecast = jest.mocked(getForecast, true);
 describe('PostSpot tests', () => {
     const mockDbClient = {} as unknown as Client;
 
-    getGeometryJson, putForecastJson, putGeometryJson;
-    const mockS3Adapter = {} as unknown as S3Adapter;
+    const mockGetGeometryJson = jest.fn();
+    const mockPutForecastJson = jest.fn();
+    const mockPutGeometryJson = jest.fn();
+    const mockS3Adapter = {
+        getGeometryJson: mockGetGeometryJson,
+        putForecastJson: mockPutForecastJson,
+        putGeometryJson: mockPutGeometryJson,
+    } as unknown as S3Adapter;
 
     const postedSpot = { name: 'name', latitude: 1, longitude: 2 };
     const polygonID = 'ABC';
     const forecastUrl = 'forecastURL';
 
     beforeEach(() => {
+        mockGetGeometryJson.mockClear();
+        mockPutForecastJson.mockClear();
+        mockPutGeometryJson.mockClear();
+
         mockInsertSpot.mockClear();
         mockMakeInitialCall.mockClear();
         mockGetForecast.mockClear();
@@ -29,7 +39,11 @@ describe('PostSpot tests', () => {
         mockMakeInitialCall.mockResolvedValue([polygonID, forecastUrl]);
     });
 
-    it('posts the spot', async () => {
+    it('checks the presence of geometery, and if already present and unchanged, posts the spot to the db', async () => {
+        const existingGeometry = { g: 'om' };
+        mockGetGeometryJson.mockResolvedValue(JSON.stringify(existingGeometry));
+        mockGetForecast.mockResolvedValue(['unused', existingGeometry]);
+
         const postSpot = new PostSpot(mockS3Adapter);
 
         await postSpot.process(postedSpot, mockDbClient);
