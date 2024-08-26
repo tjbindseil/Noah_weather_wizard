@@ -1,6 +1,6 @@
 import { PostSpotInput, PostSpotOutput, _schema } from 'ww-3-models-tjb';
 import { APIError, LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
-import { insertSpot } from '../db/dbo';
+import { insertPolygon, insertSpot } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 import { S3Adapter, getForecast, makeInitialCall } from 'ww-3-utilities-tjb';
@@ -60,6 +60,7 @@ export class PostSpot extends LooselyAuthenticatedAPI<
                     forecastUrl
                 );
 
+                await insertPolygon(pgClient, polygonID, forecastUrl);
                 await this.s3Adapter.putForecastJson(polygonID, forecastJson);
                 await this.s3Adapter.putGeometryJson(polygonID, geometryJson);
             } else {

@@ -2,9 +2,10 @@ import { PostSpot } from '../../../src/handlers/index';
 import { Client } from 'ts-postgres';
 import { APIError } from 'ww-3-api-tjb';
 
-import { insertSpot } from '../../../src/db/dbo';
+import { insertSpot, insertPolygon } from '../../../src/db/dbo';
 jest.mock('../../../src/db/dbo');
 const mockInsertSpot = jest.mocked(insertSpot, true);
+const mockInsertPolygon = jest.mocked(insertPolygon, true);
 
 import { makeInitialCall, getForecast, S3Adapter } from 'ww-3-utilities-tjb';
 jest.mock('ww-3-utilities-tjb');
@@ -37,6 +38,7 @@ describe('PostSpot tests', () => {
         mockPutGeometryJson.mockClear();
 
         mockInsertSpot.mockClear();
+        mockInsertPolygon.mockClear();
         mockMakeInitialCall.mockClear();
         mockGetForecast.mockClear();
 
@@ -90,6 +92,11 @@ describe('PostSpot tests', () => {
 
         await postSpot.process(postedSpot, mockDbClient);
 
+        expect(mockInsertPolygon).toBeCalledWith(
+            mockDbClient,
+            polygonID,
+            forecastUrl
+        );
         expect(mockPutForecastJson).toBeCalledWith(polygonID, forecast);
         expect(mockPutGeometryJson).toBeCalledWith(polygonID, existingGeometry);
         expect(mockInsertSpot).toBeCalledWith(mockDbClient, {
