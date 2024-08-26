@@ -2,13 +2,16 @@ import { PostSpot } from '../../../src/handlers/index';
 import { Client } from 'ts-postgres';
 import { APIError } from 'ww-3-api-tjb';
 
-import { insertSpot, insertPolygon } from '../../../src/db/dbo';
-jest.mock('../../../src/db/dbo');
+import {
+    makeInitialCall,
+    getForecast,
+    S3Adapter,
+    insertSpot,
+    insertPolygon,
+} from 'ww-3-utilities-tjb';
+jest.mock('ww-3-utilities-tjb');
 const mockInsertSpot = jest.mocked(insertSpot, true);
 const mockInsertPolygon = jest.mocked(insertPolygon, true);
-
-import { makeInitialCall, getForecast, S3Adapter } from 'ww-3-utilities-tjb';
-jest.mock('ww-3-utilities-tjb');
 const mockMakeInitialCall = jest.mocked(makeInitialCall, true);
 const mockGetForecast = jest.mocked(getForecast, true);
 

@@ -1,6 +1,6 @@
 import { DeleteSpotInput, DeleteSpotOutput, _schema } from 'ww-3-models-tjb';
 import { StrictlyAuthenticatedAPI } from 'ww-3-api-tjb';
-import { deleteSpot } from '../db/dbo';
+import { deleteSpot } from 'ww-3-utilities-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 

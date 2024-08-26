@@ -1,9 +1,14 @@
 import { PostSpotInput, PostSpotOutput, _schema } from 'ww-3-models-tjb';
 import { APIError, LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
-import { insertPolygon, insertSpot } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
-import { S3Adapter, getForecast, makeInitialCall } from 'ww-3-utilities-tjb';
+import {
+    S3Adapter,
+    getForecast,
+    makeInitialCall,
+    insertPolygon,
+    insertSpot,
+} from 'ww-3-utilities-tjb';
 
 export class PostSpot extends LooselyAuthenticatedAPI<
     PostSpotInput,
