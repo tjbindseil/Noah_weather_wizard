@@ -5,7 +5,7 @@
     "main": "build/src/index.js",
     "types": "build/src/index.d.ts",
     "scripts": {
-        "test": "jest unit --config jest.unit.config.js",
+        "test": "export WW_ENV='unit_test' && jest unit --config jest.unit.config.js",
         "tsc": "tsc",
         "ww-clean": "rm -rf node_modules package-lock.json build",
         "ww-format": "npx prettier --write $(find src test package*)",

@@ -20,11 +20,9 @@ describe('dbo tests', () => {
     const pool = createPool(
         {
             create: async () => {
-                console.log('TJTAG about to get app config');
                 const client = new Client(
                     get_app_config().spotDbConnectionConfig
                 );
-                console.log('TJTAG done to get app config');
                 await client.connect();
                 client.on('error', console.log);
                 return client;
@@ -72,12 +70,17 @@ describe('dbo tests', () => {
     const expectedPolygons = [polygon1, polygon2];
 
     beforeAll(async () => {
-        console.log('@@ @@ beforeAll');
         pgClient = await pool.acquire();
 
         const spots = await getSpots(pgClient);
         if (spots.length > 0) {
-            throw Error('Unit test table is not empty! Abandoning tests');
+            throw Error('Unit test spot table is not empty! Abandoning tests');
+        }
+        const polygons = await getPolygons(pgClient);
+        if (polygons.length > 0) {
+            throw Error(
+                'Unit test polygon table is not empty! Abandoning tests'
+            );
         }
     });
 
