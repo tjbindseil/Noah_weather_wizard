@@ -1,5 +1,5 @@
 import { Client } from 'ts-postgres';
-import { Spot } from 'ww-3-models-tjb';
+import { Polygon, Spot } from 'ww-3-models-tjb';
 
 type PostedSpot = Omit<Spot, 'id'>;
 
@@ -30,4 +30,28 @@ export const deleteSpot = async (pgClient: Client, id: number) => {
     );
 
     return await result.one();
+};
+
+export const insertPolygon = async (
+    pgClient: Client,
+    polygonID: string,
+    forecastURL: string
+) => {
+    const result = pgClient.query<Polygon>(
+        'insert into polygon("id", "forecastURL") values ($1, $2) returning *',
+        [polygonID, forecastURL]
+    );
+
+    return await result.one();
+};
+
+export const getPolygons = async (pgClient: Client) => {
+    const result = pgClient.query<Polygon>('SELECT * FROM polygon');
+
+    const polygons: Polygon[] = [];
+    for await (const polygon of result) {
+        polygons.push(polygon);
+    }
+
+    return polygons;
 };

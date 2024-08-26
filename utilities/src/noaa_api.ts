@@ -1,3 +1,5 @@
+// TODO handle 5 second wait and retry when issues arise
+
 export const makeInitialCall = async (latitude: number, longitude: number) => {
     const noaaURL = `https://api.weather.gov/points/${latitude},${longitude}`;
     const fetchResult = (await (

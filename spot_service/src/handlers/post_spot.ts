@@ -58,25 +58,6 @@ export class PostSpot extends LooselyAuthenticatedAPI<
                 // TODO hmm, this is done twice, maybe move?
                 const [forecastJson, geometryJson] = await getForecast(
                     forecastUrl
-                    // well, what is it?
-                    // is it a hashmap?
-                    // polygonID -> forecastURL
-                    //
-                    // actually, it would be:
-                    // forecastURL -> polygonID
-                    //
-                    // because we would fetch the forecastURL, and then decide where to put it (ie we would then need the polygonID
-                    //
-                    // option 1)
-                    // well, each spot already has the polygonID,
-                    // we can store the forecastURL there as well, and then select distinct
-                    //
-                    // option 2)
-                    // table with polygonID and forecastURL
-                    //
-                    // for option 1, selecting distinct is rough, so probably best to do option 2
-                    //
-                    // I think this will necessitate moving the dbo to the utilities dir
                 );
 
                 await this.s3Adapter.putForecastJson(polygonID, forecastJson);

@@ -1,8 +1,14 @@
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
 import { createPool } from 'generic-pool';
-import { Spot } from 'ww-3-models-tjb';
-import { deleteSpot, getSpots, insertSpot } from '../../../src/db/dbo';
+import { Polygon, Spot } from 'ww-3-models-tjb';
+import {
+    deleteSpot,
+    getPolygons,
+    getSpots,
+    insertPolygon,
+    insertSpot,
+} from '../../../src/db/dbo';
 
 // these tests will actually interface with a pg database on my local machine
 // see src/db/index.ts for a command to make the database
@@ -53,6 +59,16 @@ describe('dbo tests', () => {
     };
     const expectedSpots = [longsPeakSpot, crestoneNeedleSpot, mtWhitneySpot];
 
+    const polygon1: Polygon = {
+        id: 'ABC',
+        forecastURL: 'http://ABC.com',
+    };
+    const polygon2: Polygon = {
+        id: 'DEF',
+        forecastURL: 'http://DEF.com',
+    };
+    const expectedPolygons = [polygon1, polygon2];
+
     beforeAll(async () => {
         pgClient = await pool.acquire();
 
@@ -65,6 +81,13 @@ describe('dbo tests', () => {
     beforeEach(async () => {
         for (let i = 0; i < expectedSpots.length; ++i) {
             await insertSpot(pgClient, expectedSpots[i]);
+        }
+        for (let i = 0; i < expectedPolygons.length; ++i) {
+            await insertPolygon(
+                pgClient,
+                expectedPolygons[i].id,
+                expectedPolygons[i].forecastURL
+            );
         }
     });
 
@@ -100,8 +123,24 @@ describe('dbo tests', () => {
         expect(finalSpots.length).toEqual(expectedSpots.length - 1);
     });
 
+    it('can post and get polygons', async () => {
+        const initialPolygons = await getPolygons(pgClient);
+        expect(initialPolygons.length).toEqual(expectedPolygons.length);
+
+        const polygon3 = {
+            id: 'GHI',
+            forecastURL: 'http://JKL.com',
+        };
+
+        await insertPolygon(pgClient, polygon3.id, polygon3.forecastURL);
+
+        const finalPolygons = await getPolygons(pgClient);
+        expect(finalPolygons.length).toEqual(expectedPolygons.length + 1);
+    });
+
     afterEach(async () => {
         await pgClient.query<Spot>('TRUNCATE spot');
+        await pgClient.query<Spot>('TRUNCATE polygon');
     });
 
     afterAll(async () => {
