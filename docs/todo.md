@@ -73,11 +73,17 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 ```
 * ensure polygons are consistent - seems good, write something that verifies though - done
 * write up forecast model - done
+* create polygon table (just polygonID as pk and forecastURL)
+* add row to polygon table when saving geometry
+* move dbo to utilities
 * on a four hour interval, fetch forecast for each polygon
-  * this will require reuse in forecast_service of some of the utilities currently residing in spot_service, so move these to a lib
-  * this will also require a piece of code that is not call and response, some kind of cron job thing, figure out this
+  * this will require reuse in forecast_service of some of the utilities currently residing in spot_service, so move these to a lib - done
+  * this will also require a piece of code that is not call and response, some kind of cron job thing, figure out this (setInterval())
   * what about locking? can we just use stale data?
     * well, the forecastUpdater will ... oh shoot! We have to save the forecast URL
+    * anyway, this is just writing, and forecast provider will just read. and since actions are atomoic, this is fine
+  * use setInterval to write a function that gets the next polygon/forecastURL in order, and gets the new data and saves it
+    * the weird thing here, is how will it know of new polygons? maybe at the end of each cycle it can refresh. Since the forecast is fetched upon creating the new spot
 * wire up forecast provider (just the one that gets them all, not filter or sort)
 * write up a forecast hourly model
 * on a four hour interval, fetch forecast hourly for each polygon
