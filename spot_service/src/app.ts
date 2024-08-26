@@ -7,7 +7,7 @@ import { DeleteSpot, GetSpots, PostSpot } from './handlers';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
 import { createPool } from 'generic-pool';
-import S3Adapter from './s3_adapter';
+import { S3Adapter } from 'ww-3-utilities-tjb';
 
 const app: Express = express();
 

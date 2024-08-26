@@ -76,6 +76,8 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 * on a four hour interval, fetch forecast for each polygon
   * this will require reuse in forecast_service of some of the utilities currently residing in spot_service, so move these to a lib
   * this will also require a piece of code that is not call and response, some kind of cron job thing, figure out this
+  * what about locking? can we just use stale data?
+    * well, the forecastUpdater will ... oh shoot! We have to save the forecast URL
 * wire up forecast provider (just the one that gets them all, not filter or sort)
 * write up a forecast hourly model
 * on a four hour interval, fetch forecast hourly for each polygon

@@ -3,8 +3,7 @@ import { APIError, LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { insertSpot } from '../db/dbo';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
-import * as noaa_api from '../noaa_api';
-import S3Adapter from '../s3_adapter';
+import { S3Adapter, getForecast, makeInitialCall } from 'ww-3-utilities-tjb';
 
 export class PostSpot extends LooselyAuthenticatedAPI<
     PostSpotInput,
@@ -29,7 +28,7 @@ export class PostSpot extends LooselyAuthenticatedAPI<
     ): Promise<PostSpotOutput> {
         const trimmedLat = this.trimLatLong(input.latitude);
         const trimmedLong = this.trimLatLong(input.longitude);
-        const [polygonID, forecastUrl] = await noaa_api.makeInitialCall(
+        const [polygonID, forecastUrl] = await makeInitialCall(
             trimmedLat,
             trimmedLong
         );
@@ -41,7 +40,7 @@ export class PostSpot extends LooselyAuthenticatedAPI<
 
             // for now, we are checking existing geometry to make sure it doesn't change
             // this will ultimately be removed once it is clear that they don't change (fingers crossed)
-            const [_forecastJson, geometryJson] = await noaa_api.getForecast(
+            const [_forecastJson, geometryJson] = await getForecast(
                 forecastUrl
             );
 
@@ -53,10 +52,11 @@ export class PostSpot extends LooselyAuthenticatedAPI<
                 );
                 throw new APIError(500, 'assumptions failed');
             }
+            /* eslint-disable  @typescript-eslint/no-explicit-any */
         } catch (error: any) {
             if (error.name === 'NoSuchKey') {
                 // TODO hmm, this is done twice, maybe move?
-                const [forecastJson, geometryJson] = await noaa_api.getForecast(
+                const [forecastJson, geometryJson] = await getForecast(
                     forecastUrl
                 );
 

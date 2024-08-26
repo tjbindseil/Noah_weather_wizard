@@ -1,14 +1,13 @@
 import { PostSpot } from '../../../src/handlers/index';
 import { Client } from 'ts-postgres';
+import { APIError } from 'ww-3-api-tjb';
 
 import { insertSpot } from '../../../src/db/dbo';
 jest.mock('../../../src/db/dbo');
 const mockInsertSpot = jest.mocked(insertSpot, true);
 
-import { makeInitialCall, getForecast } from '../../../src/noaa_api';
-import S3Adapter from '../../../src/s3_adapter';
-import { APIError } from 'ww-3-api-tjb';
-jest.mock('../../../src/noaa_api');
+import { makeInitialCall, getForecast, S3Adapter } from 'ww-3-utilities-tjb';
+jest.mock('ww-3-utilities-tjb');
 const mockMakeInitialCall = jest.mocked(makeInitialCall, true);
 const mockGetForecast = jest.mocked(getForecast, true);
 
