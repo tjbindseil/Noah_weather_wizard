@@ -5,7 +5,7 @@ import {
 } from '@aws-sdk/client-s3';
 import { APIError } from 'ww-3-api-tjb';
 
-export default class S3Adapter {
+export class S3Adapter {
     private readonly GEOMETRY_FILE_NAME = 'geometry.json';
     private readonly FORECAST_FILE_NAME = 'forecast.json';
 
