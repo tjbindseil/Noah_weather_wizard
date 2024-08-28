@@ -22,10 +22,12 @@
     "license": "ISC",
     "dependencies": {
         "ajv": "^8.12.0",
+        "@aws-sdk/client-s3": "^3.454.0",
         "cors": "^2.8.5",
         "ww-3-api-tjb": "file:../api",
         "ww-3-app-config-tjb": "file:../app_config",
         "ww-3-models-tjb": "file:../models",
+        "ww-3-utilities-tjb": "file:../utilities",
         "express": "^4.18.2",
         "generic-pool": "^3.9.0",
         "pg": "^8.10.0",

@@ -17,6 +17,9 @@ import {
     ForecastHourlyProcessor,
     ForecastProcessor,
 } from './processors/processor';
+import { fetch_forecast, make_fetch_forcast } from './forecast_fetcher';
+import { S3Client } from '@aws-sdk/client-s3';
+import { S3Adapter } from 'ww-3-utilities-tjb';
 
 const app: Express = express();
 
@@ -109,5 +112,23 @@ app.get(
 );
 
 app.use(myErrorHandler);
+
+// Hmmm, this is pretty independent of the forecast_service
+// this could easily be a lambda that triggers another lambda
+// initial lambda just reads all the polygons, and for each polygon,
+// it queues up a bunch of SQS messages, each has a forecastURL and polygonID
+// then, a lambda (paralellized) consumes those messages and fetches the
+// latest forecast for each
+//
+// until this gets moved to AWS and starts getting scaled, its not necessary
+const bucketName = get_app_config().forecastBucketName;
+const s3Client = new S3Client({
+    region: 'us-east-1',
+});
+const s3Adapter = new S3Adapter(s3Client, bucketName);
+
+const fourHoursInMilliseconds = 1000 * 60 * 60 * 4;
+const fetchForecastFunc = make_fetch_forcast(pool, s3Adapter);
+setInterval(fetchForecastFunc, fourHoursInMilliseconds);
 
 export const server: http.Server = http.createServer(app);

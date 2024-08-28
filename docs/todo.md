@@ -75,7 +75,7 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 * write up forecast model - done
 * create polygon table (just polygonID as pk and forecastURL) - done
 * add row to polygon table when saving geometry - done
-* move dbo to utilities
+* move dbo to utilities - done
 * on a four hour interval, fetch forecast for each polygon
   * this will require reuse in forecast_service of some of the utilities currently residing in spot_service, so move these to a lib - done
   * this will also require a piece of code that is not call and response, some kind of cron job thing, figure out this (setInterval())
