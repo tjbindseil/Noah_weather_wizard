@@ -60,31 +60,9 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 
 
 
-## Forecast data fetching
-* input to forecast apis needs to be spot ID - done
-* change spot to ... spot? - done
-* fetch polygonID as a part of spot posting - done
-* save new polygons as part of spot posting - done
-  * create s3 buckets, add to app_config - done
-  * put forecast, forecastHourly, and polygon into s3 bucket, each prefixed with polygon ID - done
-```
-// bucket: ww-dev-forecasts
-// key: /ABC/forecast.json or /ABC/forecastHourly.json or /ABC/shape.json
-```
-* ensure polygons are consistent - seems good, write something that verifies though - done
-* write up forecast model - done
-* create polygon table (just polygonID as pk and forecastURL) - done
-* add row to polygon table when saving geometry - done
-* move dbo to utilities - done
-* on a four hour interval, fetch forecast for each polygon
-  * this will require reuse in forecast_service of some of the utilities currently residing in spot_service, so move these to a lib - done
-  * this will also require a piece of code that is not call and response, some kind of cron job thing, figure out this (setInterval())
-  * what about locking? can we just use stale data?
-    * well, the forecastUpdater will ... oh shoot! We have to save the forecast URL
-    * anyway, this is just writing, and forecast provider will just read. and since actions are atomoic, this is fine
-  * use setInterval to write a function that gets the next polygon/forecastURL in order, and gets the new data and saves it - done
-    * the weird thing here, is how will it know of new polygons? maybe at the end of each cycle it can refresh. Since the forecast is fetched upon creating the new spot - yep
+## frontend
 * start frontend (gonna be sick)
+* integ tests
 * nav bar
 * map integration
 * select locations based on lat/long rectangle
