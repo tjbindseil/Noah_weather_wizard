@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { screens } from './screens';
+import '../App.css';
 
 export function NavBar() {
   const navigate = useNavigate();
@@ -10,13 +11,13 @@ export function NavBar() {
   const currentLocation = window.location.href;
 
   return (
-    <div className='Home'>
-      <ul>
+    <div>
+      <ul className='NavBar'>
         {screens.map((route) =>
           currentLocation.endsWith(route.path) ? (
             <></>
           ) : (
-            <li>
+            <li key={route.path.replace('/', '_')}>
               <button
                 onClick={(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                   go(route.path);
