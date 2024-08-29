@@ -2,7 +2,6 @@ import { Pool } from 'generic-pool';
 import { Client } from 'ts-postgres';
 import { getForecast, getPolygons, S3Adapter } from 'ww-3-utilities-tjb';
 
-// factory for dependency inj?
 export const make_fetch_forcast = (
     pool: Pool<Client>,
     s3Adapter: S3Adapter

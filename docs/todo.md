@@ -82,9 +82,15 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
   * what about locking? can we just use stale data?
     * well, the forecastUpdater will ... oh shoot! We have to save the forecast URL
     * anyway, this is just writing, and forecast provider will just read. and since actions are atomoic, this is fine
-  * use setInterval to write a function that gets the next polygon/forecastURL in order, and gets the new data and saves it
-    * the weird thing here, is how will it know of new polygons? maybe at the end of each cycle it can refresh. Since the forecast is fetched upon creating the new spot
+  * use setInterval to write a function that gets the next polygon/forecastURL in order, and gets the new data and saves it - done
+    * the weird thing here, is how will it know of new polygons? maybe at the end of each cycle it can refresh. Since the forecast is fetched upon creating the new spot - yep
+* start frontend (gonna be sick)
+* nav bar
+* map integration
+* select locations based on lat/long rectangle
 * wire up forecast provider (just the one that gets them all, not filter or sort)
+* forecast comparison page
 * write up a forecast hourly model
 * on a four hour interval, fetch forecast hourly for each polygon
 * wire up forecast hourly provider (just the one that gets them all, not filter or sort)
+* forecast hourly comparison page
