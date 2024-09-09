@@ -1,0 +1,36 @@
+{
+    "name": "ww_integ_tests",
+    "version": "1.0.0",
+    "description": "Suite of end to end tests designed to exercise functionality indepenedent of the browser",
+    "main": "index.js",
+    "scripts": {
+        "integ-test-laptopIT": "export WW_ENV='laptopIT' && jest integ --config jest.integ.config.js",
+        "integ-test-host": "echo 'THIS ONE WORKS' && export WW_ENV='host' && jest integ --config jest.integ.config.js",
+        "integ-test-dev": "export WW_ENV='dev' && jest integ --config jest.integ.config.js",
+        "lint": "npx eslint test/ --format compact",
+        "tsc": "tsc",
+        "ww-clean": "rm -rf node_modules package-lock.json build",
+        "ww-format": "npx prettier --write $(find test package*)",
+        "ww-lint": "npx eslint $(find test package*)",
+        "ww-build": "tsc && ./run_integ_tests.sh && npm run ww-format && npm run ww-lint && echo success!",
+        "ww-build-reinstall": "npm run ww-clean && npm install && tsc && ./run_integ_tests.sh && npm run ww-format && npm run ww-lint && echo success!"
+    },
+    "author": "TJB",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/jest": "^28.1.8",
+        "@typescript-eslint/eslint-plugin": "^7.3.1",
+        "ww-3-api-tjb": "file:../api",
+        "ww-3-app-config-tjb": "file:../app_config",
+        "ww-3-models-tjb": "file:../models",
+        "eslint": "^8.40.0",
+        "eslint-config-prettier": "^8.8.0",
+        "jest": "^28.1.3",
+        "jest-extended": "^3.2.4",
+        "mongodb": "^6.5.0",
+        "prettier": "2.8.8",
+        "socket.io-client": "^4.7.2",
+        "ts-jest": "^28.0.8",
+        "typescript": "^5.0.4"
+    }
+}
