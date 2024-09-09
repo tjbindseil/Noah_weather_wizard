@@ -25,6 +25,10 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
         input: GetForecastsInput,
         pgClient: Client
     ): Promise<GetForecastsOutput> {
+        // this won't be a db call
+        // this will be a fetch from s3
+        // then, conversion to Forecast model
+        // in other words, we will have to use AJV in a new way here.
         return {
             forecasts: await getForecasts(pgClient, input.pointIDs),
         };

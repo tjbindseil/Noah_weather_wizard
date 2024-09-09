@@ -15,19 +15,27 @@ export class S3Adapter {
     ) {}
 
     public async getGeometryJson(polygonID: string): Promise<string> {
+        return this.getObject(`${polygonID}/${this.GEOMETRY_FILE_NAME}`);
+    }
+
+    public async getForecastJson(polygonID: string): Promise<string> {
+        return this.getObject(`${polygonID}/${this.FORECAST_FILE_NAME}`);
+    }
+
+    private async getObject(key: string): Promise<string> {
         const response = await this.s3Client.send(
             new GetObjectCommand({
                 Bucket: this.bucketName,
-                Key: `${polygonID}/${this.GEOMETRY_FILE_NAME}`,
+                Key: key,
             })
         );
-        const geometryJsonStr = await response.Body?.transformToString();
+        const jsonStr = await response.Body?.transformToString();
 
-        if (!geometryJsonStr) {
-            throw new APIError(500, 'geometry is empty');
+        if (!jsonStr) {
+            throw new APIError(500, `object at key: ${key} is empty`);
         }
 
-        return geometryJsonStr;
+        return jsonStr;
     }
 
     /* eslint-disable  @typescript-eslint/no-explicit-any */
