@@ -5,6 +5,7 @@ import { Polygon, Spot } from 'ww-3-models-tjb';
 import {
     deleteSpot,
     getPolygons,
+    getSpot,
     getSpots,
     insertPolygon,
     insertSpot,
@@ -58,6 +59,7 @@ describe('dbo tests', () => {
         polygonID: 'ghi',
     };
     const expectedSpots = [longsPeakSpot, crestoneNeedleSpot, mtWhitneySpot];
+    const spotIds: number[] = [];
 
     const polygon1: Polygon = {
         id: 'ABC',
@@ -85,8 +87,10 @@ describe('dbo tests', () => {
     });
 
     beforeEach(async () => {
+        spotIds.length = 0;
         for (let i = 0; i < expectedSpots.length; ++i) {
-            await insertSpot(pgClient, expectedSpots[i]);
+            const spotWithId = await insertSpot(pgClient, expectedSpots[i]);
+            spotIds.push(spotWithId.id);
         }
         for (let i = 0; i < expectedPolygons.length; ++i) {
             await insertPolygon(
@@ -142,6 +146,14 @@ describe('dbo tests', () => {
 
         const finalPolygons = await getPolygons(pgClient);
         expect(finalPolygons.length).toEqual(expectedPolygons.length + 1);
+    });
+
+    it('can get spots', async () => {
+        const firstId = spotIds[0];
+
+        const spot = await getSpot(pgClient, firstId);
+
+        expect(spot.id).toEqual(firstId);
     });
 
     afterEach(async () => {

@@ -12,6 +12,13 @@ export const insertSpot = async (pgClient: Client, spot: PostedSpot) => {
     return await result.one();
 };
 
+export const getSpot = async (pgClient: Client, spotID: number) => {
+    const result = pgClient.query<Spot>('SELECT * from spot where id = $1', [
+        spotID,
+    ]);
+    return await result.one();
+};
+
 export const getSpots = async (pgClient: Client) => {
     const result = pgClient.query<Spot>('SELECT * FROM spot');
 
