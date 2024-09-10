@@ -1,10 +1,10 @@
 import { DeleteSpotInput, DeleteSpotOutput, _schema } from 'ww-3-models-tjb';
-import { StrictlyAuthenticatedAPI } from 'ww-3-api-tjb';
+import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { deleteSpot } from 'ww-3-utilities-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 
-export class DeleteSpot extends StrictlyAuthenticatedAPI<
+export class DeleteSpot extends LooselyAuthenticatedAPI<
     DeleteSpotInput,
     DeleteSpotOutput,
     Client

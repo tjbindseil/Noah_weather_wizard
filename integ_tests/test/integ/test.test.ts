@@ -1,8 +1,8 @@
 import {
     DeleteSpotOutput,
     GetSpotsOutput,
+    PostSpotInput,
     PostSpotOutput,
-    Spot,
 } from 'ww-3-models-tjb';
 
 import { get_app_config } from 'ww-3-app-config-tjb';
@@ -22,7 +22,7 @@ describe('General integ tests', () => {
             `${spotServiceBaseUrl}/spots`
         );
 
-    const postSpot = async (spot: Omit<Spot, 'id'>) =>
+    const postSpot = async (input: PostSpotInput) =>
         await fetchWithError<PostSpotOutput>(
             'posting spot',
             `${spotServiceBaseUrl}/spot`,
@@ -31,7 +31,7 @@ describe('General integ tests', () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ spot }),
+                body: JSON.stringify(input),
             }
         );
     const deleteSpot = async (id: number) =>
@@ -52,7 +52,6 @@ describe('General integ tests', () => {
             name: 'Longs Peak',
             latitude: 40.255014,
             longitude: -105.615115,
-            polygonID: 'abc',
         });
 
         const finalSpots = await getAllSpots();
@@ -71,7 +70,6 @@ describe('General integ tests', () => {
             name: 'Longs Peak',
             latitude: 40.255014,
             longitude: -105.615115,
-            polygonID: 'abc',
         });
 
         await deleteSpot(postedSpot.spot.id);
