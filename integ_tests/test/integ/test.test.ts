@@ -1,4 +1,4 @@
-import { get_app_config } from 'ww-3-app-config-tjb';
+import { getForecasts } from './api_helpers/forecast_service_api';
 import {
     deleteSpot,
     getAllSpots,
@@ -7,10 +7,6 @@ import {
 import { DeleteSpotOutput } from 'ww-3-models-tjb';
 
 describe('General integ tests', () => {
-    const forecastServiceBaseUrl = `http://${
-        get_app_config().forecastServiceHost
-    }:${get_app_config().forecastServicePort}`;
-
     const spotsToDelete: number[] = [];
 
     it('posts a spot', async () => {
@@ -50,33 +46,48 @@ describe('General integ tests', () => {
     });
 
     it('gets all spots', async () => {
-        const firstPostedSpot = await postSpot({
+        const longsPeak = await postSpot({
             name: 'Longs Peak',
             latitude: 40.255014,
             longitude: -105.615115,
         });
-        spotsToDelete.push(firstPostedSpot.spot.id);
-        const secondPostedSpot = await postSpot({
+        const mtWhitney = await postSpot({
             name: 'Mount Whitney',
             latitude: 36.578581,
             longitude: -118.291995,
         });
-        spotsToDelete.push(secondPostedSpot.spot.id);
+        spotsToDelete.push(longsPeak.spot.id);
+        spotsToDelete.push(mtWhitney.spot.id);
 
         const finalSpots = await getAllSpots();
         expect(
-            finalSpots.spots
-                .map((spot) => spot.id)
-                .includes(firstPostedSpot.spot.id)
+            finalSpots.spots.map((spot) => spot.id).includes(longsPeak.spot.id)
         ).toBeTruthy();
         expect(
-            finalSpots.spots
-                .map((spot) => spot.id)
-                .includes(secondPostedSpot.spot.id)
+            finalSpots.spots.map((spot) => spot.id).includes(mtWhitney.spot.id)
         ).toBeTruthy();
     });
 
-    it('gets forecasts for spots', async () => {});
+    it.only('gets forecasts for spots', async () => {
+        const longsPeak = await postSpot({
+            name: 'Longs Peak',
+            latitude: 40.255014,
+            longitude: -105.615115,
+        });
+        const mtWhitney = await postSpot({
+            name: 'Mount Whitney',
+            latitude: 36.578581,
+            longitude: -118.291995,
+        });
+        spotsToDelete.push(longsPeak.spot.id);
+        spotsToDelete.push(mtWhitney.spot.id);
+
+        const forecasts = await getForecasts([
+            longsPeak.spot.id,
+            mtWhitney.spot.id,
+        ]);
+        console.log(`forecasts is: ${JSON.stringify(forecasts)}`);
+    });
 
     afterAll(async () => {
         const deletePromises: Promise<DeleteSpotOutput>[] = [];

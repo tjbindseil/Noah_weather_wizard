@@ -27,6 +27,7 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
         input: GetForecastsInput,
         pgClient: Client
     ): Promise<GetForecastsOutput> {
+        console.log('!@@ @@ preocess');
         const spotPromises: Promise<Spot>[] = [];
         for (let i = 0; i < input.pointIDs.length; ++i) {
             spotPromises.push(getSpot(pgClient, input.pointIDs[i]));
@@ -34,6 +35,7 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
         const polygons = (await Promise.all(spotPromises)).map(
             (spot) => spot.polygonID
         );
+        console.log(`!@@ @@ polygons are: ${polygons}`);
 
         const forecastJsonPromises: Promise<Forecast>[] = [];
         for (let i = 0; i < polygons.length; ++i) {
