@@ -55,11 +55,15 @@ describe('General integ tests', () => {
             polygonID: 'abc',
         });
 
+        const finalSpots = await getAllSpots();
         expect(
             initialSpots.spots
                 .map((spot) => spot.id)
                 .includes(postedSpot.spot.id)
         ).toBeFalsy();
+        expect(
+            finalSpots.spots.map((spot) => spot.id).includes(postedSpot.spot.id)
+        ).toBeTruthy();
     });
 
     it('deletes a spot', async () => {
@@ -73,7 +77,9 @@ describe('General integ tests', () => {
         await deleteSpot(postedSpot.spot.id);
 
         const finalSpots = await getAllSpots();
-        expect(initialSpots.spots.length + 1).toEqual(finalSpots.spots.length);
+        expect(
+            finalSpots.spots.map((spot) => spot.id).includes(postedSpot.spot.id)
+        ).toBeFalsy();
     });
 
     it('gets all spots', async () => {});
