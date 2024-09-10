@@ -49,7 +49,33 @@ describe('General integ tests', () => {
         ).toBeFalsy();
     });
 
-    it('gets all spots', async () => {});
+    it('gets all spots', async () => {
+        const firstPostedSpot = await postSpot({
+            name: 'Longs Peak',
+            latitude: 40.255014,
+            longitude: -105.615115,
+        });
+        spotsToDelete.push(firstPostedSpot.spot.id);
+        const secondPostedSpot = await postSpot({
+            name: 'Mount Whitney',
+            latitude: 36.578581,
+            longitude: -118.291995,
+        });
+        spotsToDelete.push(secondPostedSpot.spot.id);
+
+        const finalSpots = await getAllSpots();
+        expect(
+            finalSpots.spots
+                .map((spot) => spot.id)
+                .includes(firstPostedSpot.spot.id)
+        ).toBeTruthy();
+        expect(
+            finalSpots.spots
+                .map((spot) => spot.id)
+                .includes(secondPostedSpot.spot.id)
+        ).toBeTruthy();
+    });
+
     it('gets forecasts for spots', async () => {});
 
     afterAll(async () => {
