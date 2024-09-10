@@ -9,7 +9,6 @@ import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 import { getSpot, S3Adapter } from 'ww-3-utilities-tjb';
-import { getForecasts } from '../db/dbo';
 
 export class GetForecasts extends LooselyAuthenticatedAPI<
     GetForecastsInput,
@@ -28,10 +27,6 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
         input: GetForecastsInput,
         pgClient: Client
     ): Promise<GetForecastsOutput> {
-        // foreach point ID
-        // get the point
-        // get the polygon
-        // get the forecast
         const spotPromises: Promise<Spot>[] = [];
         for (let i = 0; i < input.pointIDs.length; ++i) {
             spotPromises.push(getSpot(pgClient, input.pointIDs[i]));
@@ -40,19 +35,16 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
             (spot) => spot.polygonID
         );
 
-        const forecastJsonPromises: Promise<string>[] = [];
+        const forecastJsonPromises: Promise<Forecast>[] = [];
         for (let i = 0; i < polygons.length; ++i) {
             forecastJsonPromises.push(
                 this.s3Adapter.getForecastJson(polygons[i])
             );
         }
-        const forecasts = (await Promise.all(forecastJsonPromises)).map(
-            (forecastJson) => ({ ...JSON.parse(forecastJson) })
-        );
+        const forecasts = await Promise.all(forecastJsonPromises);
 
         return {
-            // TODO ajv
-            forecasts: forecasts,
+            forecasts,
         };
     }
 }

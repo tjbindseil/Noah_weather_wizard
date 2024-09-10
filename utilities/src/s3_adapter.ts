@@ -3,23 +3,37 @@ import {
     PutObjectCommand,
     S3Client,
 } from '@aws-sdk/client-s3';
+import Ajv from 'ajv';
 import { APIError } from 'ww-3-api-tjb';
+import { _schema, Forecast } from 'ww-3-models-tjb';
 
 export class S3Adapter {
     private readonly GEOMETRY_FILE_NAME = 'geometry.json';
     private readonly FORECAST_FILE_NAME = 'forecast.json';
 
+    protected readonly ajv: Ajv;
+
     public constructor(
         private readonly s3Client: S3Client,
         private readonly bucketName: string
-    ) {}
+    ) {
+        this.ajv = new Ajv({ strict: false });
+    }
 
     public async getGeometryJson(polygonID: string): Promise<string> {
+        // I think this is just to make sure the polygons are consistent
         return this.getObject(`${polygonID}/${this.GEOMETRY_FILE_NAME}`);
     }
 
-    public async getForecastJson(polygonID: string): Promise<string> {
-        return this.getObject(`${polygonID}/${this.FORECAST_FILE_NAME}`);
+    public async getForecastJson(polygonID: string): Promise<Forecast> {
+        const raw = this.getObject(`${polygonID}/${this.FORECAST_FILE_NAME}`);
+        const validator = this.ajv.compile(_schema.Forecast);
+        if (!validator(raw)) {
+            console.error(`invalid forecast object: ${JSON.stringify(raw)}`);
+            throw new APIError(500, 'issue with NOAA');
+        }
+
+        return raw as Forecast;
     }
 
     private async getObject(key: string): Promise<string> {

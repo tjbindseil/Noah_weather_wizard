@@ -22,7 +22,7 @@ export interface AppConfig {
         ssl: SSLMode.Disable | SSL | undefined;
     };
     forecastServiceHost: string;
-    forecastServiceNumber: number;
+    forecastServicePort: number;
 }
 
 const hostAppConfig: AppConfig = {
@@ -38,7 +38,7 @@ const hostAppConfig: AppConfig = {
         ssl: SSLMode.Disable,
     },
     forecastServiceHost: 'localhost',
-    forecastServiceNumber: 8081,
+    forecastServicePort: 8081,
 };
 
 const laptopITConfig: AppConfig = {
@@ -54,7 +54,7 @@ const laptopITConfig: AppConfig = {
         ssl: SSLMode.Disable,
     },
     forecastServiceHost: 'localhost',
-    forecastServiceNumber: 8081,
+    forecastServicePort: 8081,
 };
 
 const devAppConfig: AppConfig = {
@@ -70,7 +70,7 @@ const devAppConfig: AppConfig = {
         ssl: SSLMode.Disable,
     },
     forecastServiceHost: 'localhost',
-    forecastServiceNumber: 8081,
+    forecastServicePort: 8081,
 };
 
 const testAppConfig: AppConfig = {
@@ -86,7 +86,7 @@ const testAppConfig: AppConfig = {
         ssl: SSLMode.Disable,
     },
     forecastServiceHost: 'localhost',
-    forecastServiceNumber: 8081,
+    forecastServicePort: 8081,
 };
 
 const unitTestAppConfig: AppConfig = {
@@ -102,7 +102,7 @@ const unitTestAppConfig: AppConfig = {
         ssl: SSLMode.Disable,
     },
     forecastServiceHost: 'localhost',
-    forecastServiceNumber: 8081,
+    forecastServicePort: 8081,
 };
 
 const prodAppConfig: AppConfig = {
@@ -118,7 +118,7 @@ const prodAppConfig: AppConfig = {
         ssl: SSLMode.Disable,
     },
     forecastServiceHost: 'localhost',
-    forecastServiceNumber: 8081,
+    forecastServicePort: 8081,
 };
 
 let appConfigSet = false;

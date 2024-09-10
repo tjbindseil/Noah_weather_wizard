@@ -5,7 +5,7 @@ const defaultRequestInit: Partial<RequestInit> = {
 export const fetchWithError = async <T>(
     action: string,
     url: string,
-    requestInit: RequestInit
+    requestInit?: RequestInit
 ): Promise<T> => {
     const requestInitWithDefaults = {
         ...defaultRequestInit,
