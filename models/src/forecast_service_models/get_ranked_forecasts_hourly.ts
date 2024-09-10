@@ -1,7 +1,7 @@
 import { ForecastHourly } from './forecast';
 
 export interface GetRankedForecastsHourlyInput {
-    pointIDs: number[];
+    spotIDs: string; // comma separated list
     formulaID: number;
 }
 

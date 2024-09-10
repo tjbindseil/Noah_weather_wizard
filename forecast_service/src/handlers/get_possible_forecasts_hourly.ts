@@ -31,7 +31,7 @@ export class GetPossibleForecastsHourly extends LooselyAuthenticatedAPI<
     ): Promise<GetPossibleForecastsHourlyOutput> {
         return {
             forecastsHourly: this.forecastHourlyProcessor.filter(
-                await getForecastsHourly(pgClient, input.pointIDs),
+                await getForecastsHourly(pgClient, input.spotIDs),
                 input.criteriaID
             ),
         };

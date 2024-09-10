@@ -1,7 +1,7 @@
 import { Forecast } from './forecast';
 
 export interface GetForecastsInput {
-    pointIDs: number[];
+    spotIDs: string; // comma separated list
 }
 
 export interface GetForecastsOutput {

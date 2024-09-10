@@ -7,7 +7,7 @@ import { Forecast, ForecastHourly } from 'ww-3-models-tjb';
 // TODO consider matching all spots
 export const getForecasts = async (
     _pgClient: Client,
-    _pointIDs: number[]
+    _pointIDs: string
 ): Promise<Forecast[]> => {
     // ... hmm should we make multiple requests? nope, find max and min somehow?
     // const result = pgClient.query<Forecast>(
@@ -27,7 +27,7 @@ export const getForecasts = async (
 
 export const getForecastsHourly = async (
     _pgClient: Client,
-    _pointIDs: number[]
+    _pointIDs: string
 ): Promise<ForecastHourly[]> => {
     return [];
     //     const result = pgClient.query<Spot>(

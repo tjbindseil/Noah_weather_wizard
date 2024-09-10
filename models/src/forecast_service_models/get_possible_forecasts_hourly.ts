@@ -1,7 +1,7 @@
 import { ForecastHourly } from './forecast';
 
 export interface GetPossibleForecastsHourlyInput {
-    pointIDs: number[];
+    spotIDs: string; // comma separated list
     criteriaID: number;
 }
 

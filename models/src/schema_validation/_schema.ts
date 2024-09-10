@@ -186,10 +186,8 @@ const schema = {
         },
         GetForecastsInput: {
             type: 'object',
-            properties: {
-                pointIDs: { type: 'array', items: { type: 'number' } },
-            },
-            required: ['pointIDs'],
+            properties: { spotIDs: { type: 'string' } },
+            required: ['spotIDs'],
         },
         GetForecastsOutput: {
             type: 'object',
@@ -263,10 +261,10 @@ const schema = {
         GetPossibleForecastsInput: {
             type: 'object',
             properties: {
-                pointIDs: { type: 'array', items: { type: 'number' } },
+                spotIDs: { type: 'string' },
                 criteriaID: { type: 'number' },
             },
-            required: ['criteriaID', 'pointIDs'],
+            required: ['criteriaID', 'spotIDs'],
         },
         GetPossibleForecastsOutput: {
             type: 'object',
@@ -340,10 +338,10 @@ const schema = {
         GetRankedForecastsInput: {
             type: 'object',
             properties: {
-                pointIDs: { type: 'array', items: { type: 'number' } },
+                spotIDs: { type: 'string' },
                 formulaID: { type: 'number' },
             },
-            required: ['formulaID', 'pointIDs'],
+            required: ['formulaID', 'spotIDs'],
         },
         GetRankedForecastsOutput: {
             type: 'object',
@@ -416,10 +414,8 @@ const schema = {
         },
         GetForecastsHourlyInput: {
             type: 'object',
-            properties: {
-                pointIDs: { type: 'array', items: { type: 'number' } },
-            },
-            required: ['pointIDs'],
+            properties: { spotIDs: { type: 'string' } },
+            required: ['spotIDs'],
         },
         GetForecastsHourlyOutput: {
             type: 'object',
@@ -438,10 +434,10 @@ const schema = {
         GetPossibleForecastsHourlyInput: {
             type: 'object',
             properties: {
-                pointIDs: { type: 'array', items: { type: 'number' } },
+                spotIDs: { type: 'string' },
                 criteriaID: { type: 'number' },
             },
-            required: ['criteriaID', 'pointIDs'],
+            required: ['criteriaID', 'spotIDs'],
         },
         GetPossibleForecastsHourlyOutput: {
             type: 'object',
@@ -460,10 +456,10 @@ const schema = {
         GetRankedForecastsHourlyInput: {
             type: 'object',
             properties: {
-                pointIDs: { type: 'array', items: { type: 'number' } },
+                spotIDs: { type: 'string' },
                 formulaID: { type: 'number' },
             },
-            required: ['formulaID', 'pointIDs'],
+            required: ['formulaID', 'spotIDs'],
         },
         GetRankedForecastsHourlyOutput: {
             type: 'object',

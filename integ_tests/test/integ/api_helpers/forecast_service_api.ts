@@ -9,9 +9,9 @@ const forecastServiceBaseUrl = `http://${
 export const getForecasts = async (spotIds: number[]) => {
     await fetchWithError<GetForecastsOutput>(
         'getting forecasts',
-        `${forecastServiceBaseUrl}/spots?` +
+        `${forecastServiceBaseUrl}/forecasts?` +
             new URLSearchParams({
-                spotIds: spotIds.map((spotId) => spotId.toString()),
+                spotIDs: spotIds.map((spotId) => spotId.toString()),
             })
     );
 };

@@ -1,7 +1,7 @@
 import { Forecast } from './forecast';
 
 export interface GetPossibleForecastsInput {
-    pointIDs: number[];
+    spotIDs: string; // comma separated list
     criteriaID: number;
 }
 

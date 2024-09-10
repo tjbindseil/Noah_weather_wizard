@@ -1,7 +1,7 @@
 import { Forecast } from './forecast';
 
 export interface GetRankedForecastsInput {
-    pointIDs: number[];
+    spotIDs: string; // comma separated list
     formulaID: number;
 }
 

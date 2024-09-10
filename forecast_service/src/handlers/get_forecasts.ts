@@ -27,10 +27,14 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
         input: GetForecastsInput,
         pgClient: Client
     ): Promise<GetForecastsOutput> {
+        const spotIds: number[] = input.spotIDs
+            .split(',')
+            .map((str) => parseFloat(str));
+
         console.log('!@@ @@ preocess');
         const spotPromises: Promise<Spot>[] = [];
-        for (let i = 0; i < input.pointIDs.length; ++i) {
-            spotPromises.push(getSpot(pgClient, input.pointIDs[i]));
+        for (let i = 0; i < spotIds.length; ++i) {
+            spotPromises.push(getSpot(pgClient, spotIds[i]));
         }
         const polygons = (await Promise.all(spotPromises)).map(
             (spot) => spot.polygonID
