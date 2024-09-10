@@ -19,6 +19,14 @@ export class DeleteSpot extends LooselyAuthenticatedAPI<
     ): Promise<DeleteSpotOutput> {
         await deleteSpot(pgClient, input.id);
 
+        // TODO delete is actually a bit more complicated,
+        // if there is no more spots looking at it, we should delete the s3 folder and its contents
+        // -- OR --
+        // we could do that in the background as part of the updating of the cache
+        //
+        // ...
+        //
+        // while im at it, it could be helpful to delete duplicate rows in the spot table?
         return {};
     }
 }
