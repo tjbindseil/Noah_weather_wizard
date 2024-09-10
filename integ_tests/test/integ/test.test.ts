@@ -56,7 +56,9 @@ describe('General integ tests', () => {
         });
 
         expect(
-            initialSpots.spots.map((spot) => spot.id).includes(postSpot.spot.id)
+            initialSpots.spots
+                .map((spot) => spot.id)
+                .includes(postedSpot.spot.id)
         ).toBeFalsy();
     });
 

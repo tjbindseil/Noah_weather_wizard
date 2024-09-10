@@ -58,7 +58,7 @@ const forecastHourlyProcessor = new ForecastHourlyProcessor();
 const forecastProcessor = new ForecastProcessor();
 
 app.get('/forecasts', (req: Request, res: Response, next: NextFunction) => {
-    new GetForecasts().call(req, res, next, pgContextController);
+    new GetForecasts(s3Adapter).call(req, res, next, pgContextController);
 });
 app.get(
     '/possible_forecasts',
