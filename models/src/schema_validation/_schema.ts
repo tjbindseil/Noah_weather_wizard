@@ -97,7 +97,7 @@ const schema = {
                     type: 'object',
                     properties: {
                         unitCode: { type: 'string' },
-                        value: { type: 'number' },
+                        value: { type: ['null', 'number'] },
                     },
                     required: ['unitCode', 'value'],
                 },
@@ -132,9 +132,9 @@ const schema = {
                     type: 'object',
                     properties: {
                         unitCode: { type: 'string' },
-                        valud: { type: 'number' },
+                        value: { type: 'number' },
                     },
-                    required: ['unitCode', 'valud'],
+                    required: ['unitCode', 'value'],
                 },
                 periods: {
                     type: 'array',
@@ -153,7 +153,7 @@ const schema = {
                                 type: 'object',
                                 properties: {
                                     unitCode: { type: 'string' },
-                                    value: { type: 'number' },
+                                    value: { type: ['null', 'number'] },
                                 },
                                 required: ['unitCode', 'value'],
                             },
@@ -202,9 +202,9 @@ const schema = {
                                 type: 'object',
                                 properties: {
                                     unitCode: { type: 'string' },
-                                    valud: { type: 'number' },
+                                    value: { type: 'number' },
                                 },
-                                required: ['unitCode', 'valud'],
+                                required: ['unitCode', 'value'],
                             },
                             periods: {
                                 type: 'array',
@@ -223,7 +223,9 @@ const schema = {
                                             type: 'object',
                                             properties: {
                                                 unitCode: { type: 'string' },
-                                                value: { type: 'number' },
+                                                value: {
+                                                    type: ['null', 'number'],
+                                                },
                                             },
                                             required: ['unitCode', 'value'],
                                         },
@@ -279,9 +281,9 @@ const schema = {
                                 type: 'object',
                                 properties: {
                                     unitCode: { type: 'string' },
-                                    valud: { type: 'number' },
+                                    value: { type: 'number' },
                                 },
-                                required: ['unitCode', 'valud'],
+                                required: ['unitCode', 'value'],
                             },
                             periods: {
                                 type: 'array',
@@ -300,7 +302,9 @@ const schema = {
                                             type: 'object',
                                             properties: {
                                                 unitCode: { type: 'string' },
-                                                value: { type: 'number' },
+                                                value: {
+                                                    type: ['null', 'number'],
+                                                },
                                             },
                                             required: ['unitCode', 'value'],
                                         },
@@ -356,9 +360,9 @@ const schema = {
                                 type: 'object',
                                 properties: {
                                     unitCode: { type: 'string' },
-                                    valud: { type: 'number' },
+                                    value: { type: 'number' },
                                 },
-                                required: ['unitCode', 'valud'],
+                                required: ['unitCode', 'value'],
                             },
                             periods: {
                                 type: 'array',
@@ -377,7 +381,9 @@ const schema = {
                                             type: 'object',
                                             properties: {
                                                 unitCode: { type: 'string' },
-                                                value: { type: 'number' },
+                                                value: {
+                                                    type: ['null', 'number'],
+                                                },
                                             },
                                             required: ['unitCode', 'value'],
                                         },

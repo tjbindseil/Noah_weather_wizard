@@ -1,10 +1,67 @@
-// TODO TJTAG probably best to get some actual stuff here
+import geometry from './resources/geometry.json';
+import forecast from './resources/forecast.json';
+import {
+    DeleteObjectsCommand,
+    ListObjectsV2Command,
+    PutObjectCommand,
+    S3Client,
+} from '@aws-sdk/client-s3';
+import { S3Adapter } from '../../src';
+
 describe('s3_adapter tests', () => {
+    const bucketName = 'ww-s3-adapter-test';
+    const testPolygonId = 'TPI';
+    const geometryKey = `${testPolygonId}/geometry.json`;
+    const forecastKey = `${testPolygonId}/forecast.json`;
+    const s3Client = new S3Client();
+    const s3Adapter = new S3Adapter(s3Client, bucketName);
+
+    beforeAll(async () => {
+        const response = await s3Client.send(
+            new ListObjectsV2Command({
+                Bucket: bucketName,
+            })
+        );
+
+        if (response.KeyCount && response.KeyCount > 0) {
+            throw new Error(
+                `bucket should be empty but has ${response.KeyCount} keys`
+            );
+        }
+    });
+
+    beforeEach(async () => {
+        await s3Client.send(
+            new PutObjectCommand({
+                Bucket: bucketName,
+                Key: geometryKey,
+                Body: JSON.stringify(geometry),
+                ContentType: 'application/json; charset=utf-8',
+            })
+        );
+        await s3Client.send(
+            new PutObjectCommand({
+                Bucket: bucketName,
+                Key: forecastKey,
+                Body: JSON.stringify(forecast),
+                ContentType: 'application/json; charset=utf-8',
+            })
+        );
+    });
+
     it('gets geometry', async () => {
-        console.log('todo');
+        const _geometryRetrieved = await s3Adapter.getGeometryJson(
+            testPolygonId
+        );
+        // console.log(`geometryRetrieved = ${_geometryRetrieved}`);
     });
 
     it('gets forecast', async () => {
+        const forecastReceived = await s3Adapter.getForecastJson(testPolygonId);
+        console.log(`foredast received is: ${forecastReceived}`);
+    });
+
+    it('throws when forecast json isnt valid', async () => {
         console.log('todo');
     });
 
@@ -14,5 +71,28 @@ describe('s3_adapter tests', () => {
 
     it('puts forecast', async () => {
         console.log('todo');
+    });
+
+    beforeEach(async () => {
+        // put existing objects in
+    });
+
+    afterEach(async () => {
+        const listResponse = await s3Client.send(
+            new ListObjectsV2Command({
+                Bucket: bucketName,
+            })
+        );
+
+        await s3Client.send(
+            new DeleteObjectsCommand({
+                Bucket: bucketName,
+                Delete: {
+                    Objects: listResponse.Contents?.map((content) => ({
+                        Key: content.Key,
+                    })),
+                },
+            })
+        );
     });
 });

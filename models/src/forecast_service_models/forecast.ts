@@ -13,7 +13,7 @@ export interface Period {
     temperatureTrend: string;
     probabilityOfPrecipitation: {
         unitCode: string;
-        value: number;
+        value: number | null; // TODO wtf does null mean here?
     };
     windSpeed: string;
     windDirection: string;
@@ -26,7 +26,7 @@ export interface Forecast {
     units: string;
     elevation: {
         unitCode: string;
-        valud: number;
+        value: number;
     };
     periods: Period[];
 }

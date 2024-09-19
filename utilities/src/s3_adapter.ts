@@ -29,13 +29,17 @@ export class S3Adapter {
         const raw = await this.getObject(
             `${polygonID}/${this.FORECAST_FILE_NAME}`
         );
+        const asObj = JSON.parse(raw);
         const validator = this.ajv.compile(_schema.Forecast);
-        if (!validator(raw)) {
-            console.error(`invalid forecast object: ${JSON.stringify(raw)}`);
+        if (!validator(asObj)) {
+            console.log(
+                `validator.errors is: ${JSON.stringify(validator.errors)}`
+            );
+            console.error(`invalid forecast object: ${JSON.stringify(asObj)}`);
             throw new APIError(500, 'issue with NOAA');
         }
 
-        return raw as Forecast;
+        return asObj as Forecast;
     }
 
     private async getObject(key: string): Promise<string> {
