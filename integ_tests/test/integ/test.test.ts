@@ -68,7 +68,7 @@ describe('General integ tests', () => {
         ).toBeTruthy();
     });
 
-    it.only('gets forecasts for spots', async () => {
+    it('gets forecasts for spots', async () => {
         const longsPeak = await postSpot({
             name: 'Longs Peak',
             latitude: 40.255014,
