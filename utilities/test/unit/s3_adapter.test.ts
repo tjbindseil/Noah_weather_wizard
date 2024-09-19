@@ -1,9 +1,18 @@
+// TODO TJTAG probably best to get some actual stuff here
 describe('s3_adapter tests', () => {
-    it('makes the initial call and returns the polygonID and the forecast url', async () => {
+    it('gets geometry', async () => {
         console.log('todo');
     });
 
-    it('fetches the forecast given the forecast url', async () => {
+    it('gets forecast', async () => {
+        console.log('todo');
+    });
+
+    it('puts geometry', async () => {
+        console.log('todo');
+    });
+
+    it('puts forecast', async () => {
         console.log('todo');
     });
 });

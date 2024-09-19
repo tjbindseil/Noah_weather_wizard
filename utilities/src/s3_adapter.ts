@@ -22,11 +22,13 @@ export class S3Adapter {
 
     public async getGeometryJson(polygonID: string): Promise<string> {
         // I think this is just to make sure the polygons are consistent
-        return this.getObject(`${polygonID}/${this.GEOMETRY_FILE_NAME}`);
+        return await this.getObject(`${polygonID}/${this.GEOMETRY_FILE_NAME}`);
     }
 
     public async getForecastJson(polygonID: string): Promise<Forecast> {
-        const raw = this.getObject(`${polygonID}/${this.FORECAST_FILE_NAME}`);
+        const raw = await this.getObject(
+            `${polygonID}/${this.FORECAST_FILE_NAME}`
+        );
         const validator = this.ajv.compile(_schema.Forecast);
         if (!validator(raw)) {
             console.error(`invalid forecast object: ${JSON.stringify(raw)}`);

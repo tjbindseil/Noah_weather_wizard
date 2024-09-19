@@ -1,13 +1,9 @@
 describe('noaa_api tests', () => {
-    it('gets geometry', async () => {
+    it('makes the initial call and returns the polygonID and the forecast url', async () => {
         console.log('todo');
     });
 
-    it('puts geometry', async () => {
-        console.log('todo');
-    });
-
-    it('puts forecast', async () => {
+    it('fetches the forecast given the forecast url', async () => {
         console.log('todo');
     });
 });
