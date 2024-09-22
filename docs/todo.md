@@ -62,7 +62,7 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 
 ## frontend
 * start frontend (gonna be sick)
-* integ tests
+* integ tests - done
 * nav bar
 * map integration
 * select locations based on lat/long rectangle
