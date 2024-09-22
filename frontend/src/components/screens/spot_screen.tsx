@@ -1,5 +1,8 @@
 import { useState } from 'react';
+import { ComposableMap, Marker, Geographies, Geography } from 'react-simple-maps';
 import { NavBar } from '../nav_bar';
+
+const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/land-10m.json';
 
 export function SpotScreen() {
   const [latitude, setLatitude] = useState(42);
@@ -49,6 +52,18 @@ export function SpotScreen() {
           setName(event.target.value);
         }}
       />
+
+      <ComposableMap>
+        <Geographies geography={geoUrl}>
+          {({ geographies }) =>
+            geographies.map((geo) => <Geography key={geo.rsmKey} geography={geo} />)
+          }
+        </Geographies>
+
+        <Marker coordinates={[longitude, latitude]}>
+          <circle r={8} fill='#F53' />
+        </Marker>
+      </ComposableMap>
     </div>
   );
 }
