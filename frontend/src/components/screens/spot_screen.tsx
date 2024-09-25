@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ComposableMap, Marker, Geographies, Geography } from 'react-simple-maps';
 import { NavBar } from '../nav_bar';
 
-const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/land-10m.json';
+const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json';
 
 export function SpotScreen() {
   const [latitude, setLatitude] = useState(42);
@@ -18,6 +18,17 @@ export function SpotScreen() {
   //
   // naw, first, lets just get something working
   // lets just do one
+  //
+  // i think interacting with caltopo is ideal
+  // https://cal.com/docs/core-features/embed/adding-embed-to-your-webpage
+  // ^ umm, this is for a calendar
+  //
+  // I will search a bit more to see if i can get a way to interact directly with cal topo
+  // if not, i will probably just resort to just showing the points as lat/long/name, and probably allow users to favorite them or something
+  //
+  //
+  // gonna try to use leaflet.js as a mapping lib: https://leafletjs.com/
+  //
   return (
     <div className='Home'>
       <NavBar />
