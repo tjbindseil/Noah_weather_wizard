@@ -1,13 +1,28 @@
-import { useState } from 'react';
-import { ComposableMap, Marker, Geographies, Geography } from 'react-simple-maps';
+import React, { useState, useRef } from 'react';
+import { MapContainer, TileLayer } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import { NavBar } from '../nav_bar';
-
-const geoUrl = 'https://cdn.jsdelivr.net/npm/world-atlas@2/land-110m.json';
 
 export function SpotScreen() {
   const [latitude, setLatitude] = useState(42);
   const [longitude, setLongitude] = useState(42);
   const [name, setName] = useState('name');
+
+  const mapRef = useRef(null);
+  const latitudeTutorial = 51.505;
+  const longitudeTutorial = -0.09;
+
+  const mapContainerProps = {
+    center: [latitudeTutorial, longitudeTutorial],
+    zoom: 13,
+    ref: mapRef,
+    style: { height: '100vh', width: '100vw' },
+  };
+  const tileLayerProps = {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  };
 
   // so,
   // i could have users input points by:
@@ -29,6 +44,7 @@ export function SpotScreen() {
   //
   // gonna try to use leaflet.js as a mapping lib: https://leafletjs.com/
   //
+  // IntrinsicAttributes & MapContainerProps & RefAttributes<LeafletMap>'
   return (
     <div className='Home'>
       <NavBar />
@@ -64,17 +80,10 @@ export function SpotScreen() {
         }}
       />
 
-      <ComposableMap>
-        <Geographies geography={geoUrl}>
-          {({ geographies }) =>
-            geographies.map((geo) => <Geography key={geo.rsmKey} geography={geo} />)
-          }
-        </Geographies>
-
-        <Marker coordinates={[longitude, latitude]}>
-          <circle r={8} fill='#F53' />
-        </Marker>
-      </ComposableMap>
+      <MapContainer {...mapContainerProps}>
+        <TileLayer {...tileLayerProps} />
+        {/* Additional map layers or components can be added here */}
+      </MapContainer>
     </div>
   );
 }
