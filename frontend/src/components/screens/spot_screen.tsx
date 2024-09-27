@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
+import 'leaflet-defaulticon-compatibility';
 import { NavBar } from '../nav_bar';
 import { SelectedSpot } from '../selected_spot';
-import markerIconPng from 'leaflet/dist/images/marker-icon.png';
-// icon={new Icon({ iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41] })}
 
 export function SpotScreen() {
   const [selectedSpots, setSelectedSpots] = useState<SelectedSpot[]>([]);
@@ -84,12 +84,11 @@ export function SpotScreen() {
         <TileLayer {...tileLayerProps} />
         {/* Additional map layers or components can be added here */}
         {selectedSpots.map((selectedSpot) => {
-          const markerProps = {
-            position: [selectedSpot.latitude, selectedSpot.longitude],
-            iconUrl: markerIconPng,
-          };
           return (
-            <Marker key={selectedSpot.name} {...markerProps}>
+            <Marker
+              key={selectedSpot.name}
+              position={[selectedSpot.latitude, selectedSpot.longitude]}
+            >
               <Popup key={selectedSpot.name}>{selectedSpot.name}</Popup>
             </Marker>
           );

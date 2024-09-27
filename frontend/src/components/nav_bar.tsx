@@ -19,6 +19,7 @@ export function NavBar() {
           ) : (
             <li key={route.path.replace('/', '_')}>
               <button
+                key={route.path.replace('/', '_')}
                 onClick={(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
                   go(route.path);
                 }}
