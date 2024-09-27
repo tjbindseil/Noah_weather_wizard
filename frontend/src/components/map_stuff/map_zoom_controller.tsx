@@ -1,16 +1,20 @@
-import { LatLngBoundsExpression, LatLngExpression } from 'leaflet';
+import { LatLngBoundsExpression, LatLngExpression, LatLngTuple } from 'leaflet';
 import { useMap } from 'react-leaflet';
 
 export interface MapZoomControllerProps {
-  selectedSpots: LatLngExpression[];
+  selectedSpots: LatLngTuple[];
 }
 
 export function MapZoomController({ selectedSpots }: MapZoomControllerProps) {
   // TODO map.fitBounds if points are empty
   const map = useMap();
 
-  selectedSpots.length > 0
-    ? map.fitBounds(selectedSpots as unknown as LatLngBoundsExpression)
-    : map.fitWorld();
+  if (selectedSpots.length > 0) {
+    console.log(`@@ @@ selectedSpots are: ${JSON.stringify(selectedSpots)}`);
+    map.fitBounds(selectedSpots);
+    map.setMaxZoom(16);
+  } else {
+    map.fitWorld();
+  }
   return <></>;
 }

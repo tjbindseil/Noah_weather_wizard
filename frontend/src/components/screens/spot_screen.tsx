@@ -3,7 +3,6 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
 import 'leaflet-defaulticon-compatibility';
-import { LatLngExpression } from 'leaflet';
 import { NavBar } from '../nav_bar';
 import { SelectedSpot, SelectedSpotProps } from '../map_stuff/selected_spot';
 import { MapZoomController } from '../map_stuff/map_zoom_controller';
@@ -16,13 +15,8 @@ export function SpotScreen() {
   const [name, setName] = useState('Longs Peak');
 
   const mapRef = useRef(null);
-  const latitudeTutorial = 40.255014; // Longs Peak
-  const longitudeTutorial = -105.615115;
 
-  const center: LatLngExpression = [latitudeTutorial, longitudeTutorial];
   const mapContainerProps = {
-    center: center,
-    zoom: 13,
     ref: mapRef,
     style: { height: '50vh', width: '50vw' },
   };
@@ -96,7 +90,7 @@ export function SpotScreen() {
         ))}
         <MapZoomController
           selectedSpots={selectedSpots.map((selectedSpot) => [
-            selectedSpot.longitude,
+            selectedSpot.latitude,
             selectedSpot.longitude,
           ])}
         />
