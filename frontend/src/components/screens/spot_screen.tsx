@@ -9,14 +9,14 @@ export function SpotScreen() {
   const [name, setName] = useState('name');
 
   const mapRef = useRef(null);
-  const latitudeTutorial = 51.505;
-  const longitudeTutorial = -0.09;
+  const latitudeTutorial = 40.255014; // Longs Peak
+  const longitudeTutorial = -105.615115;
 
   const mapContainerProps = {
     center: [latitudeTutorial, longitudeTutorial],
     zoom: 13,
     ref: mapRef,
-    style: { height: '100vh', width: '100vw' },
+    style: { height: '50vh', width: '50vw' },
   };
   const tileLayerProps = {
     attribution:
@@ -24,27 +24,6 @@ export function SpotScreen() {
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   };
 
-  // so,
-  // i could have users input points by:
-  // 1. manually putting lat/long
-  // 2. selecing via a map
-  //
-  // lets allow both, and lets get something like this working:
-  //
-  // naw, first, lets just get something working
-  // lets just do one
-  //
-  // i think interacting with caltopo is ideal
-  // https://cal.com/docs/core-features/embed/adding-embed-to-your-webpage
-  // ^ umm, this is for a calendar
-  //
-  // I will search a bit more to see if i can get a way to interact directly with cal topo
-  // if not, i will probably just resort to just showing the points as lat/long/name, and probably allow users to favorite them or something
-  //
-  //
-  // gonna try to use leaflet.js as a mapping lib: https://leafletjs.com/
-  //
-  // IntrinsicAttributes & MapContainerProps & RefAttributes<LeafletMap>'
   return (
     <div className='Home'>
       <NavBar />

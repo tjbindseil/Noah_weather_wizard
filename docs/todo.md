@@ -63,9 +63,25 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 ## frontend
 * start frontend (gonna be sick)
 * integ tests - done
-* nav bar
+* nav bar - done
 * map integration
-* select locations based on lat/long rectangle
+  * topo map instead of open street
+  * for now, we will just do front end
+    * add spot to map and list via input box
+    * add spot to map and list via clicking on the map
+    * show list of added spots (ie zoom to fit all spots)
+    * remove spot from list
+    * go to forecast page
+  * integrate with backend
+    * ultimately, this will require a user system
+    * add new spot
+    * save favorite spots
+    * browse for new spots
+      * select spots based on lat/long rectangle
+      * search
+      * view other individuals spots
+    * select a handful of considerations
+    * go to forecast page
 * wire up forecast provider (just the one that gets them all, not filter or sort)
 * forecast comparison page
 * write up a forecast hourly model
