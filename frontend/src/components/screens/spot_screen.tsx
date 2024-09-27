@@ -1,12 +1,17 @@
 import React, { useState, useRef } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { NavBar } from '../nav_bar';
+import { SelectedSpot } from '../selected_spot';
+import markerIconPng from 'leaflet/dist/images/marker-icon.png';
+// icon={new Icon({ iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41] })}
 
 export function SpotScreen() {
-  const [latitude, setLatitude] = useState(42);
-  const [longitude, setLongitude] = useState(42);
-  const [name, setName] = useState('name');
+  const [selectedSpots, setSelectedSpots] = useState<SelectedSpot[]>([]);
+
+  const [latitude, setLatitude] = useState(40.255014);
+  const [longitude, setLongitude] = useState(-105.615115);
+  const [name, setName] = useState('Longs Peak');
 
   const mapRef = useRef(null);
   const latitudeTutorial = 40.255014; // Longs Peak
@@ -59,9 +64,36 @@ export function SpotScreen() {
         }}
       />
 
+      <button
+        onClick={(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+          selectedSpots.push({ latitude, longitude, name });
+          setSelectedSpots([...selectedSpots]);
+        }}
+      >
+        Add
+      </button>
+
+      <h3>Selected Spots</h3>
+      {selectedSpots.map((selectedSpot) => (
+        <p
+          key={selectedSpot.name}
+        >{`${selectedSpot.name} lat: ${selectedSpot.latitude} long: ${selectedSpot.longitude}`}</p>
+      ))}
+
       <MapContainer {...mapContainerProps}>
         <TileLayer {...tileLayerProps} />
         {/* Additional map layers or components can be added here */}
+        {selectedSpots.map((selectedSpot) => {
+          const markerProps = {
+            position: [selectedSpot.latitude, selectedSpot.longitude],
+            iconUrl: markerIconPng,
+          };
+          return (
+            <Marker key={selectedSpot.name} {...markerProps}>
+              <Popup key={selectedSpot.name}>{selectedSpot.name}</Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
     </div>
   );
