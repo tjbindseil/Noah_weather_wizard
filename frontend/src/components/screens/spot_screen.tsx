@@ -94,7 +94,6 @@ export function SpotScreen() {
           }
           url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
         />
-        {/* Additional map layers or components can be added here */}
         {selectedSpots.map((selectedSpot) => (
           <SelectedSpot
             key={selectedSpot.name}

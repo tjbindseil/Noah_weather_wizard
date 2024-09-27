@@ -1,3 +1,4 @@
+import { LeafletEventHandlerFn } from 'leaflet';
 import { useState } from 'react';
 import { Popup, Marker, useMapEvent } from 'react-leaflet';
 import { SelectedSpotProps } from './selected_spot';
@@ -18,8 +19,12 @@ export function MapClickController({ saveSelectedSpot }: MapClickControllerProps
     setPopupLong(e.latlng.lng);
   });
 
+  const openPopup: LeafletEventHandlerFn = (e) => {
+    e.target.openPopup();
+  };
+
   return popupOpen ? (
-    <Marker position={[popupLat, popupLong]}>
+    <Marker position={[popupLat, popupLong]} eventHandlers={{ add: openPopup }}>
       <Popup>
         <label htmlFor='popupName'>Name:</label>
         <input
