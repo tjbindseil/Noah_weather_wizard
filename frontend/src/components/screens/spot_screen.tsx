@@ -25,6 +25,16 @@ export function SpotScreen() {
     [selectedSpots, setSelectedSpots],
   );
 
+  const removeThisSelectedSpot = (removedSpot: SelectedSpotProps) => {
+    const newSelectedSpots: SelectedSpotProps[] = [];
+    selectedSpots.forEach((selectedSpot) => {
+      if (selectedSpot !== removedSpot) {
+        newSelectedSpots.push(selectedSpot);
+      }
+    });
+    setSelectedSpots(newSelectedSpots);
+  };
+
   return (
     <div className='Home'>
       <NavBar />
@@ -71,9 +81,10 @@ export function SpotScreen() {
 
       <h3>Selected Spots</h3>
       {selectedSpots.map((selectedSpot) => (
-        <p
-          key={selectedSpot.name}
-        >{`${selectedSpot.name} lat: ${selectedSpot.latitude} long: ${selectedSpot.longitude}`}</p>
+        <p key={selectedSpot.name}>
+          {`${selectedSpot.name} lat: ${selectedSpot.latitude} long: ${selectedSpot.longitude}`}
+          <button onClick={(_e) => removeThisSelectedSpot(selectedSpot)}>Remove</button>
+        </p>
       ))}
 
       <MapContainer ref={mapRef} style={{ height: '50vh', width: '50vw' }}>

@@ -68,7 +68,7 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
   * topo map instead of open street
   * for now, we will just do front end
     * add spot to map and list via input box - done
-    * add spot to map and list via clicking on the map
+    * add spot to map and list via clicking on the map - done
     * show list of added spots (ie zoom to fit all spots) - done
     * highlight on map when a spot is selected
     * remove spot from list
