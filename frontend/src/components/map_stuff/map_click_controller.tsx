@@ -1,10 +1,47 @@
-import { useMapEvent } from 'react-leaflet';
+import { useState } from 'react';
+import { Popup, Marker, useMapEvent } from 'react-leaflet';
+import { SelectedSpotProps } from './selected_spot';
 
-// export interface MapClickControllerProps {}
+export interface MapClickControllerProps {
+  saveSelectedSpot: (selectedSpot: SelectedSpotProps) => void;
+}
 
-export function MapClickController() {
+export function MapClickController({ saveSelectedSpot }: MapClickControllerProps) {
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupLat, setPopupLat] = useState(0);
+  const [popupLong, setPopupLong] = useState(0);
+  const [popupName, setPopupName] = useState('');
+
   useMapEvent('click', (e) => {
-    console.log(`@@ @@ clicked on ${e.latlng.lat} / ${e.latlng.lng}`);
+    setPopupOpen(true);
+    setPopupLat(e.latlng.lat);
+    setPopupLong(e.latlng.lng);
   });
-  return <></>;
+
+  return popupOpen ? (
+    <Marker position={[popupLat, popupLong]}>
+      <Popup>
+        <label htmlFor='popupName'>Name:</label>
+        <input
+          type='text'
+          id='popupName'
+          value={popupName}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setPopupName(event.target.value);
+          }}
+        />
+        <button
+          onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            saveSelectedSpot({ latitude: popupLat, longitude: popupLong, name: popupName });
+            setPopupOpen(false);
+            event.stopPropagation();
+          }}
+        >
+          Save Spot
+        </button>
+      </Popup>
+    </Marker>
+  ) : (
+    <></>
+  );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
@@ -17,15 +17,13 @@ export function SpotScreen() {
 
   const mapRef = useRef(null);
 
-  const mapContainerProps = {
-    ref: mapRef,
-    style: { height: '50vh', width: '50vw' },
-  };
-  const tileLayerProps = {
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  };
+  const saveSpotFunc = useCallback(
+    (selectedSpot: SelectedSpotProps) => {
+      selectedSpots.push(selectedSpot);
+      setSelectedSpots([...selectedSpots]);
+    },
+    [selectedSpots, setSelectedSpots],
+  );
 
   return (
     <div className='Home'>
@@ -78,8 +76,13 @@ export function SpotScreen() {
         >{`${selectedSpot.name} lat: ${selectedSpot.latitude} long: ${selectedSpot.longitude}`}</p>
       ))}
 
-      <MapContainer {...mapContainerProps}>
-        <TileLayer {...tileLayerProps} />
+      <MapContainer ref={mapRef} style={{ height: '50vh', width: '50vw' }}>
+        <TileLayer
+          attribution={
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          }
+          url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
+        />
         {/* Additional map layers or components can be added here */}
         {selectedSpots.map((selectedSpot) => (
           <SelectedSpot
@@ -95,7 +98,7 @@ export function SpotScreen() {
             selectedSpot.longitude,
           ])}
         />
-        <MapClickController />
+        <MapClickController saveSelectedSpot={saveSpotFunc} />
       </MapContainer>
     </div>
   );
