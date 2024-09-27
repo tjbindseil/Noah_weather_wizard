@@ -6,6 +6,7 @@ import 'leaflet-defaulticon-compatibility';
 import { NavBar } from '../nav_bar';
 import { SelectedSpot, SelectedSpotProps } from '../map_stuff/selected_spot';
 import { MapZoomController } from '../map_stuff/map_zoom_controller';
+import { MapClickController } from '../map_stuff/map_click_controller';
 
 export function SpotScreen() {
   const [selectedSpots, setSelectedSpots] = useState<SelectedSpotProps[]>([]);
@@ -94,6 +95,7 @@ export function SpotScreen() {
             selectedSpot.longitude,
           ])}
         />
+        <MapClickController />
       </MapContainer>
     </div>
   );

@@ -1,4 +1,4 @@
-import { LatLngBoundsExpression, LatLngExpression, LatLngTuple } from 'leaflet';
+import { LatLngTuple } from 'leaflet';
 import { useMap } from 'react-leaflet';
 
 export interface MapZoomControllerProps {
@@ -6,7 +6,6 @@ export interface MapZoomControllerProps {
 }
 
 export function MapZoomController({ selectedSpots }: MapZoomControllerProps) {
-  // TODO map.fitBounds if points are empty
   const map = useMap();
 
   if (selectedSpots.length > 0) {
