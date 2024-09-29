@@ -72,7 +72,18 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
     * show list of added spots (ie zoom to fit all spots) - done
     * highlight on map when a spot is selected
     * remove spot from list - done
-    * go to forecast page
+    * go to forecast page - punt because this requires spots to be saved
+  * ad hoc spots?
+    * hmm, as of now, there is only a way to get forecast for a spot if it is saved
+    * so, with the above in place i need to either:
+      A) save the spots implicitly before requesting forecast
+      B) force the user to save them before requesting
+    * this begs the question of what is the reason for saving the spots?
+      * I guess spots are saved so that they can be browsed
+    * for now, I will go with option A, lets get something working for god's sake
+    * NO!
+  * spot creation page
+  * spot selection page
   * integrate with backend
     * ultimately, this will require a user system
     * add new spot
