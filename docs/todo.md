@@ -71,7 +71,7 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
     * add spot to map and list via clicking on the map - done
     * show list of added spots (ie zoom to fit all spots) - done
     * highlight on map when a spot is selected
-    * remove spot from list
+    * remove spot from list - done
     * go to forecast page
   * integrate with backend
     * ultimately, this will require a user system
