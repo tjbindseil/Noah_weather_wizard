@@ -83,7 +83,20 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
     * for now, I will go with option A, lets get something working for god's sake
     * NO!
   * spot creation page
+    * operates one spot at a time
+    * can either enter lat/long/name via text input or clicking on a map
+    * can save or cancel
+    * once saved (api call), the spot clears
+    * once cleared, the spot clears
   * spot selection page
+    * search by name
+    * center on a selected point
+    * zoom in/out
+    * populate map with spots
+    * select spots, they get added to some list, the list has a GET FORECAST button
+  * forecast page
+    * can't navigate here without selected spots (ie remove from nav bar)
+    * take welected spots, send ids to api, get forecasts and display
   * integrate with backend
     * ultimately, this will require a user system
     * add new spot

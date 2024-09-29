@@ -5,7 +5,7 @@ export interface MapZoomControllerProps {
   selectedSpots: LatLngTuple[];
 }
 
-export function MapZoomController({ selectedSpots }: MapZoomControllerProps) {
+export function MapZoomController({ selectedSpots: selectedSpots }: MapZoomControllerProps) {
   const map = useMap();
 
   if (selectedSpots.length > 0) {

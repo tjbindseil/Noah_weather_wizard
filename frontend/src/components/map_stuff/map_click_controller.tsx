@@ -3,11 +3,24 @@ import { useState } from 'react';
 import { Popup, Marker, useMapEvent } from 'react-leaflet';
 import { SelectedSpotProps } from './selected_spot';
 
-export interface MapClickControllerProps {
-  saveSelectedSpot: (selectedSpot: SelectedSpotProps) => void;
+export enum LeafletMarkerColorOptions {
+  Blue = 'blue',
+  Gold = 'gold',
+  Red = 'red',
+  Green = 'green',
+  Orange = 'orange',
+  Yellow = 'yellow',
+  Violet = 'violet',
+  Grey = 'grey',
+  Black = 'black',
 }
 
-export function MapClickController({ saveSelectedSpot }: MapClickControllerProps) {
+export interface MapClickControllerProps {
+  saveSelectedSpot: (selectedSpot: SelectedSpotProps) => Promise<void>;
+  color: LeafletMarkerColorOptions;
+}
+
+export function MapClickController({ saveSelectedSpot, color }: MapClickControllerProps) {
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupLat, setPopupLat] = useState(0);
   const [popupLong, setPopupLong] = useState(0);
@@ -23,9 +36,8 @@ export function MapClickController({ saveSelectedSpot }: MapClickControllerProps
     e.target.openPopup();
   };
 
-  const greenIcon = new Icon({
-    iconUrl:
-      'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+  const coloredIcon = new Icon({
+    iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -34,7 +46,7 @@ export function MapClickController({ saveSelectedSpot }: MapClickControllerProps
   });
 
   return popupOpen ? (
-    <Marker position={[popupLat, popupLong]} icon={greenIcon} eventHandlers={{ add: openPopup }}>
+    <Marker position={[popupLat, popupLong]} icon={coloredIcon} eventHandlers={{ add: openPopup }}>
       <Popup>
         <label htmlFor='popupName'>Name:</label>
         <input
@@ -46,8 +58,8 @@ export function MapClickController({ saveSelectedSpot }: MapClickControllerProps
           }}
         />
         <button
-          onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-            saveSelectedSpot({ latitude: popupLat, longitude: popupLong, name: popupName });
+          onClick={async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            await saveSelectedSpot({ latitude: popupLat, longitude: popupLong, name: popupName });
             setPopupOpen(false);
             event.stopPropagation();
           }}

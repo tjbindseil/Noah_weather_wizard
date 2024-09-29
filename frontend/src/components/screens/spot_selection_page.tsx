@@ -5,7 +5,7 @@ import { SelectedSpot, SelectedSpotProps } from '../map_stuff/selected_spot';
 import { MapZoomController } from '../map_stuff/map_zoom_controller';
 import { LeafletMarkerColorOptions, MapClickController } from '../map_stuff/map_click_controller';
 
-export function SpotScreen() {
+export function SpotSelectionScreen() {
   const [selectedSpots, setSelectedSpots] = useState<SelectedSpotProps[]>([]);
 
   const [latitude, setLatitude] = useState(40.255014);
