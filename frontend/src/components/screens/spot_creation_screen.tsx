@@ -1,16 +1,47 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { NavBar } from '../nav_bar';
-import { SelectedSpotProps } from '../map_stuff/selected_spot';
+import { SelectedSpot, SelectedSpotProps } from '../map_stuff/selected_spot';
 import { MapZoomController } from '../map_stuff/map_zoom_controller';
 import { LeafletMarkerColorOptions, MapClickController } from '../map_stuff/map_click_controller';
+import { LatLng, LatLngBounds } from 'leaflet';
+import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
+import { Spot } from 'ww-3-models-tjb';
 
 export function SpotCreationScreen() {
   const [latitude, setLatitude] = useState(40.255014);
   const [longitude, setLongitude] = useState(-105.615115);
   const [name, setName] = useState('Longs Peak');
 
+  const [mapBounds, setMapBounds] = useState<LatLngBounds>(
+    new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0)),
+  );
+  const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
+
   const mapRef = useRef(null);
+
+  // so, upon loading, get map bounds
+  // upon mapBounds changing, get existing points
+  // upon existingPoints being updated, display them?
+
+  useEffect(() => {
+    fetch(
+      'localhost:8080/spots?' +
+        new URLSearchParams({
+          minLat: mapBounds.getSouth().toString(),
+          maxLat: mapBounds.getNorth().toString(),
+          minLong: mapBounds.getWest().toString(),
+          maxLong: mapBounds.getEast().toString(),
+        }),
+      {
+        method: 'GET',
+        mode: 'cors',
+      },
+    )
+      .then((result) => result.json())
+      .then((existingSpots) => setExistingSpots(existingSpots))
+      .catch(console.error);
+  }, [mapBounds, setExistingSpots]);
 
   const saveSpotFunc = useCallback(
     async (selectedSpot: SelectedSpotProps) => {
@@ -91,16 +122,12 @@ export function SpotCreationScreen() {
         Save Spot
       </button>
 
-      {
-        // TODO could potentially list existing spots
-        //       <h3>Selected Spots</h3>
-        //       {selectedSpots.map((selectedSpot) => (
-        //         <p key={selectedSpot.name}>
-        //           {`${selectedSpot.name} lat: ${selectedSpot.latitude} long: ${selectedSpot.longitude}`}
-        //           <button onClick={(_e) => removeThisSelectedSpot(selectedSpot)}>Remove</button>
-        //         </p>
-        //       ))}
-      }
+      <h3>Existing Spots</h3>
+      {existingSpots.map((existingSpot) => (
+        <p key={existingSpot.name}>
+          {`${existingSpot.name} lat: ${existingSpot.latitude} long: ${existingSpot.longitude}`}
+        </p>
+      ))}
 
       <MapContainer ref={mapRef} style={{ height: '50vh', width: '50vw' }}>
         <TileLayer
@@ -109,11 +136,19 @@ export function SpotCreationScreen() {
           }
           url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
         />
+        {existingSpots.map((existingSpot) => (
+          <SelectedSpot
+            latitude={existingSpot.latitude}
+            longitude={existingSpot.longitude}
+            name={existingSpot.name}
+          />
+        ))}
         <MapZoomController selectedSpots={[[latitude, longitude]]} />
         <MapClickController
           saveSelectedSpot={saveSpotFunc}
-          color={LeafletMarkerColorOptions.Blue}
+          color={LeafletMarkerColorOptions.Green}
         />
+        <MapBoundsMonitor setMapBounds={setMapBounds} />
       </MapContainer>
     </div>
   );
