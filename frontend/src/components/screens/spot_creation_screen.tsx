@@ -26,7 +26,7 @@ export function SpotCreationScreen() {
 
   useEffect(() => {
     fetch(
-      'localhost:8080/spots?' +
+      'http://localhost:8080/spots?' +
         new URLSearchParams({
           minLat: mapBounds.getSouth().toString(),
           maxLat: mapBounds.getNorth().toString(),
@@ -39,7 +39,10 @@ export function SpotCreationScreen() {
       },
     )
       .then((result) => result.json())
-      .then((existingSpots) => setExistingSpots(existingSpots))
+      .then((result) => {
+        console.log(`existingSpots is: ${JSON.stringify(result.spots)}`);
+        setExistingSpots(result.spots);
+      })
       .catch(console.error);
   }, [mapBounds, setExistingSpots]);
 
@@ -47,7 +50,7 @@ export function SpotCreationScreen() {
     async (selectedSpot: SelectedSpotProps) => {
       // TODO context like dwf services
       await (
-        await fetch('localhost:8080/spot', {
+        await fetch('http://localhost:8080/spot', {
           method: 'POST',
           mode: 'cors',
           headers: { 'Content-Type': 'application/json' },
@@ -138,6 +141,7 @@ export function SpotCreationScreen() {
         />
         {existingSpots.map((existingSpot) => (
           <SelectedSpot
+            key={existingSpot.name}
             latitude={existingSpot.latitude}
             longitude={existingSpot.longitude}
             name={existingSpot.name}

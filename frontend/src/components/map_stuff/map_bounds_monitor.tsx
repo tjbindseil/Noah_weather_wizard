@@ -8,7 +8,8 @@ export interface MapBoundsMonitorProps {
 export const MapBoundsMonitor = ({ setMapBounds }: MapBoundsMonitorProps) => {
   const map = useMap();
   map.on('moveend', function () {
-    setMapBounds(map.getBounds());
+    console.log('moveend callback');
+    // setMapBounds(map.getBounds());
   });
 
   return <></>;
