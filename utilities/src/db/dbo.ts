@@ -19,8 +19,28 @@ export const getSpot = async (pgClient: Client, spotID: number) => {
     return await result.one();
 };
 
-export const getSpots = async (pgClient: Client) => {
+export const getAllSpots = async (pgClient: Client) => {
     const result = pgClient.query<Spot>('SELECT * FROM spot');
+
+    const spots: Spot[] = [];
+    for await (const spot of result) {
+        spots.push(spot);
+    }
+
+    return spots;
+};
+
+export const getSpots = async (
+    pgClient: Client,
+    minLat: number,
+    maxLat: number,
+    minLong: number,
+    maxLong: number
+) => {
+    const result = pgClient.query<Spot>(
+        'SELECT * FROM spot where latitude > $1 and latitude < $2 and longitude > $3 and longitude < $4 ',
+        [minLat, maxLat, minLong, maxLong]
+    );
 
     const spots: Spot[] = [];
     for await (const spot of result) {

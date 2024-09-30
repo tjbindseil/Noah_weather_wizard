@@ -1,5 +1,6 @@
 import {
     DeleteSpotOutput,
+    GetSpotsInput,
     GetSpotsOutput,
     PostSpotInput,
     PostSpotOutput,
@@ -11,11 +12,23 @@ const spotServiceBaseUrl = `http://${get_app_config().spotServiceHost}:${
     get_app_config().spotServicePort
 }`;
 
-export const getAllSpots = async () =>
-    await fetchWithError<GetSpotsOutput>(
+export const getSpots = async (getSpotsInput: GetSpotsInput) => {
+    const minLatAsStr = getSpotsInput.minLat.toString();
+    const maxLatAsStr = getSpotsInput.maxLat.toString();
+    const minLongAsStr = getSpotsInput.minLong.toString();
+    const maxLongAsStr = getSpotsInput.maxLong.toString();
+
+    return await fetchWithError<GetSpotsOutput>(
         'getting uts',
-        `${spotServiceBaseUrl}/spots`
+        `${spotServiceBaseUrl}/spots?` +
+            new URLSearchParams({
+                minLat: minLatAsStr,
+                maxLat: maxLatAsStr,
+                minLong: minLongAsStr,
+                maxLong: maxLongAsStr,
+            })
     );
+};
 
 export const postSpot = async (input: PostSpotInput) =>
     await fetchWithError<PostSpotOutput>(

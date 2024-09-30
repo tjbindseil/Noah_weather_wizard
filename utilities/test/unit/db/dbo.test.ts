@@ -6,9 +6,10 @@ import {
     deleteSpot,
     getPolygons,
     getSpot,
-    getSpots,
+    getAllSpots,
     insertPolygon,
     insertSpot,
+    getSpots,
 } from '../../../src/db/dbo';
 
 // these tests will actually interface with a pg database on my local machine
@@ -74,7 +75,7 @@ describe('dbo tests', () => {
     beforeAll(async () => {
         pgClient = await pool.acquire();
 
-        const spots = await getSpots(pgClient);
+        const spots = await getAllSpots(pgClient);
         if (spots.length > 0) {
             throw Error('Unit test spot table is not empty! Abandoning tests');
         }
@@ -102,7 +103,7 @@ describe('dbo tests', () => {
     });
 
     it('can insert a spot', async () => {
-        const initialSpots = await getSpots(pgClient);
+        const initialSpots = await getAllSpots(pgClient);
         expect(initialSpots.length).toEqual(expectedSpots.length);
 
         const grandTetonSpot = {
@@ -114,22 +115,22 @@ describe('dbo tests', () => {
 
         await insertSpot(pgClient, grandTetonSpot);
 
-        const finalSpots = await getSpots(pgClient);
+        const finalSpots = await getAllSpots(pgClient);
         expect(finalSpots.length).toEqual(expectedSpots.length + 1);
     });
 
     it('can get all spots', async () => {
-        const initialSpots = await getSpots(pgClient);
+        const initialSpots = await getAllSpots(pgClient);
         expect(initialSpots.length).toEqual(expectedSpots.length);
     });
 
     it('can delete a spot', async () => {
-        const initialSpots = await getSpots(pgClient);
+        const initialSpots = await getAllSpots(pgClient);
         expect(initialSpots.length).toEqual(expectedSpots.length);
 
         await deleteSpot(pgClient, initialSpots[0].id);
 
-        const finalSpots = await getSpots(pgClient);
+        const finalSpots = await getAllSpots(pgClient);
         expect(finalSpots.length).toEqual(expectedSpots.length - 1);
     });
 
@@ -154,6 +155,30 @@ describe('dbo tests', () => {
         const spot = await getSpot(pgClient, firstId);
 
         expect(spot.id).toEqual(firstId);
+    });
+
+    it('can get spots given a bounding lat/long box', async () => {
+        const minLat = 37;
+        const maxLat = 41;
+        const minLong = -106;
+        const maxLong = -104;
+
+        const spots = await getSpots(
+            pgClient,
+            minLat,
+            maxLat,
+            minLong,
+            maxLong
+        );
+
+        // shouldn't have whitney
+        expect(spots.length).toEqual(2);
+        expect(
+            spots.map((spot) => spot.name).includes('Longs Peak')
+        ).toBeTruthy();
+        expect(
+            spots.map((spot) => spot.name).includes('Crestone Needle')
+        ).toBeTruthy();
     });
 
     afterEach(async () => {

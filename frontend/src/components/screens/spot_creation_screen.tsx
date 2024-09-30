@@ -112,7 +112,7 @@ export function SpotCreationScreen() {
         <MapZoomController selectedSpots={[[latitude, longitude]]} />
         <MapClickController
           saveSelectedSpot={saveSpotFunc}
-          color={LeafletMarkerColorOptions.Green}
+          color={LeafletMarkerColorOptions.Blue}
         />
       </MapContainer>
     </div>

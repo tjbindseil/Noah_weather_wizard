@@ -1,5 +1,5 @@
-import geometry from './resources/geometry.json';
-import forecast from './resources/forecast.json';
+import geometry from '../resources/geometry.json';
+import forecast from '../resources/forecast.json';
 import {
     DeleteObjectsCommand,
     ListObjectsV2Command,

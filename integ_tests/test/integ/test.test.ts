@@ -1,16 +1,19 @@
 import { getForecasts } from './api_helpers/forecast_service_api';
-import {
-    deleteSpot,
-    getAllSpots,
-    postSpot,
-} from './api_helpers/spot_service_api';
-import { DeleteSpotOutput } from 'ww-3-models-tjb';
+import { deleteSpot, getSpots, postSpot } from './api_helpers/spot_service_api';
+import { DeleteSpotOutput, GetSpotsInput } from 'ww-3-models-tjb';
 
 describe('General integ tests', () => {
     const spotsToDelete: number[] = [];
 
+    const longsPeakWindow: GetSpotsInput = {
+        minLat: 39,
+        maxLat: 41,
+        minLong: -106,
+        maxLong: -104,
+    };
+
     it('posts a spot', async () => {
-        const initialSpots = await getAllSpots();
+        const initialSpots = await getSpots(longsPeakWindow);
 
         const postedSpot = await postSpot({
             name: 'Longs Peak',
@@ -19,7 +22,7 @@ describe('General integ tests', () => {
         });
         spotsToDelete.push(postedSpot.spot.id);
 
-        const finalSpots = await getAllSpots();
+        const finalSpots = await getSpots(longsPeakWindow);
         expect(
             initialSpots.spots
                 .map((spot) => spot.id)
@@ -39,13 +42,13 @@ describe('General integ tests', () => {
 
         await deleteSpot(postedSpot.spot.id);
 
-        const finalSpots = await getAllSpots();
+        const finalSpots = await getSpots(longsPeakWindow);
         expect(
             finalSpots.spots.map((spot) => spot.id).includes(postedSpot.spot.id)
         ).toBeFalsy();
     });
 
-    it('gets all spots', async () => {
+    it('gets all spots given a lat/long window', async () => {
         const longsPeak = await postSpot({
             name: 'Longs Peak',
             latitude: 40.255014,
@@ -59,13 +62,13 @@ describe('General integ tests', () => {
         spotsToDelete.push(longsPeak.spot.id);
         spotsToDelete.push(mtWhitney.spot.id);
 
-        const finalSpots = await getAllSpots();
+        const finalSpots = await getSpots(longsPeakWindow);
         expect(
             finalSpots.spots.map((spot) => spot.id).includes(longsPeak.spot.id)
         ).toBeTruthy();
         expect(
             finalSpots.spots.map((spot) => spot.id).includes(mtWhitney.spot.id)
-        ).toBeTruthy();
+        ).toBeFalsy();
     });
 
     it('gets forecasts for spots', async () => {

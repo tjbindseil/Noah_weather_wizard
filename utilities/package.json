@@ -9,7 +9,7 @@
         "tsc": "tsc",
         "ww-clean": "rm -rf node_modules package-lock.json build",
         "ww-format": "npx prettier --write $(find src test package*)",
-        "ww-lint": "npx eslint $(find src test package*)",
+        "ww-lint": "npx eslint $(find src test/unit package*)",
         "ww-build": "tsc && npm run test && npm run ww-format && npm run ww-lint && echo success!",
         "ww-build-reinstall": "npm run ww-clean && npm install && tsc && npm run test && npm run ww-format && npm run ww-lint && echo success!"
     },

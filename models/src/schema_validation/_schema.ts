@@ -12,7 +12,16 @@ const schema = {
             },
             required: ['id', 'latitude', 'longitude', 'name', 'polygonID'],
         },
-        GetSpotsInput: { type: 'object' },
+        GetSpotsInput: {
+            type: 'object',
+            properties: {
+                minLat: { type: 'string' },
+                maxLat: { type: 'string' },
+                minLong: { type: 'string' },
+                maxLong: { type: 'string' },
+            },
+            required: ['maxLat', 'maxLong', 'minLat', 'minLong'],
+        },
         GetSpotsOutput: {
             type: 'object',
             properties: {
