@@ -1,19 +1,35 @@
 // TODO handle 5 second wait and retry when issues arise
 
+import { ForecastKey } from './forecast_key';
+
 export const makeInitialCall = async (latitude: number, longitude: number) => {
     const noaaURL = `https://api.weather.gov/points/${latitude},${longitude}`;
     const fetchResult = (await (
         await fetch(noaaURL, {
             method: 'GET',
         })
-    ).json()) as { properties: { gridId: string; forecast: string } }; // TODO can I do this better?
+    ).json()) as {
+        properties: {
+            gridId: string;
+            gridX: number;
+            gridY: number;
+            forecast: string;
+        };
+    }; // TODO can I do this better?
 
-    return [fetchResult.properties.gridId, fetchResult.properties.forecast];
+    return [
+        new ForecastKey(
+            fetchResult.properties.gridId,
+            fetchResult.properties.gridX,
+            fetchResult.properties.gridY
+        ),
+        fetchResult.properties.forecast,
+    ];
 };
 
-export const getForecast = async (forecastUrl: string) => {
+export const getForecast = async (forecastKey: ForecastKey) => {
     const fetchResult = (await (
-        await fetch(forecastUrl, {
+        await fetch(forecastKey.getKeyStr(), {
             method: 'GET',
         })
     )

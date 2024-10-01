@@ -6,13 +6,20 @@ import {
     PutObjectCommand,
     S3Client,
 } from '@aws-sdk/client-s3';
-import { S3Adapter } from '../../src';
+import { ForecastKey, S3Adapter } from '../../src';
 
 describe('s3_adapter tests', () => {
     const bucketName = 'ww-s3-adapter-test';
     const testPolygonId = 'TPI';
-    const geometryKey = `${testPolygonId}/geometry.json`;
-    const forecastKey = `${testPolygonId}/forecast.json`;
+    const testGridX = 420;
+    const testGridY = 69;
+    const testForecastKey = new ForecastKey(
+        testPolygonId,
+        testGridX,
+        testGridY
+    );
+    const geometryKey = `${testForecastKey.getKeyStr()}/geometry.json`;
+    const forecastKey = `${testForecastKey.getKeyStr()}/forecast.json`;
     const s3Client = new S3Client();
     const s3Adapter = new S3Adapter(s3Client, bucketName);
 
@@ -51,13 +58,15 @@ describe('s3_adapter tests', () => {
 
     it('gets geometry', async () => {
         const _geometryRetrieved = await s3Adapter.getGeometryJson(
-            testPolygonId
+            testForecastKey
         );
         // console.log(`geometryRetrieved = ${_geometryRetrieved}`);
     });
 
     it('gets forecast', async () => {
-        const forecastReceived = await s3Adapter.getForecastJson(testPolygonId);
+        const forecastReceived = await s3Adapter.getForecastJson(
+            testForecastKey
+        );
         console.log(`foredast received is: ${forecastReceived}`);
     });
 

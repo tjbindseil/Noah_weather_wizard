@@ -6,6 +6,7 @@ import {
 import Ajv from 'ajv';
 import { APIError } from 'ww-3-api-tjb';
 import { _schema, Forecast } from 'ww-3-models-tjb';
+import { ForecastKey } from './forecast_key';
 
 export class S3Adapter {
     private readonly GEOMETRY_FILE_NAME = 'geometry.json';
@@ -20,14 +21,16 @@ export class S3Adapter {
         this.ajv = new Ajv({ strict: false });
     }
 
-    public async getGeometryJson(polygonID: string): Promise<string> {
+    public async getGeometryJson(forecastKey: ForecastKey): Promise<string> {
         // I think this is just to make sure the polygons are consistent
-        return await this.getObject(`${polygonID}/${this.GEOMETRY_FILE_NAME}`);
+        return await this.getObject(
+            `${forecastKey.getKeyStr()}/${this.GEOMETRY_FILE_NAME}`
+        );
     }
 
-    public async getForecastJson(polygonID: string): Promise<Forecast> {
+    public async getForecastJson(forecastKey: ForecastKey): Promise<Forecast> {
         const raw = await this.getObject(
-            `${polygonID}/${this.FORECAST_FILE_NAME}`
+            `${forecastKey.getKeyStr()}/${this.FORECAST_FILE_NAME}`
         );
         const asObj = JSON.parse(raw);
         const validator = this.ajv.compile(_schema.Forecast);
@@ -59,17 +62,17 @@ export class S3Adapter {
     }
 
     /* eslint-disable  @typescript-eslint/no-explicit-any */
-    public async putGeometryJson(polygonID: string, geometry: any) {
+    public async putGeometryJson(forecastKey: ForecastKey, geometry: any) {
         await this.putObject(
-            `${polygonID}/${this.GEOMETRY_FILE_NAME}`,
+            `${forecastKey.getKeyStr()}/${this.GEOMETRY_FILE_NAME}`,
             geometry
         );
     }
 
     /* eslint-disable  @typescript-eslint/no-explicit-any */
-    public async putForecastJson(polygonID: string, forecast: any) {
+    public async putForecastJson(forecastKey: ForecastKey, forecast: any) {
         await this.putObject(
-            `${polygonID}/${this.FORECAST_FILE_NAME}`,
+            `${forecastKey.getKeyStr()}/${this.FORECAST_FILE_NAME}`,
             forecast
         );
     }
