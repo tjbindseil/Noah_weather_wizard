@@ -9,7 +9,12 @@ import {
     insertSpot,
     ForecastKey,
 } from 'ww-3-utilities-tjb';
-jest.mock('ww-3-utilities-tjb');
+jest.mock('ww-3-utilities-tjb', () => ({
+    ...jest.requireActual('ww-3-utilities-tjb'),
+    insertSpot: jest.fn(),
+    makeInitialCall: jest.fn(),
+    getForecast: jest.fn(),
+}));
 const mockInsertSpot = jest.mocked(insertSpot, true);
 const mockMakeInitialCall = jest.mocked(makeInitialCall, true);
 const mockGetForecast = jest.mocked(getForecast, true);
@@ -30,6 +35,7 @@ describe('PostSpot tests', () => {
     const polygonID = 'ABC';
     const gridX = 420;
     const gridY = 69;
+    const forecastKey = new ForecastKey(polygonID, gridX, gridY);
     const forecast = { forecast: 'clear' };
     const existingGeometry = { g: 'om' };
 
@@ -46,12 +52,10 @@ describe('PostSpot tests', () => {
 
         mockGetGeometryJson.mockResolvedValue(JSON.stringify(existingGeometry));
         mockGetForecast.mockResolvedValue([forecast, existingGeometry]);
-        mockMakeInitialCall.mockResolvedValue(
-            new ForecastKey(polygonID, gridX, gridY)
-        );
+        mockMakeInitialCall.mockResolvedValue(forecastKey);
     });
 
-    it.only('trims lat and long before using them', async () => {
+    it('trims lat and long before using them', async () => {
         const untrimmedPostedSpot = {
             name: 'name',
             latitude: 1.1111111,
@@ -78,7 +82,9 @@ describe('PostSpot tests', () => {
 
         expect(mockInsertSpot).toBeCalledWith(mockDbClient, {
             ...postedSpot,
-            polygonID,
+            polygonID: forecastKey.polygonID,
+            gridX: forecastKey.gridX,
+            gridY: forecastKey.gridY,
         });
     });
 
@@ -98,11 +104,16 @@ describe('PostSpot tests', () => {
 
         await postSpot.process(postedSpot, mockDbClient);
 
-        expect(mockPutForecastJson).toBeCalledWith(polygonID, forecast);
-        expect(mockPutGeometryJson).toBeCalledWith(polygonID, existingGeometry);
+        expect(mockPutForecastJson).toBeCalledWith(forecastKey, forecast);
+        expect(mockPutGeometryJson).toBeCalledWith(
+            forecastKey,
+            existingGeometry
+        );
         expect(mockInsertSpot).toBeCalledWith(mockDbClient, {
             ...postedSpot,
-            polygonID,
+            polygonID: forecastKey.polygonID,
+            gridX: forecastKey.gridX,
+            gridY: forecastKey.gridY,
         });
     });
 

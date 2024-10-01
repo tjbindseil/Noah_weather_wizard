@@ -33,7 +33,6 @@ export class PostSpot extends LooselyAuthenticatedAPI<
         const trimmedLat = this.trimLatLong(input.latitude);
         const trimmedLong = this.trimLatLong(input.longitude);
         const forecastKey = await makeInitialCall(trimmedLat, trimmedLong);
-        console.log(`@@ @@ forecastKey is: ${forecastKey.getKeyStr()}`);
 
         try {
             const existingGeometry = await this.s3Adapter.getGeometryJson(
