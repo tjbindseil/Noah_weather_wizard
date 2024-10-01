@@ -34,6 +34,5 @@ export {
     Forecast,
     ForecastHourly,
 } from './forecast_service_models/forecast';
-export { Polygon } from './spot_service_models/polygon';
 import _schema from './schema_validation/_schema';
 export { _schema };

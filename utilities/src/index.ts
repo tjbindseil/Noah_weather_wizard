@@ -7,6 +7,4 @@ export {
     getSpots,
     getSpot,
     deleteSpot,
-    insertPolygon,
-    getPolygons,
 } from './db/dbo';

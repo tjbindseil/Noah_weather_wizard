@@ -4,6 +4,8 @@ export class Spot {
         public readonly name: string,
         public readonly latitude: number,
         public readonly longitude: number,
-        public readonly polygonID: string
+        public readonly polygonID: string,
+        public readonly gridX: number,
+        public readonly gridY: number
     ) {}
 }

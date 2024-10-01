@@ -30,3 +30,12 @@ const fetch_forecast = async (pool: Pool<Client>, s3Adapter: S3Adapter) => {
 
     await Promise.all(promises);
 };
+
+// TJTAG, ok, so bascally, we are tracking all poilkygons
+// which is broken now becasuye polygons are not polygon + grid x and y
+// so, either i
+// A) add to polygon table st it tracks gridx and gridy in addition to polygon id
+// or
+// B) remove piolygon table, then fetch all spots, reduce down to only unique forecastKeys
+//
+// I/m goin with B
