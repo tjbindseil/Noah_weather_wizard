@@ -68,7 +68,7 @@ export function SpotSelectionScreen() {
       />
 
       <button
-        onClick={(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        onClick={() => {
           selectedSpots.push({ latitude, longitude, name });
           setSelectedSpots([...selectedSpots]);
         }}

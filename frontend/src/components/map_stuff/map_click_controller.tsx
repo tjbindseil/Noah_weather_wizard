@@ -59,6 +59,7 @@ export function MapClickController({ saveSelectedSpot, color }: MapClickControll
         />
         <button
           onClick={async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            console.log(`@@ @@ SAVING and lat is: ${popupLat} and long is: ${popupLong}`);
             await saveSelectedSpot({ latitude: popupLat, longitude: popupLong, name: popupName });
             setPopupOpen(false);
             event.stopPropagation();

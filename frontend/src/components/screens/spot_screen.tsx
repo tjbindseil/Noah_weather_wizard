@@ -68,7 +68,7 @@ export function SpotScreen() {
       />
 
       <button
-        onClick={(_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        onClick={() => {
           selectedSpots.push({ latitude, longitude, name });
           setSelectedSpots([...selectedSpots]);
         }}
@@ -80,7 +80,7 @@ export function SpotScreen() {
       {selectedSpots.map((selectedSpot) => (
         <p key={selectedSpot.name}>
           {`${selectedSpot.name} lat: ${selectedSpot.latitude} long: ${selectedSpot.longitude}`}
-          <button onClick={(_e) => removeThisSelectedSpot(selectedSpot)}>Remove</button>
+          <button onClick={() => removeThisSelectedSpot(selectedSpot)}>Remove</button>
         </p>
       ))}
 

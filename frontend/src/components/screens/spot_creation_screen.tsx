@@ -2,16 +2,23 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { NavBar } from '../nav_bar';
 import { SelectedSpot, SelectedSpotProps } from '../map_stuff/selected_spot';
-import { MapZoomController } from '../map_stuff/map_zoom_controller';
 import { LeafletMarkerColorOptions, MapClickController } from '../map_stuff/map_click_controller';
 import { LatLng, LatLngBounds } from 'leaflet';
 import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
 import { Spot } from 'ww-3-models-tjb';
 
 export function SpotCreationScreen() {
-  const [latitude, setLatitude] = useState(40.255014);
-  const [longitude, setLongitude] = useState(-105.615115);
+  const longsPeak = {
+    lat: 40.255014,
+    long: -105.615115,
+  };
+
+  const [latitude, setLatitude] = useState(longsPeak.lat);
+  const [longitude, setLongitude] = useState(longsPeak.long);
   const [name, setName] = useState('Longs Peak');
+
+  const [centerLat, setCenterLat] = useState(longsPeak.lat);
+  const [centerLong, setCenterLong] = useState(longsPeak.long);
 
   const [mapBounds, setMapBounds] = useState<LatLngBounds>(
     new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0)),
@@ -117,22 +124,36 @@ export function SpotCreationScreen() {
       />
 
       <button
-        onClick={async (_event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        onClick={async () => {
           await saveSpotFunc({ latitude, longitude, name });
           // TODO refresh shown spots (this should turn the current spot from blue to red)
         }}
       >
         Save Spot
       </button>
+      <button
+        onClick={async () => {
+          console.log('center');
+          setCenterLat(latitude);
+          setCenterLong(longitude);
+        }}
+      >
+        Center map
+      </button>
 
       <h3>Existing Spots</h3>
       {existingSpots.map((existingSpot) => (
-        <p key={existingSpot.name}>
+        <p key={existingSpot.id}>
           {`${existingSpot.name} lat: ${existingSpot.latitude} long: ${existingSpot.longitude}`}
         </p>
       ))}
 
-      <MapContainer ref={mapRef} style={{ height: '50vh', width: '50vw' }}>
+      <MapContainer
+        center={[centerLat, centerLong]}
+        zoom={13}
+        ref={mapRef}
+        style={{ height: '50vh', width: '50vw' }}
+      >
         <TileLayer
           attribution={
             '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -141,13 +162,12 @@ export function SpotCreationScreen() {
         />
         {existingSpots.map((existingSpot) => (
           <SelectedSpot
-            key={existingSpot.name}
+            key={existingSpot.id}
             latitude={existingSpot.latitude}
             longitude={existingSpot.longitude}
             name={existingSpot.name}
           />
         ))}
-        <MapZoomController selectedSpots={[[latitude, longitude]]} />
         <MapClickController
           saveSelectedSpot={saveSpotFunc}
           color={LeafletMarkerColorOptions.Green}
@@ -157,3 +177,7 @@ export function SpotCreationScreen() {
     </div>
   );
 }
+
+// so what's going on?
+// upon moving the map doesn't move the initially populated point (longs peak)
+// typing in would change it, but might not want that immediately, instead put a button

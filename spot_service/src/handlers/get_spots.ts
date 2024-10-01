@@ -17,10 +17,6 @@ export class GetSpots extends LooselyAuthenticatedAPI<
         super();
     }
 
-    private extractNumber(asStr: string) {
-        return Number(asStr);
-    }
-
     public async process(
         input: GetSpotsInput,
         pgClient: Client
