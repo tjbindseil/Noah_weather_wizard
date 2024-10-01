@@ -6,7 +6,6 @@ import {
     S3Adapter,
     getForecast,
     makeInitialCall,
-    insertPolygon,
     insertSpot,
 } from 'ww-3-utilities-tjb';
 
@@ -33,20 +32,18 @@ export class PostSpot extends LooselyAuthenticatedAPI<
     ): Promise<PostSpotOutput> {
         const trimmedLat = this.trimLatLong(input.latitude);
         const trimmedLong = this.trimLatLong(input.longitude);
-        const [polygonID, forecastUrl] = await makeInitialCall(
-            trimmedLat,
-            trimmedLong
-        );
+        const forecastKey = await makeInitialCall(trimmedLat, trimmedLong);
+        console.log(`@@ @@ forecastKey is: ${forecastKey.getKeyStr()}`);
 
         try {
             const existingGeometry = await this.s3Adapter.getGeometryJson(
-                polygonID
+                forecastKey
             );
 
             // for now, we are checking existing geometry to make sure it doesn't change
             // this will ultimately be removed once it is clear that they don't change (fingers crossed)
             const [_forecastJson, geometryJson] = await getForecast(
-                forecastUrl
+                forecastKey
             );
 
             if (JSON.stringify(geometryJson) !== existingGeometry) {
@@ -62,12 +59,11 @@ export class PostSpot extends LooselyAuthenticatedAPI<
             if (error.name === 'NoSuchKey') {
                 // TODO hmm, this is done twice, maybe move?
                 const [forecastJson, geometryJson] = await getForecast(
-                    forecastUrl
+                    forecastKey
                 );
 
-                await insertPolygon(pgClient, polygonID, forecastUrl);
-                await this.s3Adapter.putForecastJson(polygonID, forecastJson);
-                await this.s3Adapter.putGeometryJson(polygonID, geometryJson);
+                await this.s3Adapter.putForecastJson(forecastKey, forecastJson);
+                await this.s3Adapter.putGeometryJson(forecastKey, geometryJson);
             } else {
                 throw error;
             }
@@ -77,7 +73,9 @@ export class PostSpot extends LooselyAuthenticatedAPI<
             name: input.name,
             latitude: trimmedLat,
             longitude: trimmedLong,
-            polygonID,
+            polygonID: forecastKey.polygonID,
+            gridX: forecastKey.gridX,
+            gridY: forecastKey.gridY,
         });
 
         return { spot: insertedSpot };

@@ -13,18 +13,14 @@ export const makeInitialCall = async (latitude: number, longitude: number) => {
             gridId: string;
             gridX: number;
             gridY: number;
-            forecast: string;
         };
     }; // TODO can I do this better?
 
-    return [
-        new ForecastKey(
-            fetchResult.properties.gridId,
-            fetchResult.properties.gridX,
-            fetchResult.properties.gridY
-        ),
-        fetchResult.properties.forecast,
-    ];
+    return new ForecastKey(
+        fetchResult.properties.gridId,
+        fetchResult.properties.gridX,
+        fetchResult.properties.gridY
+    );
 };
 
 export const getForecast = async (forecastKey: ForecastKey) => {

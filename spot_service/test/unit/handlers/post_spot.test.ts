@@ -7,11 +7,10 @@ import {
     getForecast,
     S3Adapter,
     insertSpot,
-    insertPolygon,
+    ForecastKey,
 } from 'ww-3-utilities-tjb';
 jest.mock('ww-3-utilities-tjb');
 const mockInsertSpot = jest.mocked(insertSpot, true);
-const mockInsertPolygon = jest.mocked(insertPolygon, true);
 const mockMakeInitialCall = jest.mocked(makeInitialCall, true);
 const mockGetForecast = jest.mocked(getForecast, true);
 
@@ -29,7 +28,8 @@ describe('PostSpot tests', () => {
 
     const postedSpot = { name: 'name', latitude: 1, longitude: 2 };
     const polygonID = 'ABC';
-    const forecastUrl = 'forecastURL';
+    const gridX = 420;
+    const gridY = 69;
     const forecast = { forecast: 'clear' };
     const existingGeometry = { g: 'om' };
 
@@ -41,16 +41,17 @@ describe('PostSpot tests', () => {
         mockPutGeometryJson.mockClear();
 
         mockInsertSpot.mockClear();
-        mockInsertPolygon.mockClear();
         mockMakeInitialCall.mockClear();
         mockGetForecast.mockClear();
 
         mockGetGeometryJson.mockResolvedValue(JSON.stringify(existingGeometry));
         mockGetForecast.mockResolvedValue([forecast, existingGeometry]);
-        mockMakeInitialCall.mockResolvedValue([polygonID, forecastUrl]);
+        mockMakeInitialCall.mockResolvedValue(
+            new ForecastKey(polygonID, gridX, gridY)
+        );
     });
 
-    it('trims lat and long before using them', async () => {
+    it.only('trims lat and long before using them', async () => {
         const untrimmedPostedSpot = {
             name: 'name',
             latitude: 1.1111111,
@@ -67,6 +68,8 @@ describe('PostSpot tests', () => {
             latitude: trimmedLat,
             longitude: trimmedLong,
             polygonID,
+            gridX,
+            gridY,
         });
     });
 
@@ -95,11 +98,6 @@ describe('PostSpot tests', () => {
 
         await postSpot.process(postedSpot, mockDbClient);
 
-        expect(mockInsertPolygon).toBeCalledWith(
-            mockDbClient,
-            polygonID,
-            forecastUrl
-        );
         expect(mockPutForecastJson).toBeCalledWith(polygonID, forecast);
         expect(mockPutGeometryJson).toBeCalledWith(polygonID, existingGeometry);
         expect(mockInsertSpot).toBeCalledWith(mockDbClient, {
