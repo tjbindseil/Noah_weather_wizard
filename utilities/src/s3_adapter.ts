@@ -1,5 +1,6 @@
 import {
     GetObjectCommand,
+    ListObjectsV2Command,
     PutObjectCommand,
     S3Client,
 } from '@aws-sdk/client-s3';
@@ -87,5 +88,33 @@ export class S3Adapter {
                 ContentType: 'application/json; charset=utf-8',
             })
         );
+    }
+
+    public async getAllPolygons() {
+        const result = await this.s3Client.send(
+            new ListObjectsV2Command({
+                Bucket: this.bucketName,
+            })
+        );
+
+        const forecastKeys = new Set<ForecastKey>();
+
+        result.Contents?.forEach((object) => {
+            if (!object.Key) {
+                console.error('getAllPolygons and key is null');
+                return;
+            }
+
+            const folderName = object.Key.split('/')[0];
+            const folderNameTokens = folderName.split('_');
+            forecastKeys.add(
+                new ForecastKey(
+                    folderNameTokens[0],
+                    Number(folderNameTokens[1]),
+                    Number(folderNameTokens[2])
+                )
+            );
+        });
+        return forecastKeys;
     }
 }

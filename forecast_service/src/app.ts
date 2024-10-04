@@ -128,7 +128,7 @@ const s3Client = new S3Client({
 const s3Adapter = new S3Adapter(s3Client, bucketName);
 
 const fourHoursInMilliseconds = 1000 * 60 * 60 * 4;
-const fetchForecastFunc = make_fetch_forcast(pool, s3Adapter);
+const fetchForecastFunc = make_fetch_forcast(s3Adapter);
 setInterval(fetchForecastFunc, fourHoursInMilliseconds);
 
 export const server: http.Server = http.createServer(app);
