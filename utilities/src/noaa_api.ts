@@ -25,7 +25,7 @@ export const makeInitialCall = async (latitude: number, longitude: number) => {
 
 export const getForecast = async (forecastKey: ForecastKey) => {
     const fetchResult = (await (
-        await fetch(forecastKey.getKeyStr(), {
+        await fetch(forecastKey.getForecastUrl(), {
             method: 'GET',
         })
     )

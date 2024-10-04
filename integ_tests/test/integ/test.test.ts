@@ -6,10 +6,10 @@ describe('General integ tests', () => {
     const spotsToDelete: number[] = [];
 
     const longsPeakWindow: GetSpotsInput = {
-        minLat: 39,
-        maxLat: 41,
-        minLong: -106,
-        maxLong: -104,
+        minLat: '39',
+        maxLat: '41',
+        minLong: '-106',
+        maxLong: '-104',
     };
 
     it('posts a spot', async () => {
