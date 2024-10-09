@@ -47,7 +47,6 @@ export function SpotCreationScreen() {
     )
       .then((result) => result.json())
       .then((result) => {
-        console.log(`existingSpots is: ${JSON.stringify(result.spots)}`);
         setExistingSpots(result.spots);
       })
       .catch(console.error);
@@ -83,8 +82,8 @@ export function SpotCreationScreen() {
       <p>Then, name your spot and save it.</p>
       <p>
         Once all your spots are created, check out the
-        <a href={'localhost:3000/spot-selection'}> Spot Selection Page</a> to select the spots
-        you&aposd like to compare.
+        <a href={'localhost:3000/spot-selection'}> Spot Selection Page</a> to select the spots you
+        would like to compare.
       </p>
       <br />
       <p>
@@ -133,7 +132,6 @@ export function SpotCreationScreen() {
       </button>
       <button
         onClick={async () => {
-          console.log('center');
           setCenterLat(latitude);
           setCenterLong(longitude);
         }}
@@ -177,7 +175,3 @@ export function SpotCreationScreen() {
     </div>
   );
 }
-
-// so what's going on?
-// upon moving the map doesn't move the initially populated point (longs peak)
-// typing in would change it, but might not want that immediately, instead put a button
