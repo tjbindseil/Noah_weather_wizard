@@ -7,24 +7,12 @@ import { Spot } from 'ww-3-models-tjb';
 import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
 
 export function SpotSelectionScreen() {
-  // this screen is for selecting spots that are already created, note that new spots
-  // must be created on the <a>spot creation page</a>
-  //
-  // so, here, based on the bounds of the map, we will display any existing spots
-  // existing spots will be listed as blue points on the map and listed in a table
-  //
-  // in the table, the user will have the option to select them with a checkbox
-  //
-  // once selected, the spots will go from blue to green on the map
-  //
-  // lastly, the user can select a 'go to forecast' button and display the forecast for each
   const longsPeak = {
     lat: 40.255014,
     long: -105.615115,
   };
 
-  // TODO state controlled checked vs unchecked for existing spots
-  const checked = false;
+  const [checkedSpots, setCheckedSpots] = useState<number[]>([]);
 
   const [mapBounds, setMapBounds] = useState<LatLngBounds>(
     new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0)),
@@ -32,10 +20,6 @@ export function SpotSelectionScreen() {
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
 
   const mapRef = useRef(null);
-
-  // so, upon loading, get map bounds
-  // upon mapBounds changing, get existing points
-  // upon existingPoints being updated, display them?
 
   useEffect(() => {
     fetch(
@@ -94,7 +78,22 @@ export function SpotSelectionScreen() {
                 <td>{existingSpot.latitude}</td>
                 <td>{existingSpot.longitude}</td>
                 <td>
-                  <input type='checkbox' id='selected' name='selected' checked={!!checked} />
+                  <input
+                    type='checkbox'
+                    id={existingSpot.id.toString()}
+                    name='selected'
+                    checked={!!checkedSpots.includes(existingSpot.id)}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      checkedSpots.includes(Number(event.target.id))
+                        ? checkedSpots.splice(
+                            checkedSpots.findIndex((spotId) => spotId === Number(event.target.id)),
+                            1,
+                          )
+                        : checkedSpots.push(Number(event.target.id));
+
+                      setCheckedSpots([...checkedSpots]);
+                    }}
+                  />
                 </td>
               </tr>
             </>
