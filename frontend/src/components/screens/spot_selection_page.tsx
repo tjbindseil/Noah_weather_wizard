@@ -5,6 +5,7 @@ import { SelectedSpot } from '../map_stuff/selected_spot';
 import { LatLngBounds, LatLng } from 'leaflet';
 import { Spot } from 'ww-3-models-tjb';
 import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
+import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 
 export function SpotSelectionScreen() {
   const longsPeak = {
@@ -119,6 +120,11 @@ export function SpotSelectionScreen() {
             latitude={existingSpot.latitude}
             longitude={existingSpot.longitude}
             name={existingSpot.name}
+            color={
+              checkedSpots.includes(existingSpot.id)
+                ? LeafletMarkerColorOptions.Green
+                : LeafletMarkerColorOptions.Blue
+            }
           />
         ))}
         <MapBoundsMonitor setMapBounds={setMapBounds} />

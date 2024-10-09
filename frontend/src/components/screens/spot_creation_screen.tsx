@@ -1,11 +1,12 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { NavBar } from '../nav_bar';
-import { SelectedSpot, SelectedSpotProps } from '../map_stuff/selected_spot';
-import { LeafletMarkerColorOptions, MapClickController } from '../map_stuff/map_click_controller';
+import { SelectedSpot } from '../map_stuff/selected_spot';
+import { MapClickController } from '../map_stuff/map_click_controller';
 import { LatLng, LatLngBounds } from 'leaflet';
 import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
 import { Spot } from 'ww-3-models-tjb';
+import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 
 export function SpotCreationScreen() {
   const longsPeak = {
@@ -53,7 +54,7 @@ export function SpotCreationScreen() {
   }, [mapBounds, setExistingSpots]);
 
   const saveSpotFunc = useCallback(
-    async (selectedSpot: SelectedSpotProps) => {
+    async (selectedSpot: { latitude: number; longitude: number; name: string }) => {
       // TODO context like dwf services
       await (
         await fetch('http://localhost:8080/spot', {
@@ -164,6 +165,7 @@ export function SpotCreationScreen() {
             latitude={existingSpot.latitude}
             longitude={existingSpot.longitude}
             name={existingSpot.name}
+            color={LeafletMarkerColorOptions.Blue}
           />
         ))}
         <MapClickController

@@ -1,19 +1,8 @@
-import { Icon, LeafletEventHandlerFn } from 'leaflet';
+import { LeafletEventHandlerFn } from 'leaflet';
 import { useState } from 'react';
 import { Popup, Marker, useMapEvent } from 'react-leaflet';
+import { LeafletMarkerColorOptions, makeColoredIcon } from './marker_color';
 import { SelectedSpotProps } from './selected_spot';
-
-export enum LeafletMarkerColorOptions {
-  Blue = 'blue',
-  Gold = 'gold',
-  Red = 'red',
-  Green = 'green',
-  Orange = 'orange',
-  Yellow = 'yellow',
-  Violet = 'violet',
-  Grey = 'grey',
-  Black = 'black',
-}
 
 export interface MapClickControllerProps {
   saveSelectedSpot: (selectedSpot: SelectedSpotProps) => Promise<void>;
@@ -36,14 +25,7 @@ export function MapClickController({ saveSelectedSpot, color }: MapClickControll
     e.target.openPopup();
   };
 
-  const coloredIcon = new Icon({
-    iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-  });
+  const coloredIcon = makeColoredIcon(color);
 
   return popupOpen ? (
     <Marker position={[popupLat, popupLong]} icon={coloredIcon} eventHandlers={{ add: openPopup }}>
@@ -60,7 +42,12 @@ export function MapClickController({ saveSelectedSpot, color }: MapClickControll
         <button
           onClick={async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             console.log(`@@ @@ SAVING and lat is: ${popupLat} and long is: ${popupLong}`);
-            await saveSelectedSpot({ latitude: popupLat, longitude: popupLong, name: popupName });
+            await saveSelectedSpot({
+              latitude: popupLat,
+              longitude: popupLong,
+              name: popupName,
+              color,
+            });
             setPopupOpen(false);
             event.stopPropagation();
           }}
