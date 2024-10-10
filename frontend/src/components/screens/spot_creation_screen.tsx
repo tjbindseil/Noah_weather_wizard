@@ -5,10 +5,13 @@ import { SelectedSpot } from '../map_stuff/selected_spot';
 import { MapClickController } from '../map_stuff/map_click_controller';
 import { LatLng, LatLngBounds } from 'leaflet';
 import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
-import { Spot } from 'ww-3-models-tjb';
+import { PostSpotInput, Spot } from 'ww-3-models-tjb';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
+import { useSpotService } from '../../services/spot_service';
 
 export function SpotCreationScreen() {
+  const spotService = useSpotService();
+
   const longsPeak = {
     lat: 40.255014,
     long: -105.615115,
@@ -32,7 +35,7 @@ export function SpotCreationScreen() {
   // upon mapBounds changing, get existing points
   // upon existingPoints being updated, display them?
 
-  useEffect(() => {
+  const fetchExistingSpots = useCallback(() => {
     fetch(
       'http://localhost:8080/spots?' +
         new URLSearchParams({
@@ -49,25 +52,19 @@ export function SpotCreationScreen() {
       .then((result) => result.json())
       .then((result) => {
         setExistingSpots(result.spots);
+        console.log(`receiving existing spots, mapBounds are: ${JSON.stringify(mapBounds)}`);
       })
       .catch(console.error);
   }, [mapBounds, setExistingSpots]);
 
+  useEffect(fetchExistingSpots, [mapBounds]);
+
   const saveSpotFunc = useCallback(
-    async (selectedSpot: { latitude: number; longitude: number; name: string }) => {
-      // TODO context like dwf services
-      await (
-        await fetch('http://localhost:8080/spot', {
-          method: 'POST',
-          mode: 'cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...selectedSpot,
-          }),
-        })
-      ).json();
+    async (selectedSpot: PostSpotInput) => {
+      await spotService.createSpot(selectedSpot);
+      fetchExistingSpots();
     },
-    [name, latitude, longitude],
+    [spotService],
   );
 
   // TODO upon clicing on map, set the lat/long input values
