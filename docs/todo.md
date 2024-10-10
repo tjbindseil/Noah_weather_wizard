@@ -61,52 +61,25 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 
 
 ## frontend
-* start frontend (gonna be sick)
-* integ tests - done
-* nav bar - done
-* map integration
-  * topo map instead of open street
-  * for now, we will just do front end
-    * add spot to map and list via input box - done
-    * add spot to map and list via clicking on the map - done
-    * show list of added spots (ie zoom to fit all spots) - done
-    * highlight on map when a spot is selected
-    * remove spot from list - done
-    * go to forecast page - punt because this requires spots to be saved
-  * ad hoc spots?
-    * hmm, as of now, there is only a way to get forecast for a spot if it is saved
-    * so, with the above in place i need to either:
-      A) save the spots implicitly before requesting forecast
-      B) force the user to save them before requesting
-    * this begs the question of what is the reason for saving the spots?
-      * I guess spots are saved so that they can be browsed
-    * for now, I will go with option A, lets get something working for god's sake
-    * NO!
-  * spot creation page
-    * operates one spot at a time
-    * can either enter lat/long/name via text input or clicking on a map
-    * can save or cancel
-    * once saved (api call), the spot clears
-    * once cleared, the spot clears
-  * spot selection page
-    * search by name
-    * center on a selected point
-    * zoom in/out
-    * populate map with spots
-    * select spots, they get added to some list, the list has a GET FORECAST button
-  * forecast page
-    * can't navigate here without selected spots (ie remove from nav bar)
-    * take welected spots, send ids to api, get forecasts and display
-  * integrate with backend
-    * ultimately, this will require a user system
-    * add new spot
-    * save favorite spots
-    * browse for new spots
-      * select spots based on lat/long rectangle
-      * search
-      * view other individuals spots
-    * select a handful of considerations
-    * go to forecast page
+* existing spots do not pop up initially
+* upon creating a spot, all existing spots disappear (including the spot just made)
+* highlight on map when a spot is selected
+* handle retry / wait stuff
+  * retry in noaa api
+  * display waiting until successful or unsuccessful
+* spot selection page
+  * search by name
+  * center on a selected point
+* integrate with backend
+  * ultimately, this will require a user system
+  * add new spot
+  * save favorite spots
+  * browse for new spots
+    * select spots based on lat/long rectangle
+    * search
+    * view other individuals spots
+  * select a handful of considerations
+  * go to forecast page
 * wire up forecast provider (just the one that gets them all, not filter or sort)
 * forecast comparison page
 * write up a forecast hourly model

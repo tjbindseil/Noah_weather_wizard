@@ -7,14 +7,13 @@ export interface MapBoundsMonitorProps {
 
 export const MapBoundsMonitor = ({ setMapBounds }: MapBoundsMonitorProps) => {
   const map = useMap();
-  let lastBounds = map.getBounds();
-  map.on('moveend', function () {
-    // TJTAG the below causes this to get called over and over, need to determine why
-    const newBounds = map.getBounds();
-    if (!lastBounds.equals(newBounds)) {
-      lastBounds = newBounds;
-      setMapBounds(newBounds);
-    }
+
+  // set right off the bat
+  setMapBounds(map.getBounds());
+
+  // and when the map moves
+  map.on('moveend', () => {
+    setMapBounds(map.getBounds());
   });
 
   return <></>;

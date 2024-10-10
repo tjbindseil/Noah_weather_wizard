@@ -27,6 +27,7 @@ export function MapClickController({ saveSelectedSpot, color }: MapClickControll
 
   const coloredIcon = makeColoredIcon(color);
 
+  // TODO remove the popup marker
   return popupOpen ? (
     <Marker position={[popupLat, popupLong]} icon={coloredIcon} eventHandlers={{ add: openPopup }}>
       <Popup>
@@ -41,7 +42,6 @@ export function MapClickController({ saveSelectedSpot, color }: MapClickControll
         />
         <button
           onClick={async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-            console.log(`@@ @@ SAVING and lat is: ${popupLat} and long is: ${popupLong}`);
             await saveSelectedSpot({
               latitude: popupLat,
               longitude: popupLong,

@@ -12,6 +12,8 @@ import { useSpotService } from '../../services/spot_service';
 export function SpotCreationScreen() {
   const spotService = useSpotService();
 
+  const mapRef = useRef(null);
+
   const longsPeak = {
     lat: 40.255014,
     long: -105.615115,
@@ -21,6 +23,7 @@ export function SpotCreationScreen() {
   const [longitude, setLongitude] = useState(longsPeak.long);
   const [name, setName] = useState('Longs Peak');
 
+  // TODO I dont think this mechanism works
   const [centerLat, setCenterLat] = useState(longsPeak.lat);
   const [centerLong, setCenterLong] = useState(longsPeak.long);
 
@@ -29,13 +32,29 @@ export function SpotCreationScreen() {
   );
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
 
-  const mapRef = useRef(null);
+  const setMapBoundsIfChanged = useCallback(
+    (newMapBounds: LatLngBounds) => {
+      console.log(
+        `@@ @@ setMapBoundsIfChanged - newMapBounds is: ${newMapBounds.toBBoxString()} and mapBounds is: ${mapBounds.toBBoxString()}`,
+      );
+      if (!mapBounds.equals(newMapBounds)) {
+        console.log('@@ @@ setMapBoundsIfChanged - setting map bounds');
+        setMapBounds(newMapBounds);
+      }
+    },
+    [mapBounds, setMapBounds],
+  );
 
-  // so, upon loading, get map bounds
-  // upon mapBounds changing, get existing points
-  // upon existingPoints being updated, display them?
-
+  // in general, how to order these effects?
+  // basically, we are getting the request for zeroMapBounds back after the ones with the real mapBounds
+  // https://stackoverflow.com/questions/61121856/can-i-rely-on-the-useeffect-order-in-a-component
+  const zeroMapBounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0));
   const fetchExistingSpots = useCallback(() => {
+    // weird initial situation...
+    if (mapBounds.equals(zeroMapBounds)) {
+      return;
+    }
+
     fetch(
       'http://localhost:8080/spots?' +
         new URLSearchParams({
@@ -52,16 +71,17 @@ export function SpotCreationScreen() {
       .then((result) => result.json())
       .then((result) => {
         setExistingSpots(result.spots);
-        console.log(`receiving existing spots, mapBounds are: ${JSON.stringify(mapBounds)}`);
+        console.log(`receiving existing spots, mapBounds are: ${mapBounds.toBBoxString()}`);
       })
       .catch(console.error);
   }, [mapBounds, setExistingSpots]);
 
-  useEffect(fetchExistingSpots, [mapBounds]);
+  useEffect(fetchExistingSpots, [fetchExistingSpots, mapBounds]);
 
   const saveSpotFunc = useCallback(
     async (selectedSpot: PostSpotInput) => {
       await spotService.createSpot(selectedSpot);
+      // TODO i think this still doesn't work
       fetchExistingSpots();
     },
     [spotService],
@@ -85,7 +105,7 @@ export function SpotCreationScreen() {
       </p>
       <br />
       <p>
-        Red spots are spots that are already created, while a blue spot is what is currently being
+        Blue spots are spots that are already created, while a green spot is what is currently being
         created.
       </p>
       <br />
@@ -124,6 +144,9 @@ export function SpotCreationScreen() {
         onClick={async () => {
           await saveSpotFunc({ latitude, longitude, name });
           // TODO refresh shown spots (this should turn the current spot from blue to red)
+          // this is getting done now, but initial spots are an issue because the map bounds monitor has trouble setting them initially
+          //
+          // could pass in some rigged one time setter to use
         }}
       >
         Save Spot
@@ -169,7 +192,7 @@ export function SpotCreationScreen() {
           saveSelectedSpot={saveSpotFunc}
           color={LeafletMarkerColorOptions.Green}
         />
-        <MapBoundsMonitor setMapBounds={setMapBounds} />
+        <MapBoundsMonitor setMapBounds={setMapBoundsIfChanged} />
       </MapContainer>
     </div>
   );
