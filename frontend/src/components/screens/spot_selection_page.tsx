@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { NavBar } from '../nav_bar';
 import { SelectedSpot } from '../map_stuff/selected_spot';
@@ -6,8 +6,11 @@ import { LatLngBounds, LatLng } from 'leaflet';
 import { Spot } from 'ww-3-models-tjb';
 import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
+import { useSpotService } from '../../services/spot_service';
 
 export function SpotSelectionScreen() {
+  const spotService = useSpotService();
+
   const longsPeak = {
     lat: 40.255014,
     long: -105.615115,
@@ -22,26 +25,41 @@ export function SpotSelectionScreen() {
 
   const mapRef = useRef(null);
 
-  useEffect(() => {
-    fetch(
-      'http://localhost:8080/spots?' +
-        new URLSearchParams({
-          minLat: mapBounds.getSouth().toString(),
-          maxLat: mapBounds.getNorth().toString(),
-          minLong: mapBounds.getWest().toString(),
-          maxLong: mapBounds.getEast().toString(),
-        }),
-      {
-        method: 'GET',
-        mode: 'cors',
-      },
-    )
-      .then((result) => result.json())
+  // TODO dry this out man!
+  const setMapBoundsIfChanged = useCallback(
+    (newMapBounds: LatLngBounds) => {
+      if (!mapBounds.equals(newMapBounds)) {
+        setMapBounds(newMapBounds);
+      }
+    },
+    [mapBounds, setMapBounds],
+  );
+
+  // TODO dry this out man!
+  const fetchExistingSpots = useCallback(() => {
+    // weird initial situation...
+    // the asynchronous calls here are returning out of order, so the initial call with a 0/0 window
+    // will return after the call with the real window. this results in there being no spots
+    // this solution does not address the root cause but seems to work
+    const zeroMapBounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0));
+    if (mapBounds.equals(zeroMapBounds)) {
+      return;
+    }
+
+    spotService
+      .getSpots({
+        minLat: mapBounds.getSouth().toString(),
+        maxLat: mapBounds.getNorth().toString(),
+        minLong: mapBounds.getWest().toString(),
+        maxLong: mapBounds.getEast().toString(),
+      })
       .then((result) => {
         setExistingSpots(result.spots);
       })
       .catch(console.error);
   }, [mapBounds, setExistingSpots]);
+
+  useEffect(fetchExistingSpots, [mapBounds, setExistingSpots]);
 
   return (
     <div className='Home'>
@@ -127,7 +145,7 @@ export function SpotSelectionScreen() {
             }
           />
         ))}
-        <MapBoundsMonitor setMapBounds={setMapBounds} />
+        <MapBoundsMonitor setMapBounds={setMapBoundsIfChanged} />
       </MapContainer>
     </div>
   );

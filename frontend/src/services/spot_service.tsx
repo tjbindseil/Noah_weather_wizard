@@ -54,7 +54,7 @@ const SpotService = ({ children }: any) => {
 
     async getSpots(input: GetSpotsInput): Promise<GetSpotsOutput> {
       const result = await (
-        await fetch('http://localhost:8080/spots?' + new URLSearchParams({ ...input }), {
+        await fetch(`${baseUrl}/spots?` + new URLSearchParams({ ...input }), {
           method: 'GET',
           mode: 'cors',
         })
