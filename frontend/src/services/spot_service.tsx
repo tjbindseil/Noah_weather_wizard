@@ -27,7 +27,7 @@ const ajv = new Ajv();
 const SpotService = ({ children }: any) => {
   const baseUrl = 'http://localhost:8080';
   const postSpotOutputValidator = ajv.compile(_schema.PostSpotOutput);
-  const getSpotsOutputValidator = ajv.compile(_schema.GetSpotsInput);
+  const getSpotsOutputValidator = ajv.compile(_schema.GetSpotsOutput);
 
   const spotService = {
     async createSpot(postSpotInput: PostSpotInput): Promise<PostSpotOutput> {
@@ -52,9 +52,9 @@ const SpotService = ({ children }: any) => {
       return result as unknown as PostSpotOutput;
     },
 
-    async getSpots(_input: GetSpotsInput): Promise<GetSpotsOutput> {
+    async getSpots(input: GetSpotsInput): Promise<GetSpotsOutput> {
       const result = await (
-        await fetch(`${baseUrl}/spots`, {
+        await fetch('http://localhost:8080/spots?' + new URLSearchParams({ ...input }), {
           method: 'GET',
           mode: 'cors',
         })

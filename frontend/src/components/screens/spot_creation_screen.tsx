@@ -51,20 +51,13 @@ export function SpotCreationScreen() {
       return;
     }
 
-    fetch(
-      'http://localhost:8080/spots?' +
-        new URLSearchParams({
-          minLat: mapBounds.getSouth().toString(),
-          maxLat: mapBounds.getNorth().toString(),
-          minLong: mapBounds.getWest().toString(),
-          maxLong: mapBounds.getEast().toString(),
-        }),
-      {
-        method: 'GET',
-        mode: 'cors',
-      },
-    )
-      .then((result) => result.json())
+    spotService
+      .getSpots({
+        minLat: mapBounds.getSouth().toString(),
+        maxLat: mapBounds.getNorth().toString(),
+        minLong: mapBounds.getWest().toString(),
+        maxLong: mapBounds.getEast().toString(),
+      })
       .then((result) => {
         setExistingSpots(result.spots);
       })
