@@ -34,30 +34,22 @@ export function SpotCreationScreen() {
 
   const setMapBoundsIfChanged = useCallback(
     (newMapBounds: LatLngBounds) => {
-      //       console.log(
-      //         `@@ @@ setMapBoundsIfChanged - newMapBounds is: ${newMapBounds.toBBoxString()} and mapBounds is: ${mapBounds.toBBoxString()}`,
-      //       );
       if (!mapBounds.equals(newMapBounds)) {
-        //         console.log('@@ @@ setMapBoundsIfChanged - setting map bounds');
         setMapBounds(newMapBounds);
       }
     },
     [mapBounds, setMapBounds],
   );
 
-  // in general, how to order these effects?
-  // basically, we are getting the request for zeroMapBounds back after the ones with the real mapBounds
-  // https://stackoverflow.com/questions/61121856/can-i-rely-on-the-useeffect-order-in-a-component
-  // const zeroMapBounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0));
   const fetchExistingSpots = useCallback(() => {
-    // could also use a static variable to number calls, then track if they are executed in order
-    console.log(`fetching existing spots, mapBounds are: ${mapBounds.toBBoxString()}`);
     // weird initial situation...
-    //     if (mapBounds.equals(zeroMapBounds)) {
-    //       return;
-    //     }
-
-    const initialMapBounds = new LatLngBounds(mapBounds.getSouthWest(), mapBounds.getNorthEast());
+    // the asynchronous calls here are returning out of order, so the initial call with a 0/0 window
+    // will return after the call with the real window. this results in there being no spots
+    // this solution does not address the root cause but seems to work
+    const zeroMapBounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0));
+    if (mapBounds.equals(zeroMapBounds)) {
+      return;
+    }
 
     fetch(
       'http://localhost:8080/spots?' +
@@ -75,9 +67,6 @@ export function SpotCreationScreen() {
       .then((result) => result.json())
       .then((result) => {
         setExistingSpots(result.spots);
-        console.log(
-          `receiving existing spots, initialMapBounds are: ${initialMapBounds.toBBoxString()} mapBounds are: ${mapBounds.toBBoxString()}`,
-        );
       })
       .catch(console.error);
   }, [mapBounds, setExistingSpots]);
@@ -90,7 +79,7 @@ export function SpotCreationScreen() {
       // TODO i think this still doesn't work
       fetchExistingSpots();
     },
-    [spotService],
+    [fetchExistingSpots, spotService],
   );
 
   // TODO upon clicing on map, set the lat/long input values
