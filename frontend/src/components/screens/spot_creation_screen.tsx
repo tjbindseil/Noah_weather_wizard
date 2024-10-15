@@ -34,11 +34,11 @@ export function SpotCreationScreen() {
 
   const setMapBoundsIfChanged = useCallback(
     (newMapBounds: LatLngBounds) => {
-      console.log(
-        `@@ @@ setMapBoundsIfChanged - newMapBounds is: ${newMapBounds.toBBoxString()} and mapBounds is: ${mapBounds.toBBoxString()}`,
-      );
+      //       console.log(
+      //         `@@ @@ setMapBoundsIfChanged - newMapBounds is: ${newMapBounds.toBBoxString()} and mapBounds is: ${mapBounds.toBBoxString()}`,
+      //       );
       if (!mapBounds.equals(newMapBounds)) {
-        console.log('@@ @@ setMapBoundsIfChanged - setting map bounds');
+        //         console.log('@@ @@ setMapBoundsIfChanged - setting map bounds');
         setMapBounds(newMapBounds);
       }
     },
@@ -48,12 +48,16 @@ export function SpotCreationScreen() {
   // in general, how to order these effects?
   // basically, we are getting the request for zeroMapBounds back after the ones with the real mapBounds
   // https://stackoverflow.com/questions/61121856/can-i-rely-on-the-useeffect-order-in-a-component
-  const zeroMapBounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0));
+  // const zeroMapBounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0));
   const fetchExistingSpots = useCallback(() => {
+    // could also use a static variable to number calls, then track if they are executed in order
+    console.log(`fetching existing spots, mapBounds are: ${mapBounds.toBBoxString()}`);
     // weird initial situation...
-    if (mapBounds.equals(zeroMapBounds)) {
-      return;
-    }
+    //     if (mapBounds.equals(zeroMapBounds)) {
+    //       return;
+    //     }
+
+    const initialMapBounds = new LatLngBounds(mapBounds.getSouthWest(), mapBounds.getNorthEast());
 
     fetch(
       'http://localhost:8080/spots?' +
@@ -71,7 +75,9 @@ export function SpotCreationScreen() {
       .then((result) => result.json())
       .then((result) => {
         setExistingSpots(result.spots);
-        console.log(`receiving existing spots, mapBounds are: ${mapBounds.toBBoxString()}`);
+        console.log(
+          `receiving existing spots, initialMapBounds are: ${initialMapBounds.toBBoxString()} mapBounds are: ${mapBounds.toBBoxString()}`,
+        );
       })
       .catch(console.error);
   }, [mapBounds, setExistingSpots]);
