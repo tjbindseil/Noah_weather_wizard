@@ -59,6 +59,19 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 
 
 
+## user stuff
+* get username back?
+* quick test
+* which endpoints need validation?
+* add username to spots
+* integ tests
+* feature where the user saves their favorite spots
+* integ tests
+* way to login on frontend
+* save username with frontend requests for spot creation
+* add page (or way) to manage favorite spots
+* select spots, manage caching via a service ???
+
 
 ## frontend
 * existing spots do not pop up initially - done (kinda, not sure how to handle ordering of useEffect fetching)
