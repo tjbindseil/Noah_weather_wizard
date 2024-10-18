@@ -34,5 +34,6 @@ export {
     Forecast,
     ForecastHourly,
 } from './forecast_service_models/forecast';
+export { User } from './user';
 import _schema from './schema_validation/_schema';
 export { _schema };

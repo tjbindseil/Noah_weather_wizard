@@ -1,5 +1,5 @@
 import { PostSpotInput, PostSpotOutput, _schema } from 'ww-3-models-tjb';
-import { APIError, LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
+import { APIError, StrictlyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 import {
@@ -9,7 +9,7 @@ import {
     insertSpot,
 } from 'ww-3-utilities-tjb';
 
-export class PostSpot extends LooselyAuthenticatedAPI<
+export class PostSpot extends StrictlyAuthenticatedAPI<
     PostSpotInput,
     PostSpotOutput,
     Client
@@ -30,6 +30,8 @@ export class PostSpot extends LooselyAuthenticatedAPI<
         input: PostSpotInput,
         pgClient: Client
     ): Promise<PostSpotOutput> {
+        console.log(`username is: ${this.validatedUsername}`);
+
         const trimmedLat = this.trimLatLong(input.latitude);
         const trimmedLong = this.trimLatLong(input.longitude);
         const forecastKey = await makeInitialCall(trimmedLat, trimmedLong);

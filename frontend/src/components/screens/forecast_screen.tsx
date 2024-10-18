@@ -12,6 +12,12 @@ export function ForecastScreen() {
   // for this reason, i think it is best that the forecast service controls the fetching and storing of forecast data
   //
   // in addition, I would pretty simply be showing things when doing the code for forecast screen, so to the forecast service i will go
+  //
+  // so, now i have forecast service (and spot service) started.
+  //
+  // How should the forecast service handle the fetching, caching, etc of forecasts?
+  //
+  // Also, would a similar strategy solve the ordering of the map thing?
 
   return (
     <div className='Home'>

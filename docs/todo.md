@@ -64,6 +64,10 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 * existing spots do not pop up initially - done (kinda, not sure how to handle ordering of useEffect fetching)
 * upon creating a spot, all existing spots disappear (including the spot just made) - done
 * highlight on map when a spot is selected
+* forecast service integration
+  * so, right now, we have a page that lets spots be checked
+  * it might be easier if ... dd
+* consider utilizing the permanence of spot service in coordination with the map to solve the repeated `fetch_existing_spot` calls returning out of order
 * handle retry / wait stuff
   * retry in noaa api
   * display waiting until successful or unsuccessful

@@ -12,9 +12,9 @@ type CognitoJwtVerifierReturn = CognitoJwtVerifierSingleUserPool<{
     clientId: string;
 }>;
 
-const clientId = '1m1nh3j0ibr3fcoc0kt1ukniqa';
+const clientId = '710a0udc55uijq37av84ldipph';
 export const defaultVerifier = CognitoJwtVerifier.create({
-    userPoolId: 'us-east-1_zpq5v4Bda',
+    userPoolId: 'us-east-1_mDsHOM6wS',
     tokenUse: 'access',
     clientId: clientId,
 });
