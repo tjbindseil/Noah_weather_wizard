@@ -1,6 +1,13 @@
+import {
+    testUser1,
+    testUser2,
+    testUser3,
+    UserWithToken,
+} from './setup/seedUsers';
 import { getForecasts } from './api_helpers/forecast_service_api';
 import { deleteSpot, getSpots, postSpot } from './api_helpers/spot_service_api';
 import { DeleteSpotOutput, GetSpotsInput } from 'ww-3-models-tjb';
+import { authorizeUser } from 'ww-3-user-facade-tjb';
 
 describe('General integ tests', () => {
     const spotsToDelete: number[] = [];
@@ -12,14 +19,28 @@ describe('General integ tests', () => {
         maxLong: '-104',
     };
 
+    beforeAll(async () => {
+        const authPromises: Promise<void>[] = [];
+        const authUserSaveToken = async (u: UserWithToken) => {
+            u.token = (await authorizeUser(u.username, u.password)).AccessToken;
+        };
+        [testUser1, testUser2, testUser3].forEach((u) =>
+            authPromises.push(authUserSaveToken(u))
+        );
+        await Promise.all(authPromises);
+    });
+
     it('posts a spot', async () => {
         const initialSpots = await getSpots(longsPeakWindow);
 
-        const postedSpot = await postSpot({
-            name: 'Longs Peak',
-            latitude: 40.255014,
-            longitude: -105.615115,
-        });
+        const postedSpot = await postSpot(
+            {
+                name: 'Longs Peak',
+                latitude: 40.255014,
+                longitude: -105.615115,
+            },
+            testUser1
+        );
         spotsToDelete.push(postedSpot.spot.id);
 
         const finalSpots = await getSpots(longsPeakWindow);
@@ -34,11 +55,14 @@ describe('General integ tests', () => {
     });
 
     it('deletes a spot', async () => {
-        const postedSpot = await postSpot({
-            name: 'Longs Peak',
-            latitude: 40.255014,
-            longitude: -105.615115,
-        });
+        const postedSpot = await postSpot(
+            {
+                name: 'Longs Peak',
+                latitude: 40.255014,
+                longitude: -105.615115,
+            },
+            testUser1
+        );
 
         await deleteSpot(postedSpot.spot.id);
 
@@ -49,16 +73,22 @@ describe('General integ tests', () => {
     });
 
     it('gets all spots given a lat/long window', async () => {
-        const longsPeak = await postSpot({
-            name: 'Longs Peak',
-            latitude: 40.255014,
-            longitude: -105.615115,
-        });
-        const mtWhitney = await postSpot({
-            name: 'Mount Whitney',
-            latitude: 36.578581,
-            longitude: -118.291995,
-        });
+        const longsPeak = await postSpot(
+            {
+                name: 'Longs Peak',
+                latitude: 40.255014,
+                longitude: -105.615115,
+            },
+            testUser1
+        );
+        const mtWhitney = await postSpot(
+            {
+                name: 'Mount Whitney',
+                latitude: 36.578581,
+                longitude: -118.291995,
+            },
+            testUser1
+        );
         spotsToDelete.push(longsPeak.spot.id);
         spotsToDelete.push(mtWhitney.spot.id);
 
@@ -72,16 +102,22 @@ describe('General integ tests', () => {
     });
 
     it('gets forecasts for spots', async () => {
-        const longsPeak = await postSpot({
-            name: 'Longs Peak',
-            latitude: 40.255014,
-            longitude: -105.615115,
-        });
-        const mtWhitney = await postSpot({
-            name: 'Mount Whitney',
-            latitude: 36.578581,
-            longitude: -118.291995,
-        });
+        const longsPeak = await postSpot(
+            {
+                name: 'Longs Peak',
+                latitude: 40.255014,
+                longitude: -105.615115,
+            },
+            testUser1
+        );
+        const mtWhitney = await postSpot(
+            {
+                name: 'Mount Whitney',
+                latitude: 36.578581,
+                longitude: -118.291995,
+            },
+            testUser1
+        );
         spotsToDelete.push(longsPeak.spot.id);
         spotsToDelete.push(mtWhitney.spot.id);
 

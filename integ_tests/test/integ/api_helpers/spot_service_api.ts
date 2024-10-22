@@ -7,6 +7,7 @@ import {
 } from 'ww-3-models-tjb';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { fetchWithError } from './fetch_with_error';
+import { UserWithToken } from '../setup/seedUsers';
 
 const spotServiceBaseUrl = `http://${get_app_config().spotServiceHost}:${
     get_app_config().spotServicePort
@@ -30,7 +31,7 @@ export const getSpots = async (getSpotsInput: GetSpotsInput) => {
     );
 };
 
-export const postSpot = async (input: PostSpotInput) =>
+export const postSpot = async (input: PostSpotInput, creator: UserWithToken) =>
     await fetchWithError<PostSpotOutput>(
         'posting spot',
         `${spotServiceBaseUrl}/spot`,
@@ -38,6 +39,7 @@ export const postSpot = async (input: PostSpotInput) =>
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer: ${creator.token}`,
             },
             body: JSON.stringify(input),
         }
