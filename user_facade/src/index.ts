@@ -1,1 +1,7 @@
-export { make_user } from './user_facade';
+export {
+    createUser,
+    authorizeUser,
+    confirmUser,
+    refreshUser,
+    deleteUser,
+} from './user_facade';
