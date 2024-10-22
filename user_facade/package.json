@@ -2,8 +2,8 @@
     "name": "ww-3-user-facade-tjb",
     "version": "1.0.1",
     "description": "user facade used shared accross services",
-    "main": "build/src/index.js",
-    "types": "build/src/index.d.ts",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
     "scripts": {
         "test": "echo no test",
         "tsc": "tsc",

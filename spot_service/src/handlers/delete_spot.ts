@@ -4,6 +4,7 @@ import { deleteSpot } from 'ww-3-utilities-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 
+// TODO only can delete ones own spots
 export class DeleteSpot extends LooselyAuthenticatedAPI<
     DeleteSpotInput,
     DeleteSpotOutput,

@@ -23,6 +23,7 @@
         "ww-3-api-tjb": "file:../api",
         "ww-3-app-config-tjb": "file:../app_config",
         "ww-3-models-tjb": "file:../models",
+        "ww-3-user-facade-tjb": "file:../user_facade",
         "eslint": "^8.40.0",
         "eslint-config-prettier": "^8.8.0",
         "jest": "^28.1.3",
