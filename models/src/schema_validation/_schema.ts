@@ -11,8 +11,10 @@ const schema = {
                 polygonID: { type: 'string' },
                 gridX: { type: 'number' },
                 gridY: { type: 'number' },
+                creator: { type: 'string' },
             },
             required: [
+                'creator',
                 'gridX',
                 'gridY',
                 'id',
@@ -47,8 +49,10 @@ const schema = {
                             polygonID: { type: 'string' },
                             gridX: { type: 'number' },
                             gridY: { type: 'number' },
+                            creator: { type: 'string' },
                         },
                         required: [
+                            'creator',
                             'gridX',
                             'gridY',
                             'id',
@@ -84,8 +88,10 @@ const schema = {
                         polygonID: { type: 'string' },
                         gridX: { type: 'number' },
                         gridY: { type: 'number' },
+                        creator: { type: 'string' },
                     },
                     required: [
+                        'creator',
                         'gridX',
                         'gridY',
                         'id',

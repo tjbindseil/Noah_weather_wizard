@@ -60,10 +60,11 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 
 
 ## user stuff
-* get username back?
-* quick test
+* get username back? - done
+* quick test - done
+* add username to spots - done
 * which endpoints need validation?
-* add username to spots
+  * delete
 * integ tests
 * feature where the user saves their favorite spots
 * integ tests

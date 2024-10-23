@@ -1,6 +1,6 @@
 import { DeleteSpotInput, DeleteSpotOutput, _schema } from 'ww-3-models-tjb';
 import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
-import { deleteSpot } from 'ww-3-utilities-tjb';
+import { deleteSpot, getSpot } from 'ww-3-utilities-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 
@@ -18,6 +18,9 @@ export class DeleteSpot extends LooselyAuthenticatedAPI<
         input: DeleteSpotInput,
         pgClient: Client
     ): Promise<DeleteSpotOutput> {
+        //         const spotToDelete = getSpot(pgClient, input.id);
+        //         if (this.validatedUsername !=
+
         await deleteSpot(pgClient, input.id);
 
         // TODO delete is actually a bit more complicated,

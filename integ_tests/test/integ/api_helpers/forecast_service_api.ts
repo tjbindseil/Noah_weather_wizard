@@ -7,7 +7,7 @@ const forecastServiceBaseUrl = `http://${
 }:${get_app_config().forecastServicePort}`;
 
 export const getForecasts = async (spotIds: number[]) => {
-    await fetchWithError<GetForecastsOutput>(
+    return await fetchWithError<GetForecastsOutput>(
         'getting forecasts',
         `${forecastServiceBaseUrl}/forecasts?` +
             new URLSearchParams({

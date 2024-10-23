@@ -30,8 +30,6 @@ export class PostSpot extends StrictlyAuthenticatedAPI<
         input: PostSpotInput,
         pgClient: Client
     ): Promise<PostSpotOutput> {
-        console.log(`username is: ${this.validatedUsername}`);
-
         const trimmedLat = this.trimLatLong(input.latitude);
         const trimmedLong = this.trimLatLong(input.longitude);
         const forecastKey = await makeInitialCall(trimmedLat, trimmedLong);
@@ -77,6 +75,7 @@ export class PostSpot extends StrictlyAuthenticatedAPI<
             polygonID: forecastKey.polygonID,
             gridX: forecastKey.gridX,
             gridY: forecastKey.gridY,
+            creator: this.validatedUsername,
         });
 
         return { spot: insertedSpot };

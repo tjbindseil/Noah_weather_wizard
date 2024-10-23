@@ -121,11 +121,11 @@ describe('General integ tests', () => {
         spotsToDelete.push(longsPeak.spot.id);
         spotsToDelete.push(mtWhitney.spot.id);
 
-        const forecasts = await getForecasts([
+        const _forecasts = await getForecasts([
             longsPeak.spot.id,
             mtWhitney.spot.id,
         ]);
-        console.log(`forecasts is: ${JSON.stringify(forecasts)}`);
+        // console.log(`forecasts is: ${JSON.stringify(forecasts)}`);
     });
 
     afterAll(async () => {

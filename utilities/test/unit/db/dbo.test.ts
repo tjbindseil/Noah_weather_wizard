@@ -39,6 +39,8 @@ describe('dbo tests', () => {
         }
     );
 
+    const ogCreator = 'OG_CREATOR';
+
     const longsPeakSpot: PostedSpot = {
         name: 'Longs Peak',
         latitude: 40.255014,
@@ -46,6 +48,7 @@ describe('dbo tests', () => {
         polygonID: 'abc',
         gridX: 4,
         gridY: 5,
+        creator: ogCreator,
     };
     const crestoneNeedleSpot: PostedSpot = {
         name: 'Crestone Needle',
@@ -54,6 +57,7 @@ describe('dbo tests', () => {
         polygonID: 'def',
         gridX: 6,
         gridY: 7,
+        creator: ogCreator,
     };
     const mtWhitneySpot: PostedSpot = {
         name: 'Mount Whitney',
@@ -62,6 +66,7 @@ describe('dbo tests', () => {
         polygonID: 'ghi',
         gridX: 8,
         gridY: 9,
+        creator: ogCreator,
     };
     const expectedSpots = [longsPeakSpot, crestoneNeedleSpot, mtWhitneySpot];
     const spotIds: number[] = [];
@@ -94,6 +99,7 @@ describe('dbo tests', () => {
             polygonID: 'jkl',
             gridX: 10,
             gridY: 11,
+            creator: ogCreator,
         };
 
         await insertSpot(pgClient, grandTetonSpot);
