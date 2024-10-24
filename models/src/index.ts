@@ -35,5 +35,17 @@ export {
     ForecastHourly,
 } from './forecast_service_models/forecast';
 export { User } from './user';
+export {
+    GetFavoritesInput,
+    GetFavoritesOutput,
+} from './spot_service_models/get_favorites';
+export {
+    PostFavoriteInput,
+    PostFavoriteOutput,
+} from './spot_service_models/post_favorite';
+export {
+    DeleteFavoriteInput,
+    DeleteFavoriteOutput,
+} from './spot_service_models/delete_favorite';
 import _schema from './schema_validation/_schema';
 export { _schema };

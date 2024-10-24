@@ -7,3 +7,6 @@ export { GetRankedForecastsInput } from '../forecast_service_models/get_ranked_f
 export { GetForecastsHourlyInput } from '../forecast_service_models/get_forecasts_hourly';
 export { GetPossibleForecastsHourlyInput } from '../forecast_service_models/get_possible_forecasts_hourly';
 export { GetRankedForecastsHourlyInput } from '../forecast_service_models/get_ranked_forecasts_hourly';
+export { GetFavoritesInput } from '../spot_service_models/get_favorites';
+export { PostFavoriteInput } from '../spot_service_models/post_favorite';
+export { DeleteFavoriteInput } from '../spot_service_models/delete_favorite';

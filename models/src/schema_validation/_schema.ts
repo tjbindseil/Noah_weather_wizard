@@ -514,6 +514,51 @@ const schema = {
             },
             required: ['forecastsHourly'],
         },
+        GetFavoritesInput: { type: 'object' },
+        GetFavoritesOutput: {
+            type: 'object',
+            properties: {
+                favoriteSpots: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            id: { type: 'number' },
+                            name: { type: 'string' },
+                            latitude: { type: 'number' },
+                            longitude: { type: 'number' },
+                            polygonID: { type: 'string' },
+                            gridX: { type: 'number' },
+                            gridY: { type: 'number' },
+                            creator: { type: 'string' },
+                        },
+                        required: [
+                            'creator',
+                            'gridX',
+                            'gridY',
+                            'id',
+                            'latitude',
+                            'longitude',
+                            'name',
+                            'polygonID',
+                        ],
+                    },
+                },
+            },
+            required: ['favoriteSpots'],
+        },
+        PostFavoriteInput: {
+            type: 'object',
+            properties: { spotId: { type: 'number' } },
+            required: ['spotId'],
+        },
+        PostFavoriteOutput: { type: 'object' },
+        DeleteFavoriteInput: {
+            type: 'object',
+            properties: { spotId: { type: 'number' } },
+            required: ['spotId'],
+        },
+        DeleteFavoriteOutput: { type: 'object' },
     },
 } as const;
 export default schema.definitions;
