@@ -54,7 +54,7 @@ describe('General integ tests', () => {
         ).toBeTruthy();
     });
 
-    it('deletes a spot', async () => {
+    it('deletes a spot when the requestor also created the spot', async () => {
         const postedSpot = await postSpot(
             {
                 name: 'Longs Peak',
@@ -64,12 +64,34 @@ describe('General integ tests', () => {
             testUser1
         );
 
-        await deleteSpot(postedSpot.spot.id);
+        await deleteSpot(postedSpot.spot.id, testUser1);
 
         const finalSpots = await getSpots(longsPeakWindow);
         expect(
             finalSpots.spots.map((spot) => spot.id).includes(postedSpot.spot.id)
         ).toBeFalsy();
+    });
+
+    it('does not delete a spot when the requestor did not create the spot', async () => {
+        const postedSpot = await postSpot(
+            {
+                name: 'Longs Peak',
+                latitude: 40.255014,
+                longitude: -105.615115,
+            },
+            testUser1
+        );
+        spotsToDelete.push(postedSpot.spot.id);
+
+        // TODO catch exception
+        await expect(deleteSpot(postedSpot.spot.id, testUser2)).rejects.toThrow(
+            'fetch failed!'
+        );
+
+        const finalSpots = await getSpots(longsPeakWindow);
+        expect(
+            finalSpots.spots.map((spot) => spot.id).includes(postedSpot.spot.id)
+        ).toBeTruthy();
     });
 
     it('gets all spots given a lat/long window', async () => {
@@ -130,11 +152,13 @@ describe('General integ tests', () => {
 
     afterAll(async () => {
         const deletePromises: Promise<DeleteSpotOutput>[] = [];
-        spotsToDelete.forEach((id) => deletePromises.push(deleteSpot(id)));
+        spotsToDelete.forEach((id) =>
+            deletePromises.push(deleteSpot(id, testUser1))
+        );
         await Promise.all(deletePromises);
     });
 
     // more advanced...
-    // it updaters the forecasts in the background
+    // it updates the forecasts in the background
     // it('fetches the spots forecast upon posting the spot', async () => {});
 });

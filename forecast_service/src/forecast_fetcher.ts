@@ -14,7 +14,7 @@ const fetch_forecast = async (s3Adapter: S3Adapter) => {
 
     forecastKeys.forEach((forecastKey) =>
         promises.push(
-            getForecast(forecastKey).then((forecast) =>
+            getForecast(forecastKey).then(([forecast, _geometry]) =>
                 s3Adapter.putForecastJson(forecastKey, forecast)
             )
         )

@@ -1,11 +1,11 @@
 import { DeleteSpotInput, DeleteSpotOutput, _schema } from 'ww-3-models-tjb';
-import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
+import { APIError, StrictlyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { deleteSpot, getSpot } from 'ww-3-utilities-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 
 // TODO only can delete ones own spots
-export class DeleteSpot extends LooselyAuthenticatedAPI<
+export class DeleteSpot extends StrictlyAuthenticatedAPI<
     DeleteSpotInput,
     DeleteSpotOutput,
     Client
@@ -18,8 +18,10 @@ export class DeleteSpot extends LooselyAuthenticatedAPI<
         input: DeleteSpotInput,
         pgClient: Client
     ): Promise<DeleteSpotOutput> {
-        //         const spotToDelete = getSpot(pgClient, input.id);
-        //         if (this.validatedUsername !=
+        const spotToDelete = await getSpot(pgClient, input.id);
+        if (this.validatedUsername != spotToDelete.creator) {
+            throw new APIError(403, 'can only delete your own spots');
+        }
 
         await deleteSpot(pgClient, input.id);
 

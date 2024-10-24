@@ -45,13 +45,16 @@ export const postSpot = async (input: PostSpotInput, creator: UserWithToken) =>
         }
     );
 
-export const deleteSpot = async (id: number) =>
+export const deleteSpot = async (id: number, deletor: UserWithToken) =>
     await fetchWithError<DeleteSpotOutput>(
         'deleting spot',
         `${spotServiceBaseUrl}/spot`,
         {
             method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer: ${deletor.token}`,
+            },
             body: JSON.stringify({ id }),
         }
     );
