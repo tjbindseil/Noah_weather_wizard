@@ -14,5 +14,5 @@
 // CREATE TABLE favorite (
 //     "id" serial PRIMARY KEY,
 //     "username" varchar (128) NOT NULL,
-//     "spotId" integer REFERENCES spot (id)
+//     "spotId" integer REFERENCES spot (id) ON DELETE CASCADE
 // );

@@ -67,12 +67,12 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
   * delete
 * integ tests - done 
 * feature where the user saves their favorite spots
-  * we need a table in rds where each row has a userID and a spotID
-  * so then we also need end points (all strictly authenticated
+  * we need a table in rds where each row has a userID and a spotID - done
+  * so then we also need end points (all strictly authenticated) - done
     * post favorite spot
     * delete favorite spot
     * get favorite spots
-  * lastly, when we are deleting a spot, we should delete all favorites
+  * lastly, when we are deleting a spot, we should delete all favorites - done
 * integ tests for above
 * way to login on frontend
 * save username with frontend requests for spot creation

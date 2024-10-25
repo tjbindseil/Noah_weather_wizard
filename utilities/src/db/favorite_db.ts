@@ -19,10 +19,30 @@ export const insertFavorite = async (
     return await result.one();
 };
 
-export const getFavorites = async (pgClient: Client, username: string) => {
+export const getFavoritesByUsername = async (
+    pgClient: Client,
+    username: string
+) => {
     const result = pgClient.query<Favorite>(
         'select * from favorite where "username" = $1',
         [username]
+    );
+
+    const favorites: Favorite[] = [];
+    for await (const favorite of result) {
+        favorites.push(favorite);
+    }
+
+    return favorites;
+};
+
+export const getAllFavoritesBySpot = async (
+    pgClient: Client,
+    spotId: number
+) => {
+    const result = pgClient.query<Favorite>(
+        'select * from favorite where "spotId" = $1',
+        [spotId]
     );
 
     const favorites: Favorite[] = [];

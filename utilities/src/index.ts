@@ -8,4 +8,9 @@ export {
     getSpot,
     deleteSpot,
 } from './db/spot_db';
-export { insertFavorite, getFavorites, deleteFavorite } from './db/favorite_db';
+export {
+    insertFavorite,
+    getFavoritesByUsername,
+    getAllFavoritesBySpot,
+    deleteFavorite,
+} from './db/favorite_db';

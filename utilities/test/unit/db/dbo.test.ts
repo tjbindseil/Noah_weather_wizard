@@ -11,7 +11,8 @@ import {
 } from '../../../src/db/spot_db';
 import {
     deleteFavorite,
-    getFavorites,
+    getAllFavoritesBySpot,
+    getFavoritesByUsername,
     insertFavorite,
 } from '../../../src/db/favorite_db';
 
@@ -176,11 +177,14 @@ describe('dbo tests', () => {
     });
 
     it('can insert favorites', async () => {
-        const initialFavorites = await getFavorites(pgClient, ogCreator);
+        const initialFavorites = await getFavoritesByUsername(
+            pgClient,
+            ogCreator
+        );
         expect(initialFavorites.length).toEqual(0);
         await insertFavorite(pgClient, ogCreator, spotIds[0]);
 
-        const favorites = await getFavorites(pgClient, ogCreator);
+        const favorites = await getFavoritesByUsername(pgClient, ogCreator);
 
         expect(favorites.length).toEqual(1);
     });
@@ -189,21 +193,59 @@ describe('dbo tests', () => {
         await insertFavorite(pgClient, ogCreator, spotIds[0]);
         await insertFavorite(pgClient, ogCreator, spotIds[1]);
 
-        const ogFavorites = await getFavorites(pgClient, ogCreator);
-        const otherFavorites = await getFavorites(pgClient, otherCreator);
+        const ogFavorites = await getFavoritesByUsername(pgClient, ogCreator);
+        const otherFavorites = await getFavoritesByUsername(
+            pgClient,
+            otherCreator
+        );
 
         expect(ogFavorites.length).toEqual(2);
         expect(otherFavorites.length).toEqual(0);
     });
 
+    it('can get favorites by spotId', async () => {
+        await insertFavorite(pgClient, ogCreator, spotIds[0]);
+        await insertFavorite(pgClient, ogCreator, spotIds[1]);
+        await insertFavorite(pgClient, otherCreator, spotIds[1]);
+
+        const spot0Favorites = await getAllFavoritesBySpot(
+            pgClient,
+            spotIds[0]
+        );
+        const spot1Favorites = await getAllFavoritesBySpot(
+            pgClient,
+            spotIds[1]
+        );
+
+        expect(spot0Favorites.length).toEqual(1);
+        expect(spot1Favorites.length).toEqual(2);
+    });
+
     it('can delete favorites', async () => {
         await insertFavorite(pgClient, ogCreator, spotIds[0]);
-        const favorites = await getFavorites(pgClient, ogCreator);
+        const favorites = await getFavoritesByUsername(pgClient, ogCreator);
         expect(favorites.length).toEqual(1);
 
         await deleteFavorite(pgClient, ogCreator, spotIds[0]);
 
-        const favoritesAfterDelete = await getFavorites(pgClient, ogCreator);
+        const favoritesAfterDelete = await getFavoritesByUsername(
+            pgClient,
+            ogCreator
+        );
+        expect(favoritesAfterDelete.length).toEqual(0);
+    });
+
+    it('cascades deletes to favorites', async () => {
+        await insertFavorite(pgClient, ogCreator, spotIds[0]);
+        const favorites = await getFavoritesByUsername(pgClient, ogCreator);
+        expect(favorites.length).toEqual(1);
+
+        await deleteSpot(pgClient, spotIds[0]);
+
+        const favoritesAfterDelete = await getFavoritesByUsername(
+            pgClient,
+            ogCreator
+        );
         expect(favoritesAfterDelete.length).toEqual(0);
     });
 
