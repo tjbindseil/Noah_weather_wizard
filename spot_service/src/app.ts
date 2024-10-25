@@ -9,6 +9,7 @@ import {
     PostSpot,
     PostFavorite,
     GetFavorites,
+    DeleteFavorite,
 } from './handlers';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
@@ -69,6 +70,9 @@ app.post('/favorite', (req: Request, res: Response, next: NextFunction) => {
 });
 app.get('/favorites', (req: Request, res: Response, next: NextFunction) => {
     new GetFavorites().call(req, res, next, pgContextController);
+});
+app.delete('/favorite', (req: Request, res: Response, next: NextFunction) => {
+    new DeleteFavorite().call(req, res, next, pgContextController);
 });
 
 app.use(myErrorHandler);
