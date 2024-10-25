@@ -3,7 +3,13 @@ import express, { Express, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import http from 'http';
 import { myErrorHandler, PGContextController } from 'ww-3-api-tjb';
-import { DeleteSpot, GetSpots, PostSpot, PostFavorite } from './handlers';
+import {
+    DeleteSpot,
+    GetSpots,
+    PostSpot,
+    PostFavorite,
+    GetFavorites,
+} from './handlers';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
 import { createPool } from 'generic-pool';
@@ -60,6 +66,9 @@ app.delete('/spot', (req: Request, res: Response, next: NextFunction) => {
 
 app.post('/favorite', (req: Request, res: Response, next: NextFunction) => {
     new PostFavorite().call(req, res, next, pgContextController);
+});
+app.get('/favorites', (req: Request, res: Response, next: NextFunction) => {
+    new GetFavorites().call(req, res, next, pgContextController);
 });
 
 app.use(myErrorHandler);
