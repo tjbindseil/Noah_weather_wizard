@@ -8,7 +8,12 @@ import {
     getAllSpots,
     insertSpot,
     getSpots,
-} from '../../../src/db/dbo';
+} from '../../../src/db/spot_db';
+import {
+    deleteFavorite,
+    getFavorites,
+    insertFavorite,
+} from '../../../src/db/favorite_db';
 
 // these tests will actually interface with a pg database on my local machine
 // see src/db/index.ts for a command to make the database
@@ -40,6 +45,7 @@ describe('dbo tests', () => {
     );
 
     const ogCreator = 'OG_CREATOR';
+    const otherCreator = 'OTHER_CREATOR';
 
     const longsPeakSpot: PostedSpot = {
         name: 'Longs Peak',
@@ -68,7 +74,21 @@ describe('dbo tests', () => {
         gridY: 9,
         creator: ogCreator,
     };
-    const expectedSpots = [longsPeakSpot, crestoneNeedleSpot, mtWhitneySpot];
+    const otherCreatorSpot: PostedSpot = {
+        name: 'other creator spot',
+        latitude: 39.5,
+        longitude: 40.5,
+        polygonID: 'jkl',
+        gridX: 10,
+        gridY: 11,
+        creator: otherCreator,
+    };
+    const expectedSpots = [
+        longsPeakSpot,
+        crestoneNeedleSpot,
+        mtWhitneySpot,
+        otherCreatorSpot,
+    ];
     const spotIds: number[] = [];
 
     beforeAll(async () => {
@@ -155,9 +175,40 @@ describe('dbo tests', () => {
         ).toBeTruthy();
     });
 
+    it('can insert favorites', async () => {
+        const initialFavorites = await getFavorites(pgClient, ogCreator);
+        expect(initialFavorites.length).toEqual(0);
+        await insertFavorite(pgClient, ogCreator, spotIds[0]);
+
+        const favorites = await getFavorites(pgClient, ogCreator);
+
+        expect(favorites.length).toEqual(1);
+    });
+
+    it('can get favorites by username', async () => {
+        await insertFavorite(pgClient, ogCreator, spotIds[0]);
+        await insertFavorite(pgClient, ogCreator, spotIds[1]);
+
+        const ogFavorites = await getFavorites(pgClient, ogCreator);
+        const otherFavorites = await getFavorites(pgClient, otherCreator);
+
+        expect(ogFavorites.length).toEqual(2);
+        expect(otherFavorites.length).toEqual(0);
+    });
+
+    it('can delete favorites', async () => {
+        await insertFavorite(pgClient, ogCreator, spotIds[0]);
+        const favorites = await getFavorites(pgClient, ogCreator);
+        expect(favorites.length).toEqual(1);
+
+        await deleteFavorite(pgClient, ogCreator, spotIds[0]);
+
+        const favoritesAfterDelete = await getFavorites(pgClient, ogCreator);
+        expect(favoritesAfterDelete.length).toEqual(0);
+    });
+
     afterEach(async () => {
-        await pgClient.query<Spot>('TRUNCATE spot');
-        await pgClient.query<Spot>('TRUNCATE polygon');
+        await pgClient.query('TRUNCATE favorite, spot CASCADE');
     });
 
     afterAll(async () => {

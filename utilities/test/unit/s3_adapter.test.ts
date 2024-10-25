@@ -64,10 +64,10 @@ describe('s3_adapter tests', () => {
     });
 
     it('gets forecast', async () => {
-        const forecastReceived = await s3Adapter.getForecastJson(
+        const _forecastReceived = await s3Adapter.getForecastJson(
             testForecastKey
         );
-        console.log(`foredast received is: ${forecastReceived}`);
+        // console.log(`forecast received is: ${forecastReceived}`);
     });
 
     it('throws when forecast json isnt valid', async () => {

@@ -7,4 +7,5 @@ export {
     getSpots,
     getSpot,
     deleteSpot,
-} from './db/dbo';
+} from './db/spot_db';
+export { insertFavorite, getFavorites, deleteFavorite } from './db/favorite_db';
