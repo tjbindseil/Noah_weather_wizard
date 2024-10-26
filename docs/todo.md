@@ -73,11 +73,22 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
     * delete favorite spot
     * get favorite spots
   * lastly, when we are deleting a spot, we should delete all favorites - done
-  * integ tests for above
+  * integ tests for above - done
 * way to login on frontend
-* save username with frontend requests for spot creation
-* add page (or way) to manage favorite spots
+  * user service
+    * get logged in status (true/false)
+    * facilitate login, refresh, logout, cancel user, etc
+    * get username
+    * get token
+  * login page
+  * save username with frontend requests for spot creation
+  * favorites page
+    * favorites page redirect?
+      * automatic?
+      * blah blah blah need to login, click here, sends user to login page
 * select spots, manage caching via a service ???
+* private spots
+* deal with multiplicity of spots
 
 
 ## frontend
