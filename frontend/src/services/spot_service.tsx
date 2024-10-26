@@ -24,6 +24,8 @@ export const useSpotService = (): ISpotService =>
 
 const ajv = new Ajv();
 
+// TODO incorporate eslint and prettier in build process for frontend like backend
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 const SpotService = ({ children }: any) => {
   const baseUrl = 'http://localhost:8080';
   const postSpotOutputValidator = ajv.compile(_schema.PostSpotOutput);
