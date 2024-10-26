@@ -6,7 +6,7 @@ import {
 import { APIError, StrictlyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
-import { getFavorites, insertFavorite } from 'ww-3-utilities-tjb';
+import { getFavoritesByUsername, insertFavorite } from 'ww-3-utilities-tjb';
 
 export class PostFavorite extends StrictlyAuthenticatedAPI<
     PostFavoriteInput,
@@ -21,7 +21,7 @@ export class PostFavorite extends StrictlyAuthenticatedAPI<
         { spotId }: PostFavoriteInput,
         pgClient: Client
     ): Promise<PostFavoriteOutput> {
-        const existingFavorites = await getFavorites(
+        const existingFavorites = await getFavoritesByUsername(
             pgClient,
             this.validatedUsername
         );

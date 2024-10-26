@@ -5,12 +5,29 @@ import {
     UserWithToken,
 } from './setup/seedUsers';
 import { getForecasts } from './api_helpers/forecast_service_api';
-import { deleteSpot, getSpots, postSpot } from './api_helpers/spot_service_api';
-import { DeleteSpotOutput, GetSpotsInput } from 'ww-3-models-tjb';
+import {
+    deleteFavorite,
+    deleteSpot,
+    getFavorites,
+    getSpots,
+    postFavorite,
+    postSpot,
+} from './api_helpers/spot_service_api';
+import {
+    DeleteFavoriteOutput,
+    DeleteSpotOutput,
+    GetSpotsInput,
+} from 'ww-3-models-tjb';
 import { authorizeUser } from 'ww-3-user-facade-tjb';
+
+interface Favorite {
+    spotId: number;
+    user: UserWithToken;
+}
 
 describe('General integ tests', () => {
     const spotsToDelete: number[] = [];
+    const favoritesToDelete: Favorite[] = [];
 
     const longsPeakWindow: GetSpotsInput = {
         minLat: '39',
@@ -35,7 +52,7 @@ describe('General integ tests', () => {
 
         const postedSpot = await postSpot(
             {
-                name: 'Longs Peak',
+                name: 'Longs 1 Peak',
                 latitude: 40.255014,
                 longitude: -105.615115,
             },
@@ -57,7 +74,7 @@ describe('General integ tests', () => {
     it('deletes a spot when the requestor also created the spot', async () => {
         const postedSpot = await postSpot(
             {
-                name: 'Longs Peak',
+                name: 'Longs 2 Peak',
                 latitude: 40.255014,
                 longitude: -105.615115,
             },
@@ -75,7 +92,7 @@ describe('General integ tests', () => {
     it('does not delete a spot when the requestor did not create the spot', async () => {
         const postedSpot = await postSpot(
             {
-                name: 'Longs Peak',
+                name: 'Longs 3 Peak',
                 latitude: 40.255014,
                 longitude: -105.615115,
             },
@@ -97,7 +114,7 @@ describe('General integ tests', () => {
     it('gets all spots given a lat/long window', async () => {
         const longsPeak = await postSpot(
             {
-                name: 'Longs Peak',
+                name: 'Longs 4 Peak',
                 latitude: 40.255014,
                 longitude: -105.615115,
             },
@@ -126,7 +143,7 @@ describe('General integ tests', () => {
     it('gets forecasts for spots', async () => {
         const longsPeak = await postSpot(
             {
-                name: 'Longs Peak',
+                name: 'Longs 5 Peak',
                 latitude: 40.255014,
                 longitude: -105.615115,
             },
@@ -150,12 +167,63 @@ describe('General integ tests', () => {
         // console.log(`forecasts is: ${JSON.stringify(forecasts)}`);
     });
 
-    afterAll(async () => {
-        const deletePromises: Promise<DeleteSpotOutput>[] = [];
-        spotsToDelete.forEach((id) =>
-            deletePromises.push(deleteSpot(id, testUser1))
+    it('creates favorites', async () => {
+        const longsPeak = await postSpot(
+            {
+                name: 'Longs Peak',
+                latitude: 40.255014,
+                longitude: -105.615115,
+            },
+            testUser1
         );
-        await Promise.all(deletePromises);
+        spotsToDelete.push(longsPeak.spot.id);
+        const initialFavorites = await getFavorites({}, testUser1);
+        expect(initialFavorites.favoriteSpots.length).toEqual(0);
+
+        await postFavorite(
+            {
+                spotId: longsPeak.spot.id,
+            },
+            testUser1
+        );
+        favoritesToDelete.push({ spotId: longsPeak.spot.id, user: testUser1 });
+
+        // this only works cuz testUser1 only has 1 favorite right now, might be an issue if tests grow
+        const finalFavorites = await getFavorites({}, testUser1);
+        expect(finalFavorites.favoriteSpots.length).toEqual(1);
+    });
+
+    it('gets favorites', async () => {
+        //
+    });
+
+    it('deletes favorites', async () => {
+        //
+    });
+
+    it('creates favorites idempotently', async () => {
+        //
+    });
+
+    it('silently ignores deletion of a favorite that does not exist', async () => {
+        //
+    });
+
+    it('cleans up favorites when spots are deleted', async () => {
+        //
+    });
+
+    afterAll(async () => {
+        const favoriteDeletePromises: Promise<DeleteFavoriteOutput>[] = [];
+        favoritesToDelete.forEach((f) =>
+            favoriteDeletePromises.push(deleteFavorite(f.spotId, f.user))
+        );
+        await Promise.all(favoriteDeletePromises);
+        const spotDeletePromises: Promise<DeleteSpotOutput>[] = [];
+        spotsToDelete.forEach((id) =>
+            spotDeletePromises.push(deleteSpot(id, testUser1))
+        );
+        await Promise.all(spotDeletePromises);
     });
 
     // more advanced...

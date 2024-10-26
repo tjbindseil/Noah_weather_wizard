@@ -11,6 +11,6 @@ export {
 export {
     insertFavorite,
     getFavoritesByUsername,
-    getAllFavoritesBySpot,
+    getFavoritesBySpot,
     deleteFavorite,
 } from './db/favorite_db';

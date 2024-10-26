@@ -1,7 +1,12 @@
 import {
+    DeleteFavoriteOutput,
     DeleteSpotOutput,
+    GetFavoritesInput,
+    GetFavoritesOutput,
     GetSpotsInput,
     GetSpotsOutput,
+    PostFavoriteInput,
+    PostFavoriteOutput,
     PostSpotInput,
     PostSpotOutput,
 } from 'ww-3-models-tjb';
@@ -47,7 +52,7 @@ export const postSpot = async (input: PostSpotInput, creator: UserWithToken) =>
 
 export const deleteSpot = async (id: number, deletor: UserWithToken) =>
     await fetchWithError<DeleteSpotOutput>(
-        'deleting spot',
+        `deleting spot (id: ${id} and creator: ${deletor.username})`,
         `${spotServiceBaseUrl}/spot`,
         {
             method: 'DELETE',
@@ -56,5 +61,52 @@ export const deleteSpot = async (id: number, deletor: UserWithToken) =>
                 Authorization: `Bearer: ${deletor.token}`,
             },
             body: JSON.stringify({ id }),
+        }
+    );
+
+export const getFavorites = async (
+    _input: GetFavoritesInput,
+    requestor: UserWithToken
+) => {
+    return await fetchWithError<GetFavoritesOutput>(
+        'getting favorites',
+        `${spotServiceBaseUrl}/favorites`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer: ${requestor.token}`,
+            },
+        }
+    );
+};
+
+export const postFavorite = async (
+    input: PostFavoriteInput,
+    creator: UserWithToken
+) =>
+    await fetchWithError<PostFavoriteOutput>(
+        'posting favorite',
+        `${spotServiceBaseUrl}/favorite`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer: ${creator.token}`,
+            },
+            body: JSON.stringify(input),
+        }
+    );
+
+export const deleteFavorite = async (id: number, deletor: UserWithToken) =>
+    await fetchWithError<DeleteFavoriteOutput>(
+        'deleting favorite',
+        `${spotServiceBaseUrl}/favorite`,
+        {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer: ${deletor.token}`,
+            },
+            body: JSON.stringify({ spotId: id }),
         }
     );

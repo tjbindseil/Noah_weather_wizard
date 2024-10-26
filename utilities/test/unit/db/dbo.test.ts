@@ -11,7 +11,7 @@ import {
 } from '../../../src/db/spot_db';
 import {
     deleteFavorite,
-    getAllFavoritesBySpot,
+    getFavoritesBySpot,
     getFavoritesByUsername,
     insertFavorite,
 } from '../../../src/db/favorite_db';
@@ -208,14 +208,8 @@ describe('dbo tests', () => {
         await insertFavorite(pgClient, ogCreator, spotIds[1]);
         await insertFavorite(pgClient, otherCreator, spotIds[1]);
 
-        const spot0Favorites = await getAllFavoritesBySpot(
-            pgClient,
-            spotIds[0]
-        );
-        const spot1Favorites = await getAllFavoritesBySpot(
-            pgClient,
-            spotIds[1]
-        );
+        const spot0Favorites = await getFavoritesBySpot(pgClient, spotIds[0]);
+        const spot1Favorites = await getFavoritesBySpot(pgClient, spotIds[1]);
 
         expect(spot0Favorites.length).toEqual(1);
         expect(spot1Favorites.length).toEqual(2);

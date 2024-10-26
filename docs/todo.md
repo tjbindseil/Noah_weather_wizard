@@ -73,7 +73,7 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
     * delete favorite spot
     * get favorite spots
   * lastly, when we are deleting a spot, we should delete all favorites - done
-* integ tests for above
+  * integ tests for above
 * way to login on frontend
 * save username with frontend requests for spot creation
 * add page (or way) to manage favorite spots

@@ -36,10 +36,7 @@ export const getFavoritesByUsername = async (
     return favorites;
 };
 
-export const getAllFavoritesBySpot = async (
-    pgClient: Client,
-    spotId: number
-) => {
+export const getFavoritesBySpot = async (pgClient: Client, spotId: number) => {
     const result = pgClient.query<Favorite>(
         'select * from favorite where "spotId" = $1',
         [spotId]
