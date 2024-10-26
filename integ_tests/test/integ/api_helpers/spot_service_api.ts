@@ -97,7 +97,7 @@ export const postFavorite = async (
         }
     );
 
-export const deleteFavorite = async (id: number, deletor: UserWithToken) =>
+export const deleteFavorite = async (spotId: number, deletor: UserWithToken) =>
     await fetchWithError<DeleteFavoriteOutput>(
         'deleting favorite',
         `${spotServiceBaseUrl}/favorite`,
@@ -107,6 +107,6 @@ export const deleteFavorite = async (id: number, deletor: UserWithToken) =>
                 'Content-Type': 'application/json',
                 Authorization: `Bearer: ${deletor.token}`,
             },
-            body: JSON.stringify({ spotId: id }),
+            body: JSON.stringify({ spotId }),
         }
     );

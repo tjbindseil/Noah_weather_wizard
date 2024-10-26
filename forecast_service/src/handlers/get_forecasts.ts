@@ -23,6 +23,7 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
         super();
     }
 
+    // TODO I think failures here stop the service
     public async process(
         input: GetForecastsInput,
         pgClient: Client

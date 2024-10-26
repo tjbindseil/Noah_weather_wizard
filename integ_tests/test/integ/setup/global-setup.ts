@@ -1,9 +1,15 @@
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
-import { testUser1, testUser2, testUser3, UserWithToken } from './seedUsers';
+import {
+    testUser1,
+    testUser2,
+    testUser3,
+    testUser4,
+    UserWithToken,
+} from './seedUsers';
 import { createUser, authorizeUser } from 'ww-3-user-facade-tjb';
 
 async function createTestUsers() {
-    const testUsers = [testUser1, testUser2, testUser3];
+    const testUsers = [testUser1, testUser2, testUser3, testUser4];
 
     const createPromises: Promise<void>[] = [];
     testUsers.forEach((u) => createPromises.push(createUser(u, true)));

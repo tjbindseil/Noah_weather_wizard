@@ -2,6 +2,7 @@ import {
     testUser1,
     testUser2,
     testUser3,
+    testUser4,
     UserWithToken,
 } from './setup/seedUsers';
 import { getForecasts } from './api_helpers/forecast_service_api';
@@ -26,7 +27,7 @@ interface Favorite {
 }
 
 describe('General integ tests', () => {
-    const spotsToDelete: number[] = [];
+    const spotsToDelete: Favorite[] = [];
     const favoritesToDelete: Favorite[] = [];
 
     const longsPeakWindow: GetSpotsInput = {
@@ -41,7 +42,7 @@ describe('General integ tests', () => {
         const authUserSaveToken = async (u: UserWithToken) => {
             u.token = (await authorizeUser(u.username, u.password)).AccessToken;
         };
-        [testUser1, testUser2, testUser3].forEach((u) =>
+        [testUser1, testUser2, testUser3, testUser4].forEach((u) =>
             authPromises.push(authUserSaveToken(u))
         );
         await Promise.all(authPromises);
@@ -58,7 +59,7 @@ describe('General integ tests', () => {
             },
             testUser1
         );
-        spotsToDelete.push(postedSpot.spot.id);
+        spotsToDelete.push({ spotId: postedSpot.spot.id, user: testUser1 });
 
         const finalSpots = await getSpots(longsPeakWindow);
         expect(
@@ -98,7 +99,7 @@ describe('General integ tests', () => {
             },
             testUser1
         );
-        spotsToDelete.push(postedSpot.spot.id);
+        spotsToDelete.push({ spotId: postedSpot.spot.id, user: testUser1 });
 
         // TODO catch exception
         await expect(deleteSpot(postedSpot.spot.id, testUser2)).rejects.toThrow(
@@ -128,8 +129,8 @@ describe('General integ tests', () => {
             },
             testUser1
         );
-        spotsToDelete.push(longsPeak.spot.id);
-        spotsToDelete.push(mtWhitney.spot.id);
+        spotsToDelete.push({ spotId: longsPeak.spot.id, user: testUser1 });
+        spotsToDelete.push({ spotId: mtWhitney.spot.id, user: testUser1 });
 
         const finalSpots = await getSpots(longsPeakWindow);
         expect(
@@ -157,8 +158,8 @@ describe('General integ tests', () => {
             },
             testUser1
         );
-        spotsToDelete.push(longsPeak.spot.id);
-        spotsToDelete.push(mtWhitney.spot.id);
+        spotsToDelete.push({ spotId: longsPeak.spot.id, user: testUser1 });
+        spotsToDelete.push({ spotId: mtWhitney.spot.id, user: testUser1 });
 
         const _forecasts = await getForecasts([
             longsPeak.spot.id,
@@ -167,7 +168,7 @@ describe('General integ tests', () => {
         // console.log(`forecasts is: ${JSON.stringify(forecasts)}`);
     });
 
-    it('creates favorites', async () => {
+    it('creates (and gets) favorites', async () => {
         const longsPeak = await postSpot(
             {
                 name: 'Longs Peak',
@@ -176,7 +177,7 @@ describe('General integ tests', () => {
             },
             testUser1
         );
-        spotsToDelete.push(longsPeak.spot.id);
+        spotsToDelete.push({ spotId: longsPeak.spot.id, user: testUser1 });
         const initialFavorites = await getFavorites({}, testUser1);
         expect(initialFavorites.favoriteSpots.length).toEqual(0);
 
@@ -188,29 +189,85 @@ describe('General integ tests', () => {
         );
         favoritesToDelete.push({ spotId: longsPeak.spot.id, user: testUser1 });
 
-        // this only works cuz testUser1 only has 1 favorite right now, might be an issue if tests grow
+        // TODO - this (and other favorite integ tests) only works cuz testUser1 only has 1 favorite right now, might be an issue if tests grow
         const finalFavorites = await getFavorites({}, testUser1);
         expect(finalFavorites.favoriteSpots.length).toEqual(1);
     });
 
-    it('gets favorites', async () => {
-        //
-    });
-
     it('deletes favorites', async () => {
-        //
+        // this is tested in `afterAll`
     });
 
     it('creates favorites idempotently', async () => {
-        //
+        const longsPeak = await postSpot(
+            {
+                name: 'Longs Peak',
+                latitude: 40.255014,
+                longitude: -105.615115,
+            },
+            testUser2
+        );
+        spotsToDelete.push({ spotId: longsPeak.spot.id, user: testUser2 });
+        const initialFavorites = await getFavorites({}, testUser2);
+        expect(initialFavorites.favoriteSpots.length).toEqual(0);
+
+        await postFavorite(
+            {
+                spotId: longsPeak.spot.id,
+            },
+            testUser2
+        );
+        favoritesToDelete.push({ spotId: longsPeak.spot.id, user: testUser2 });
+
+        const intermediateFavorites = await getFavorites({}, testUser2);
+        expect(intermediateFavorites.favoriteSpots.length).toEqual(1);
+
+        await postFavorite(
+            {
+                spotId: longsPeak.spot.id,
+            },
+            testUser2
+        );
+        favoritesToDelete.push({ spotId: longsPeak.spot.id, user: testUser2 });
+
+        const finalFavorites = await getFavorites({}, testUser2);
+        expect(finalFavorites.favoriteSpots.length).toEqual(1);
     });
 
     it('silently ignores deletion of a favorite that does not exist', async () => {
-        //
+        await deleteFavorite(420, testUser3);
     });
 
     it('cleans up favorites when spots are deleted', async () => {
-        //
+        const longsPeak = await postSpot(
+            {
+                name: 'Longs Peak',
+                latitude: 40.255014,
+                longitude: -105.615115,
+            },
+            testUser4
+        );
+        const initialFavorites = await getFavorites({}, testUser4);
+        expect(initialFavorites.favoriteSpots.length).toEqual(0);
+        console.log('longs peak posted and 0 initial favorites verified');
+
+        await postFavorite(
+            {
+                spotId: longsPeak.spot.id,
+            },
+            testUser4
+        );
+
+        const intermediateFavorites = await getFavorites({}, testUser4);
+        expect(intermediateFavorites.favoriteSpots.length).toEqual(1);
+        console.log('favorite posted');
+
+        await deleteSpot(longsPeak.spot.id, testUser4);
+        console.log('spot deleted');
+
+        const finalFavorites = await getFavorites({}, testUser4);
+        expect(finalFavorites.favoriteSpots.length).toEqual(0);
+        console.log('final favs verified');
     });
 
     afterAll(async () => {
@@ -220,8 +277,8 @@ describe('General integ tests', () => {
         );
         await Promise.all(favoriteDeletePromises);
         const spotDeletePromises: Promise<DeleteSpotOutput>[] = [];
-        spotsToDelete.forEach((id) =>
-            spotDeletePromises.push(deleteSpot(id, testUser1))
+        spotsToDelete.forEach((f) =>
+            spotDeletePromises.push(deleteSpot(f.spotId, f.user))
         );
         await Promise.all(spotDeletePromises);
     });

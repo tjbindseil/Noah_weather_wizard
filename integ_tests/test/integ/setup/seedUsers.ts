@@ -22,3 +22,9 @@ export const testUser3: UserWithToken = {
     email: 'unverified@example.com',
     token: undefined,
 };
+export const testUser4: UserWithToken = {
+    username: 'testUser4',
+    password: 'Badpassword4&',
+    email: 'unverified@example.com',
+    token: undefined,
+};

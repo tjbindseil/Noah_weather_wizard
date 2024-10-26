@@ -1,9 +1,9 @@
-import { testUser1, testUser2, testUser3 } from './seedUsers';
+import { testUser1, testUser2, testUser3, testUser4 } from './seedUsers';
 import { deleteUser } from 'ww-3-user-facade-tjb';
 
 const deleteTestUsers = async () => {
     const deletePromises: Promise<void>[] = [];
-    [testUser1, testUser2, testUser3].forEach((u) => {
+    [testUser1, testUser2, testUser3, testUser4].forEach((u) => {
         if (!u.token) {
             console.error(
                 `user: ${JSON.stringify(
