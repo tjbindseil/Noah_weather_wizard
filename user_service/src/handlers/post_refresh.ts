@@ -18,16 +18,16 @@ export class PostRefresh extends LooselyAuthenticatedAPI<
     ): Promise<PostRefreshOutput> {
         const authResult = await refreshUser(input.refreshToken);
 
-        if (authResult.accessToken) {
+        if (!authResult.AccessToken) {
             throw new APIError(500, 'authResult does not contain accessToken');
         }
-        if (authResult.refreshToken) {
+        if (!authResult.RefreshToken) {
             throw new APIError(500, 'authResult does not contain refreshToken');
         }
 
         return {
-            accessToken: authResult.accessToken,
-            refreshToken: authResult.refreshToken,
+            accessToken: authResult.AccessToken,
+            refreshToken: authResult.RefreshToken,
         };
     }
 }

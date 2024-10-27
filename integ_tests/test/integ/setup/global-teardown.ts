@@ -1,10 +1,11 @@
 import { testUser1, testUser2, testUser3, testUser4 } from './seedUsers';
-import { deleteUser } from 'ww-3-user-facade-tjb';
+import { deleteUser } from '../api_helpers/user_service_api';
+import { DeleteUserInput } from 'ww-3-models-tjb';
 
 const deleteTestUsers = async () => {
-    const deletePromises: Promise<void>[] = [];
+    const deletePromises: Promise<DeleteUserInput>[] = [];
     [testUser1, testUser2, testUser3, testUser4].forEach((u) => {
-        if (!u.token) {
+        if (!u.accessToken) {
             console.error(
                 `user: ${JSON.stringify(
                     u
@@ -12,7 +13,7 @@ const deleteTestUsers = async () => {
             );
             throw new Error();
         }
-        deletePromises.push(deleteUser(u.token));
+        deletePromises.push(deleteUser({ accessToken: u.accessToken }));
     });
     await Promise.all(deletePromises);
 };

@@ -3,7 +3,7 @@ import {
     testUser2,
     testUser3,
     testUser4,
-    UserWithToken,
+    UserWithTokens,
 } from './setup/seedUsers';
 import { getForecasts } from './api_helpers/forecast_service_api';
 import {
@@ -19,11 +19,11 @@ import {
     DeleteSpotOutput,
     GetSpotsInput,
 } from 'ww-3-models-tjb';
-import { authorizeUser } from 'ww-3-user-facade-tjb';
+import { postAuth } from './api_helpers/user_service_api';
 
 interface Favorite {
     spotId: number;
-    user: UserWithToken;
+    user: UserWithTokens;
 }
 
 describe('General integ tests', () => {
@@ -39,8 +39,10 @@ describe('General integ tests', () => {
 
     beforeAll(async () => {
         const authPromises: Promise<void>[] = [];
-        const authUserSaveToken = async (u: UserWithToken) => {
-            u.token = (await authorizeUser(u.username, u.password)).AccessToken;
+        const authUserSaveToken = async (u: UserWithTokens) => {
+            u.accessToken = (
+                await postAuth({ username: u.username, password: u.password })
+            ).accessToken;
         };
         [testUser1, testUser2, testUser3, testUser4].forEach((u) =>
             authPromises.push(authUserSaveToken(u))

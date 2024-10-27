@@ -580,8 +580,9 @@ const schema = {
                     },
                     required: ['email', 'password', 'username'],
                 },
+                testUser: { type: 'boolean' },
             },
-            required: ['user'],
+            required: ['testUser', 'user'],
         },
         PostUserOutput: { type: 'object' },
         PostAuthInput: {

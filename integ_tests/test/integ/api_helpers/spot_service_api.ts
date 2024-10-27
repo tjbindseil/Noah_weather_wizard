@@ -12,7 +12,7 @@ import {
 } from 'ww-3-models-tjb';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { fetchWithError } from './fetch_with_error';
-import { UserWithToken } from '../setup/seedUsers';
+import { UserWithTokens } from '../setup/seedUsers';
 
 const spotServiceBaseUrl = `http://${get_app_config().spotServiceHost}:${
     get_app_config().spotServicePort
@@ -36,7 +36,7 @@ export const getSpots = async (getSpotsInput: GetSpotsInput) => {
     );
 };
 
-export const postSpot = async (input: PostSpotInput, creator: UserWithToken) =>
+export const postSpot = async (input: PostSpotInput, creator: UserWithTokens) =>
     await fetchWithError<PostSpotOutput>(
         'posting spot',
         `${spotServiceBaseUrl}/spot`,
@@ -44,13 +44,13 @@ export const postSpot = async (input: PostSpotInput, creator: UserWithToken) =>
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer: ${creator.token}`,
+                Authorization: `Bearer: ${creator.accessToken}`,
             },
             body: JSON.stringify(input),
         }
     );
 
-export const deleteSpot = async (id: number, deletor: UserWithToken) =>
+export const deleteSpot = async (id: number, deletor: UserWithTokens) =>
     await fetchWithError<DeleteSpotOutput>(
         `deleting spot (id: ${id} and creator: ${deletor.username})`,
         `${spotServiceBaseUrl}/spot`,
@@ -58,7 +58,7 @@ export const deleteSpot = async (id: number, deletor: UserWithToken) =>
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer: ${deletor.token}`,
+                Authorization: `Bearer: ${deletor.accessToken}`,
             },
             body: JSON.stringify({ id }),
         }
@@ -66,7 +66,7 @@ export const deleteSpot = async (id: number, deletor: UserWithToken) =>
 
 export const getFavorites = async (
     _input: GetFavoritesInput,
-    requestor: UserWithToken
+    requestor: UserWithTokens
 ) => {
     return await fetchWithError<GetFavoritesOutput>(
         'getting favorites',
@@ -74,7 +74,7 @@ export const getFavorites = async (
         {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer: ${requestor.token}`,
+                Authorization: `Bearer: ${requestor.accessToken}`,
             },
         }
     );
@@ -82,7 +82,7 @@ export const getFavorites = async (
 
 export const postFavorite = async (
     input: PostFavoriteInput,
-    creator: UserWithToken
+    creator: UserWithTokens
 ) =>
     await fetchWithError<PostFavoriteOutput>(
         'posting favorite',
@@ -91,13 +91,13 @@ export const postFavorite = async (
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer: ${creator.token}`,
+                Authorization: `Bearer: ${creator.accessToken}`,
             },
             body: JSON.stringify(input),
         }
     );
 
-export const deleteFavorite = async (spotId: number, deletor: UserWithToken) =>
+export const deleteFavorite = async (spotId: number, deletor: UserWithTokens) =>
     await fetchWithError<DeleteFavoriteOutput>(
         'deleting favorite',
         `${spotServiceBaseUrl}/favorite`,
@@ -105,7 +105,7 @@ export const deleteFavorite = async (spotId: number, deletor: UserWithToken) =>
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer: ${deletor.token}`,
+                Authorization: `Bearer: ${deletor.accessToken}`,
             },
             body: JSON.stringify({ spotId }),
         }

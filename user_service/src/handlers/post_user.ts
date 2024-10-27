@@ -16,7 +16,7 @@ export class PostUser extends LooselyAuthenticatedAPI<
         input: PostUserInput,
         _unused: unknown
     ): Promise<PostUserOutput> {
-        await createUser(input.user);
+        await createUser(input.user, input.testUser);
 
         return {};
     }
