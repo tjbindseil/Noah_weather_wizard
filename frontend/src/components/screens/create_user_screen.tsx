@@ -21,10 +21,10 @@ export function CreateUserScreen() {
   const createFunc = useCallback(() => {
     // TODO go to the page the user was previous on
     userService
-      .createUser({ username, password, email })
+      .createUser({ user: { username, password, email }, testUser: false })
       .then(() => go('/confirm_user'))
       .catch((e) => console.error(e));
-  }, []);
+  }, [username, password, email]);
 
   return (
     <div className='Screen'>

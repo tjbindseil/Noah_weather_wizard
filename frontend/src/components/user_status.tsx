@@ -37,7 +37,7 @@ export function UserStatus() {
           </li>
         </ul>
       ) : userService.signedIn() ? (
-        <button onClick={() => setDroppedDown(true)}>Welcome: ${userService.getUsername()} </button>
+        <button onClick={() => setDroppedDown(true)}>Welcome: {userService.getUsername()} </button>
       ) : (
         <button onClick={() => go('/login')}>Sign In/Up</button>
       )}

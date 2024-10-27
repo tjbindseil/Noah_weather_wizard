@@ -17,9 +17,9 @@ export function LoginScreen() {
   const [password, setPassword] = useState('');
 
   const loginFunc = useCallback(() => {
-    userService.authorizeUser(username, password).then(() => go('/'));
+    userService.authorizeUser({ username, password }).then(() => go('/'));
     // TODO show loading
-  }, []);
+  }, [username, password]);
 
   // TODO UserStatus on these pages???
   return (

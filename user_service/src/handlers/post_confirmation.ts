@@ -20,6 +20,7 @@ export class PostConfirmation extends LooselyAuthenticatedAPI<
         input: PostConfirmationInput,
         _unused: unknown
     ): Promise<PostConfirmationOutput> {
+        console.log(`input is : ${JSON.stringify(input)}`);
         await confirmUser(input.username, input.confirmationCode);
 
         return {};
