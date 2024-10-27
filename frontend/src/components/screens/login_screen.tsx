@@ -13,8 +13,8 @@ export function LoginScreen() {
     navigate(url);
   };
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('first_frontend_user');
+  const [password, setPassword] = useState('Badpassword1&');
 
   const loginFunc = useCallback(() => {
     userService.authorizeUser({ username, password }).then(() => go('/'));

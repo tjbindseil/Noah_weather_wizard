@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUserService } from '../services/user_service';
 
 export function UserStatus() {
@@ -29,9 +29,19 @@ export function UserStatus() {
       {droppedDown ? (
         // TODO - should this be its own page? profile page or something
         <ul>
-          <li>Favorites page</li>
-          <li>logout</li>
-          <li>delete account</li>
+          <li>
+            <button>Favorites page</button>
+          </li>
+          <li>
+            <Link reloadDocument to={'/'}>
+              logout
+            </Link>
+          </li>
+          <li>
+            <Link reloadDocument to={'/delete_user'}>
+              Delete Account
+            </Link>
+          </li>
           <li>
             <button onClick={() => setDroppedDown(false)}>close</button>
           </li>

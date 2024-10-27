@@ -50,6 +50,7 @@ const UserService = ({ children }: any) => {
     username: undefined,
 
     async createUser(postUserInput: PostUserInput) {
+      console.log('@@ @@ begin createUser');
       //
       // *****
       // *****
@@ -86,6 +87,7 @@ const UserService = ({ children }: any) => {
     },
 
     async authorizeUser(postAuthInput: PostAuthInput) {
+      console.log('@@ @@ begin authorizeUser');
       const result = await (
         await fetch(`${baseUrl}/auth`, {
           method: 'POST',
@@ -102,11 +104,14 @@ const UserService = ({ children }: any) => {
       }
 
       const postAuthOutput = result as unknown as PostAuthOutput;
+      console.log('@@ @@ authorizeUser setting access and refresh token');
       this.accessToken = postAuthOutput.accessToken;
+      this.refreshToken = postAuthOutput.refreshToken;
       await this.setUsername();
     },
 
     async confirmUser(postConfirmationInput: PostConfirmationInput) {
+      console.log('@@ @@ begin confirmUser');
       const result = await (
         await fetch(`${baseUrl}/confirmation`, {
           method: 'POST',
@@ -126,6 +131,7 @@ const UserService = ({ children }: any) => {
     },
 
     async refreshUser() {
+      console.log('@@ @@ begin refreshUser');
       if (this.refreshToken) {
         const result = await (
           await fetch(`${baseUrl}/refresh`, {
@@ -143,6 +149,7 @@ const UserService = ({ children }: any) => {
         }
 
         const postRefreshOutput = result as unknown as PostRefreshOutput;
+        console.log('@@ @@ refreshUser setting access and refresh tokens');
         this.accessToken = postRefreshOutput.accessToken;
         this.refreshToken = postRefreshOutput.refreshToken;
 
@@ -151,6 +158,7 @@ const UserService = ({ children }: any) => {
     },
 
     async deleteUser() {
+      console.log('@@ @@ begin deleteUser');
       if (this.accessToken) {
         const result = await (
           await fetch(`${baseUrl}/user`, {
@@ -172,10 +180,13 @@ const UserService = ({ children }: any) => {
     },
 
     signedIn() {
-      return !(this.accessToken === undefined); // TODO what about refresh
+      console.log('@@ @@ begin signedIn');
+      // return !(this.accessToken || this.refreshToken);
+      return !(this.accessToken === undefined);
     },
 
     async setUsername() {
+      console.log('@@ @@ begin setUsername');
       if (this.accessToken) {
         const decoded = await defaultVerifier.verify(this.accessToken);
         this.username = decoded.username;
@@ -187,7 +198,9 @@ const UserService = ({ children }: any) => {
     },
 
     logout() {
+      console.log('@@ @@ begin logout');
       this.username = undefined;
+      console.log('@@ @@ logout setting access and refresh token to undefined');
       this.accessToken = undefined;
       this.refreshToken = undefined;
     },
