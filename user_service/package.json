@@ -1,0 +1,42 @@
+{
+    "name": "ww_user_service",
+    "version": "1.0.0",
+    "description": "User Server for the Weather Wizard",
+    "main": "index.js",
+    "scripts": {
+        "test": "export WW_ENV='unit_test' && jest unit --config jest.unit.config.js",
+        "dev": "export WW_ENV='dev' && concurrently \"npx tsc --watch\" \"nodemon -q build/src/index.js\"",
+        "start-host": "export WW_ENV='host' && concurrently \"npx tsc --watch\" \"nodemon -q src/index.ts\"",
+        "start-laptopIT": "export WW_ENV='laptopIT' && ts-node src/index.ts",
+        "start-dev": "export WW_ENV='dev' && ts-node src/index.ts",
+        "prod-start": "export NODE_ENV='production' && ts-node src/index.ts",
+        "lint": "npx eslint src/ test/ --format compact",
+        "tsc": "tsc",
+        "ww-clean": "rm -rf node_modules package-lock.json build",
+        "ww-format": "npx prettier --write $(find src test package*)",
+        "ww-lint": "npx eslint $(find src test package*)",
+        "ww-build": "tsc && npm run test && npm run ww-format && npm run ww-lint && echo success!",
+        "ww-build-reinstall": "npm run ww-clean && npm install && tsc && npm run test && npm run ww-format && npm run ww-lint && echo success!"
+    },
+    "author": "TJB",
+    "license": "ISC",
+    "dependencies": {
+        "ajv": "^8.12.0",
+        "cors": "^2.8.5",
+        "ww-3-api-tjb": "file:../api",
+        "ww-3-app-config-tjb": "file:../app_config",
+        "ww-3-models-tjb": "file:../models",
+        "ww-3-user-facade-tjb": "file:../utilities",
+        "express": "^4.18.2"
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.17",
+        "@types/express": "^4.17.21",
+        "@typescript-eslint/eslint-plugin": "^7.3.1",
+        "concurrently": "^8.2.2",
+        "eslint": "^8.40.0",
+        "eslint-config-prettier": "^8.8.0",
+        "prettier": "2.8.8",
+        "ts-node": "^10.9.1"
+    }
+}
