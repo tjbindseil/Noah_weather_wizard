@@ -23,6 +23,8 @@ export interface AppConfig {
     };
     forecastServiceHost: string;
     forecastServicePort: number;
+    userServiceHost: string;
+    userServicePort: number;
 }
 
 const hostAppConfig: AppConfig = {
@@ -39,6 +41,8 @@ const hostAppConfig: AppConfig = {
     },
     forecastServiceHost: 'localhost',
     forecastServicePort: 8081,
+    userServiceHost: 'localhost',
+    userServicePort: 8082,
 };
 
 const laptopITConfig: AppConfig = {
@@ -55,6 +59,8 @@ const laptopITConfig: AppConfig = {
     },
     forecastServiceHost: 'localhost',
     forecastServicePort: 8081,
+    userServiceHost: 'localhost',
+    userServicePort: 8082,
 };
 
 const devAppConfig: AppConfig = {
@@ -71,6 +77,8 @@ const devAppConfig: AppConfig = {
     },
     forecastServiceHost: 'localhost',
     forecastServicePort: 8081,
+    userServiceHost: 'localhost',
+    userServicePort: 8082,
 };
 
 const testAppConfig: AppConfig = {
@@ -87,6 +95,8 @@ const testAppConfig: AppConfig = {
     },
     forecastServiceHost: 'localhost',
     forecastServicePort: 8081,
+    userServiceHost: 'localhost',
+    userServicePort: 8082,
 };
 
 const unitTestAppConfig: AppConfig = {
@@ -103,6 +113,8 @@ const unitTestAppConfig: AppConfig = {
     },
     forecastServiceHost: 'localhost',
     forecastServicePort: 8081,
+    userServiceHost: 'localhost',
+    userServicePort: 8082,
 };
 
 const prodAppConfig: AppConfig = {
@@ -119,6 +131,8 @@ const prodAppConfig: AppConfig = {
     },
     forecastServiceHost: 'localhost',
     forecastServicePort: 8081,
+    userServiceHost: 'localhost',
+    userServicePort: 8082,
 };
 
 let appConfigSet = false;

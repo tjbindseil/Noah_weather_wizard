@@ -34,7 +34,18 @@ export {
     Forecast,
     ForecastHourly,
 } from './forecast_service_models/forecast';
-export { User } from './user';
+export { User } from './user_service/user';
+export { PostUserInput, PostUserOutput } from './user_service/post_user';
+export { PostAuthInput, PostAuthOutput } from './user_service/post_auth';
+export {
+    PostConfirmationInput,
+    PostConfirmationOutput,
+} from './user_service/post_confirmation';
+export {
+    PostRefreshInput,
+    PostRefreshOutput,
+} from './user_service/post_refresh';
+export { DeleteUserInput, DeleteUserOutput } from './user_service/delete_user';
 export {
     GetFavoritesInput,
     GetFavoritesOutput,

@@ -559,6 +559,75 @@ const schema = {
             required: ['spotId'],
         },
         DeleteFavoriteOutput: { type: 'object' },
+        User: {
+            type: 'object',
+            properties: {
+                username: { type: 'string' },
+                password: { type: 'string' },
+                email: { type: 'string' },
+            },
+            required: ['email', 'password', 'username'],
+        },
+        PostUserInput: {
+            type: 'object',
+            properties: {
+                user: {
+                    type: 'object',
+                    properties: {
+                        username: { type: 'string' },
+                        password: { type: 'string' },
+                        email: { type: 'string' },
+                    },
+                    required: ['email', 'password', 'username'],
+                },
+            },
+            required: ['user'],
+        },
+        PostUserOutput: { type: 'object' },
+        PostAuthInput: {
+            type: 'object',
+            properties: {
+                username: { type: 'string' },
+                password: { type: 'string' },
+            },
+            required: ['password', 'username'],
+        },
+        PostAuthOutput: {
+            type: 'object',
+            properties: {
+                accessToken: { type: 'string' },
+                refreshToken: { type: 'string' },
+            },
+            required: ['accessToken', 'refreshToken'],
+        },
+        PostConfirmationInput: {
+            type: 'object',
+            properties: {
+                username: { type: 'string' },
+                confirmationCode: { type: 'string' },
+            },
+            required: ['confirmationCode', 'username'],
+        },
+        PostConfirmationOutput: { type: 'object' },
+        PostRefreshInput: {
+            type: 'object',
+            properties: { refreshToken: { type: 'string' } },
+            required: ['refreshToken'],
+        },
+        PostRefreshOutput: {
+            type: 'object',
+            properties: {
+                accessToken: { type: 'string' },
+                refreshToken: { type: 'string' },
+            },
+            required: ['accessToken', 'refreshToken'],
+        },
+        DeleteUserInput: {
+            type: 'object',
+            properties: { accessToken: { type: 'string' } },
+            required: ['accessToken'],
+        },
+        DeleteUserOutput: { type: 'object' },
     },
 } as const;
 export default schema.definitions;
