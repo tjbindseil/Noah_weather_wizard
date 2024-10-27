@@ -1,4 +1,11 @@
-import { PostAuthInput, PostAuthOutput, PostUserInput, _schema } from 'ww-3-models-tjb';
+import {
+  PostAuthInput,
+  PostAuthOutput,
+  PostConfirmationInput,
+  PostRefreshOutput,
+  PostUserInput,
+  _schema,
+} from 'ww-3-models-tjb';
 import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
 import { defaultVerifier } from 'ww-3-api-tjb';
@@ -7,8 +14,8 @@ import Ajv from 'ajv';
 export interface IUserService {
   createUser(postUserInput: PostUserInput): Promise<void>;
   authorizeUser(postAuthInput: PostAuthInput): Promise<void>;
-  confirmUser(username: string, confirmationCode: string): Promise<void>;
-  deleteUser(token: string): Promise<void>;
+  confirmUser(postConfirmationInput: PostConfirmationInput): Promise<void>;
+  deleteUser(): Promise<void>;
   signedIn(): boolean;
   getUsername(): string | undefined;
   logout(): void;
@@ -38,7 +45,8 @@ const UserService = ({ children }: any) => {
   const deleteUserOutputValidator = ajv.compile(_schema.DeleteUserOutput);
 
   const userService = {
-    authResult: undefined,
+    accessToken: undefined,
+    refreshToken: undefined,
     username: undefined,
 
     async createUser(postUserInput: PostUserInput) {
@@ -98,33 +106,78 @@ const UserService = ({ children }: any) => {
       await this.setUsername();
     },
 
-    async confirmUser(username: string, confirmationCode: string) {
-      await userFacade.confirmUser(username, confirmationCode);
+    async confirmUser(postConfirmationInput: PostConfirmationInput) {
+      const result = await (
+        await fetch(`${baseUrl}/confirmation`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...postConfirmationInput,
+          }),
+        })
+      ).json();
+
+      if (!postConfirmationOutputValidator(result)) {
+        throw new Error(
+          `UserService::postConfirmation - invalid response: ${JSON.stringify(result)}`,
+        );
+      }
     },
 
     async refreshUser() {
-      if (this.authResult) {
-        if (this.authResult.RefreshToken) {
-          this.authResult = await userFacade.refreshUser(this.authResult.RefreshToken);
-        } else {
-          // TODO some way to relay this back to the server
-          console.error('somehow refresh token is not present on authResult');
+      if (this.refreshToken) {
+        const result = await (
+          await fetch(`${baseUrl}/refresh`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              refreshToken: this.refreshToken,
+            }),
+          })
+        ).json();
+
+        if (!postRefreshOutputValidator(result)) {
+          throw new Error(`UserService::postRefresh - invalid response: ${JSON.stringify(result)}`);
         }
+
+        const postRefreshOutput = result as unknown as PostRefreshOutput;
+        this.accessToken = postRefreshOutput.accessToken;
+        this.refreshToken = postRefreshOutput.refreshToken;
+
+        await this.setUsername();
       }
-      await this.setUsername();
     },
 
-    async deleteUser(token: string) {
-      await userFacade.deleteUser(token);
+    async deleteUser() {
+      if (this.accessToken) {
+        const result = await (
+          await fetch(`${baseUrl}/user`, {
+            method: 'DELETE',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              accessToken: this.accessToken,
+            }),
+          })
+        ).json();
+
+        if (!deleteUserOutputValidator(result)) {
+          throw new Error(`UserService::deleteUser - invalid response: ${JSON.stringify(result)}`);
+        }
+
+        this.logout();
+      }
     },
 
     signedIn() {
-      return !(this.authResult === undefined);
+      return !(this.accessToken === undefined); // TODO what about refresh
     },
 
     async setUsername() {
-      if (this.authResult && this.authResult.AccessToken) {
-        const decoded = await defaultVerifier.verify(this.authResult.AccessToken);
+      if (this.accessToken) {
+        const decoded = await defaultVerifier.verify(this.accessToken);
         this.username = decoded.username;
       }
     },
@@ -135,7 +188,8 @@ const UserService = ({ children }: any) => {
 
     logout() {
       this.username = undefined;
-      this.authResult = undefined;
+      this.accessToken = undefined;
+      this.refreshToken = undefined;
     },
   } as UserServiceImpl;
 
