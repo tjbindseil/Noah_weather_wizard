@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { generalInputChangeHandler } from '../../helpers/general_input_change_handler';
 import { useUserService } from '../../services/user_service';
 import { NavBar } from '../nav_bar';
+import { PasswordRequirements } from '../password_requirements';
 
 export function LoginScreen() {
   const userService = useUserService();
@@ -16,7 +17,7 @@ export function LoginScreen() {
   const [password, setPassword] = useState('');
 
   const loginFunc = useCallback(() => {
-    userService.authorizeUser(username, password).then(() => go('/login'));
+    userService.authorizeUser(username, password).then(() => go('/'));
     // TODO show loading
   }, []);
 
@@ -31,14 +32,7 @@ export function LoginScreen() {
         onChange={(e) => generalInputChangeHandler(e, setUsername)}
         type={'text'}
       ></input>
-      <p>password requirement:</p>
-      <ul>
-        <li>At least 8 characters</li>
-        <li>Contains at least 1 number</li>
-        <li>Contains at least 1 special character</li>
-        <li>Contains at least 1 uppercase letter </li>
-        <li>Contains at least 1 lowercase letter</li>
-      </ul>
+      <PasswordRequirements />
       <label>enter password here:</label>
       <input
         value={password}

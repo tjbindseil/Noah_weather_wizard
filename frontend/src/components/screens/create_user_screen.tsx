@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { generalInputChangeHandler } from '../../helpers/general_input_change_handler';
 import { useUserService } from '../../services/user_service';
 import { NavBar } from '../nav_bar';
+import { PasswordRequirements } from '../password_requirements';
 
 export function CreateUserScreen() {
   const userService = useUserService();
@@ -12,13 +13,17 @@ export function CreateUserScreen() {
     navigate(url);
   };
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // TODO clear defaults
+  const [username, setUsername] = useState('first_frontend_user');
+  const [email, setEmail] = useState('tjbindseil@gmail.com');
+  const [password, setPassword] = useState('Badpassword1&');
 
   const createFunc = useCallback(() => {
     // TODO go to the page the user was previous on
-    userService.createUser({ username, password, email }).then(() => go('/confirm_user'));
+    userService
+      .createUser({ username, password, email })
+      .then(() => go('/confirm_user'))
+      .catch((e) => console.error(e));
   }, []);
 
   return (
@@ -37,6 +42,7 @@ export function CreateUserScreen() {
         onChange={(e) => generalInputChangeHandler(e, setEmail)}
         type={'text'}
       ></input>
+      <PasswordRequirements />
       <label>enter password here:</label>
       <input
         value={password}

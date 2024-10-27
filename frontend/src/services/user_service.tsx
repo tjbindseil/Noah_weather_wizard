@@ -9,7 +9,6 @@ export interface IUserService {
   createUser(user: User): Promise<void>;
   authorizeUser(username: string, password: string): Promise<void>;
   confirmUser(username: string, confirmationCode: string): Promise<void>;
-  refreshUser(): Promise<void>;
   deleteUser(token: string): Promise<void>;
   signedIn(): boolean;
   getUsername(): string | undefined;
@@ -20,45 +19,51 @@ export const UserServiceContext = Contextualizer.createContext(ProvidedServices.
 export const useUserService = (): IUserService =>
   Contextualizer.use<IUserService>(ProvidedServices.UserService);
 
-// so,
-// its kinda a state machine
-// not logged in
-//   ^
-//   |
-//   v
-// logged in
-
-/* eslint-disable  @typescript-eslint/no-explicit-any */
 interface UserServiceImpl extends IUserService {
   authResult: AuthenticationResultType | undefined;
+  refreshUser(): Promise<void>;
   username: string | undefined;
   setUsername: () => Promise<void>;
 }
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 const UserService = ({ children }: any) => {
   const userService = {
     authResult: undefined,
     username: undefined,
 
     async createUser(user: User) {
+      //
+      // *****
+      // *****
+      // ***** heads up, when running integ tests, everything runs on the laptop, ie where the aws config
+      // ***** is. So, when running on the browser, there is no aws config. this is likely why react isn't working.
+      // *****
+      //
+      // so really, i have two options:
+      // 1. stand up a user service (uhhhh) that just acts as a way to already have the configs set up
+      // 2. figure out a way to bundle the aws config file in the react app
+      //
+      // immediately, i am realizing that, once this react app is being served, it will get weird
+      // while at that point, the user service that I am proposing in option 1 above is going to be
+      // running on a docker container or a lambda or something. i think it will be easy for
+      // that piece of compute to have an IAM role/user/whateva. So, i think option 1 is better (no brainer level better) in the long run
+      //
+      // Lastly, I think that, I can leave the user_facade as is. This means I don't have to rework the integ tests that use it
+      //
+      // *****
       await userFacade.createUser(user);
-
-      // USERTODO navigate to confirmPage
     },
 
     async authorizeUser(username: string, password: string) {
       this.authResult = await userFacade.authorizeUser(username, password);
       await this.setUsername();
-      // USERTODO navigate to a namable place (like favorites if thats where the user was trying to access)
-      // or navigate to home if unspecified
     },
 
     async confirmUser(username: string, confirmationCode: string) {
       await userFacade.confirmUser(username, confirmationCode);
-      // USERTODO navigate to login page
     },
 
-    // TODO I think this is private...
     async refreshUser() {
       if (this.authResult) {
         if (this.authResult.RefreshToken) {
@@ -73,7 +78,6 @@ const UserService = ({ children }: any) => {
 
     async deleteUser(token: string) {
       await userFacade.deleteUser(token);
-      // USERTODO navigate to a page that imdicates user was successfully deleted
     },
 
     signedIn() {

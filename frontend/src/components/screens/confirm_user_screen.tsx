@@ -17,7 +17,7 @@ export function ConfirmUserScreen() {
 
   const confirmFunc = useCallback(() => {
     // TODO go to the page the user was previous on
-    userService.confirmUser(username, confirmationCode).then(() => go('/'));
+    userService.confirmUser(username, confirmationCode).then(() => go('/login'));
   }, []);
 
   return (
