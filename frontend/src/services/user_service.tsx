@@ -10,6 +10,7 @@ import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
 import { defaultVerifier } from 'ww-3-api-tjb';
 import Ajv from 'ajv';
+import { TokenStorageObject } from './utils/token_storage_obj';
 
 export interface IUserService {
   createUser(postUserInput: PostUserInput): Promise<void>;
@@ -26,8 +27,6 @@ export const useUserService = (): IUserService =>
   Contextualizer.use<IUserService>(ProvidedServices.UserService);
 
 interface UserServiceImpl extends IUserService {
-  accessToken: string | undefined;
-  refreshToken: string | undefined;
   refreshUser(): Promise<void>;
   username: string | undefined;
   setUsername: () => Promise<void>;
@@ -44,9 +43,9 @@ const UserService = ({ children }: any) => {
   const postRefreshOutputValidator = ajv.compile(_schema.PostRefreshOutput);
   const deleteUserOutputValidator = ajv.compile(_schema.DeleteUserOutput);
 
+  const tokenStorageObject = new TokenStorageObject();
+
   const userService = {
-    accessToken: undefined,
-    refreshToken: undefined,
     username: undefined,
 
     async createUser(postUserInput: PostUserInput) {
@@ -105,8 +104,7 @@ const UserService = ({ children }: any) => {
 
       const postAuthOutput = result as unknown as PostAuthOutput;
       console.log('@@ @@ authorizeUser setting access and refresh token');
-      this.accessToken = postAuthOutput.accessToken;
-      this.refreshToken = postAuthOutput.refreshToken;
+      tokenStorageObject.setTokens(postAuthOutput.accessToken, postAuthOutput.refreshToken);
       await this.setUsername();
     },
 
@@ -132,14 +130,14 @@ const UserService = ({ children }: any) => {
 
     async refreshUser() {
       console.log('@@ @@ begin refreshUser');
-      if (this.refreshToken) {
+      if (tokenStorageObject.getRefreshToken()) {
         const result = await (
           await fetch(`${baseUrl}/refresh`, {
             method: 'POST',
             mode: 'cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              refreshToken: this.refreshToken,
+              refreshToken: tokenStorageObject.getRefreshToken(),
             }),
           })
         ).json();
@@ -150,8 +148,7 @@ const UserService = ({ children }: any) => {
 
         const postRefreshOutput = result as unknown as PostRefreshOutput;
         console.log('@@ @@ refreshUser setting access and refresh tokens');
-        this.accessToken = postRefreshOutput.accessToken;
-        this.refreshToken = postRefreshOutput.refreshToken;
+        tokenStorageObject.setTokens(postRefreshOutput.accessToken, postRefreshOutput.refreshToken);
 
         await this.setUsername();
       }
@@ -159,14 +156,14 @@ const UserService = ({ children }: any) => {
 
     async deleteUser() {
       console.log('@@ @@ begin deleteUser');
-      if (this.accessToken) {
+      if (tokenStorageObject.getAccessToken()) {
         const result = await (
           await fetch(`${baseUrl}/user`, {
             method: 'DELETE',
             mode: 'cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              accessToken: this.accessToken,
+              accessToken: tokenStorageObject.getAccessToken(),
             }),
           })
         ).json();
@@ -181,14 +178,14 @@ const UserService = ({ children }: any) => {
 
     signedIn() {
       console.log('@@ @@ begin signedIn');
-      // return !(this.accessToken || this.refreshToken);
-      return !(this.accessToken === undefined);
+      return tokenStorageObject.loggedIn();
     },
 
     async setUsername() {
       console.log('@@ @@ begin setUsername');
-      if (this.accessToken) {
-        const decoded = await defaultVerifier.verify(this.accessToken);
+      const accessToken = tokenStorageObject.getAccessToken();
+      if (accessToken) {
+        const decoded = await defaultVerifier.verify(accessToken);
         this.username = decoded.username;
       }
     },
@@ -201,8 +198,7 @@ const UserService = ({ children }: any) => {
       console.log('@@ @@ begin logout');
       this.username = undefined;
       console.log('@@ @@ logout setting access and refresh token to undefined');
-      this.accessToken = undefined;
-      this.refreshToken = undefined;
+      tokenStorageObject.signOut();
     },
   } as UserServiceImpl;
 
