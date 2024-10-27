@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUserService } from '../services/user_service';
 
 export function UserStatus() {
@@ -16,16 +17,30 @@ export function UserStatus() {
 
   const userService = useUserService();
 
+  const navigate = useNavigate();
+  const go = (url: string) => {
+    navigate(url);
+  };
+
   const [droppedDown, setDroppedDown] = useState(false);
 
   return (
     <div className='UserStatus'>
-      {userService.signedIn() ? (
-        <p>Welcome: ${userService.getUsername()} </p>
+      {droppedDown ? (
+        // TODO - should this be its own page? profile page or something
+        <ul>
+          <li>Favorites page</li>
+          <li>logout</li>
+          <li>delete account</li>
+          <li>
+            <button onClick={() => setDroppedDown(false)}>close</button>
+          </li>
+        </ul>
+      ) : userService.signedIn() ? (
+        <button onClick={() => setDroppedDown(true)}>Welcome: ${userService.getUsername()} </button>
       ) : (
-        <button>Sign In</button>
+        <button onClick={() => go('/login')}>Sign In/Up</button>
       )}
-      <p>The Weather Wizard awaits your request!</p>
     </div>
   );
 }

@@ -1,19 +1,19 @@
-import { useNavigate } from 'react-router-dom';
-import { screens } from './screens';
+import { navBarScreens } from './screens';
 import '../App.css';
+import { useNavigate } from 'react-router-dom';
 
 export function NavBar() {
+  const currentLocation = window.location.href;
+
   const navigate = useNavigate();
   const go = (url: string) => {
     navigate(url);
   };
 
-  const currentLocation = window.location.href;
-
   return (
     <div>
       <ul className='NavBar'>
-        {screens.map((route) =>
+        {navBarScreens.map((route) =>
           currentLocation.endsWith(route.path) ? (
             <></>
           ) : (
