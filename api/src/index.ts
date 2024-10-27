@@ -10,3 +10,4 @@ export { myErrorHandler } from './middleware/error_handler';
 export { Queue, Priority } from './queue';
 export { waitUntil, waitForMS } from './wait';
 export { Job, JobState } from './job';
+export { makeCognitoJWTAuthenticator, defaultVerifier } from './auth';

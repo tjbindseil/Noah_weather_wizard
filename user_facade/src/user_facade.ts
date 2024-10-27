@@ -43,7 +43,12 @@ export const createUser = async (user: User, testUser = false) => {
     //         if (err instanceof JwtExpiredError) {
     //             console.error('JWT expired!');
     //         }
-    await client.send(command);
+    const response = await client.send(command);
+    // response.UserConfirmed;
+    // TODO what if an unconfirmed user attempts to sign in?
+    // TODO what if an unconfirmed user attempts to make a new account (UsernameExistsException for this case)
+
+    return response;
 };
 
 export const authorizeUser = async (username: string, password: string) => {
