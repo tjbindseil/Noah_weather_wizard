@@ -3,6 +3,7 @@ import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
 import * as userFacade from 'ww-3-user-facade-tjb';
 import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
+import { defaultVerifier } from 'ww-3-api-tjb';
 
 export interface IUserService {
   createUser(user: User): Promise<void>;
@@ -12,6 +13,7 @@ export interface IUserService {
   deleteUser(token: string): Promise<void>;
   signedIn(): boolean;
   getUsername(): string | undefined;
+  logout(): void;
 }
 
 export const UserServiceContext = Contextualizer.createContext(ProvidedServices.UserService);
@@ -29,11 +31,15 @@ export const useUserService = (): IUserService =>
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 interface UserServiceImpl extends IUserService {
   authResult: AuthenticationResultType | undefined;
+  username: string | undefined;
+  setUsername: () => Promise<void>;
 }
 
 const UserService = ({ children }: any) => {
-  const userService: UserServiceImpl = {
+  const userService = {
     authResult: undefined,
+    username: undefined,
+
     async createUser(user: User) {
       await userFacade.createUser(user);
 
@@ -42,6 +48,7 @@ const UserService = ({ children }: any) => {
 
     async authorizeUser(username: string, password: string) {
       this.authResult = await userFacade.authorizeUser(username, password);
+      await this.setUsername();
       // USERTODO navigate to a namable place (like favorites if thats where the user was trying to access)
       // or navigate to home if unspecified
     },
@@ -61,6 +68,7 @@ const UserService = ({ children }: any) => {
           console.error('somehow refresh token is not present on authResult');
         }
       }
+      await this.setUsername();
     },
 
     async deleteUser(token: string) {
@@ -72,13 +80,22 @@ const UserService = ({ children }: any) => {
       return !(this.authResult === undefined);
     },
 
-    getUsername() {
-      return this.authResult?.AccessToken;
+    async setUsername() {
+      if (this.authResult && this.authResult.AccessToken) {
+        const decoded = await defaultVerifier.verify(this.authResult.AccessToken);
+        this.username = decoded.username;
+      }
     },
 
-    // TODO logout
-    // i guess that is just clear the authResult
-  };
+    getUsername() {
+      return this.username;
+    },
+
+    logout() {
+      this.username = undefined;
+      this.authResult = undefined;
+    },
+  } as UserServiceImpl;
 
   return (
     <>
