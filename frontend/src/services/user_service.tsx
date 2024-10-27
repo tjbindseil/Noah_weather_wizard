@@ -1,13 +1,12 @@
-import { User } from 'ww-3-models-tjb';
+import { PostAuthInput, PostAuthOutput, PostUserInput, _schema } from 'ww-3-models-tjb';
 import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
-import * as userFacade from 'ww-3-user-facade-tjb';
-import { AuthenticationResultType } from '@aws-sdk/client-cognito-identity-provider';
 import { defaultVerifier } from 'ww-3-api-tjb';
+import Ajv from 'ajv';
 
 export interface IUserService {
-  createUser(user: User): Promise<void>;
-  authorizeUser(username: string, password: string): Promise<void>;
+  createUser(postUserInput: PostUserInput): Promise<void>;
+  authorizeUser(postAuthInput: PostAuthInput): Promise<void>;
   confirmUser(username: string, confirmationCode: string): Promise<void>;
   deleteUser(token: string): Promise<void>;
   signedIn(): boolean;
@@ -20,19 +19,29 @@ export const useUserService = (): IUserService =>
   Contextualizer.use<IUserService>(ProvidedServices.UserService);
 
 interface UserServiceImpl extends IUserService {
-  authResult: AuthenticationResultType | undefined;
+  accessToken: string | undefined;
+  refreshToken: string | undefined;
   refreshUser(): Promise<void>;
   username: string | undefined;
   setUsername: () => Promise<void>;
 }
 
+const ajv = new Ajv();
+
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const UserService = ({ children }: any) => {
+  const baseUrl = 'http://localhost:8082';
+  const postUserOutputValidator = ajv.compile(_schema.PostUserOutput);
+  const postAuthOutputValidator = ajv.compile(_schema.PostAuthOutput);
+  const postConfirmationOutputValidator = ajv.compile(_schema.PostConfirmationOutput);
+  const postRefreshOutputValidator = ajv.compile(_schema.PostRefreshOutput);
+  const deleteUserOutputValidator = ajv.compile(_schema.DeleteUserOutput);
+
   const userService = {
     authResult: undefined,
     username: undefined,
 
-    async createUser(user: User) {
+    async createUser(postUserInput: PostUserInput) {
       //
       // *****
       // *****
@@ -52,11 +61,40 @@ const UserService = ({ children }: any) => {
       // Lastly, I think that, I can leave the user_facade as is. This means I don't have to rework the integ tests that use it
       //
       // *****
-      await userFacade.createUser(user);
+      const result = await (
+        await fetch(`${baseUrl}/user`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...postUserInput,
+          }),
+        })
+      ).json();
+
+      if (!postUserOutputValidator(result)) {
+        throw new Error(`UserService::postUser - invalid response: ${JSON.stringify(result)}`);
+      }
     },
 
-    async authorizeUser(username: string, password: string) {
-      this.authResult = await userFacade.authorizeUser(username, password);
+    async authorizeUser(postAuthInput: PostAuthInput) {
+      const result = await (
+        await fetch(`${baseUrl}/auth`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...postAuthInput,
+          }),
+        })
+      ).json();
+
+      if (!postAuthOutputValidator(result)) {
+        throw new Error(`UserService::postAuth - invalid response: ${JSON.stringify(result)}`);
+      }
+
+      const postAuthOutput = result as unknown as PostAuthOutput;
+      this.accessToken = postAuthOutput.accessToken;
       await this.setUsername();
     },
 
