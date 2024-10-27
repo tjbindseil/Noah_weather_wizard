@@ -191,6 +191,9 @@ const UserService = ({ children }: any) => {
     },
 
     getUsername() {
+      //       if (!this.username && tokenStorageObject.loggedIn()) {
+      //         this.setUsername();
+      //       }
       return this.username;
     },
 
