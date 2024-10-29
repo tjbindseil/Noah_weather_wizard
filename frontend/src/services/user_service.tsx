@@ -155,6 +155,14 @@ const UserService = ({ children }: any) => {
       }
     },
 
+    // TODO I think at this point, I am just worried about when a
+    // call is done with an expired accesas token
+    //
+    // options:
+    // 1) get 403, try to refresh token
+    // 2) try to know when a token is in need of a refresh, and schedule it?
+    // 3) try to refresh before any authenticaion of fetch happens
+
     async deleteUser() {
       console.log('@@ @@ begin deleteUser');
       if (tokenStorageObject.getAccessToken()) {
@@ -186,15 +194,11 @@ const UserService = ({ children }: any) => {
     async setUsername() {
       console.log('@@ @@ begin setUsername');
       const accessToken = tokenStorageObject.getAccessToken();
-      // const refreshToken = tokenStorageObject.getRefreshToken();
       if (accessToken) {
         try {
           const decoded = await defaultVerifier.verify(accessToken);
           this.username = decoded.username;
         } catch (e: any) {
-          // `e instanceof JwtExpiredError` is not working,
-          // so just try to refresh anyways
-
           await this.refreshUser();
         }
       }

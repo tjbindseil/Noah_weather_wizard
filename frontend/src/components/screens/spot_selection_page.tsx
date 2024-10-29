@@ -7,6 +7,7 @@ import { Spot } from 'ww-3-models-tjb';
 import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
+import { UserStatus } from '../user_status';
 
 export function SpotSelectionScreen() {
   const spotService = useSpotService();
@@ -64,6 +65,7 @@ export function SpotSelectionScreen() {
   return (
     <div className='Home'>
       <NavBar />
+      <UserStatus />
       <p>Select spots for which you would like a forecast.</p>
       <p>
         To create new spots, use the{' '}

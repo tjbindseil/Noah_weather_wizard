@@ -33,14 +33,18 @@ export function UserStatus() {
             <button>Favorites page</button>
           </li>
           <li>
-            <Link reloadDocument to={'/'}>
-              logout
-            </Link>
+            <button onClick={() => userService.logout()}>
+              <Link reloadDocument to={'/'}>
+                logout
+              </Link>
+            </button>
           </li>
           <li>
-            <Link reloadDocument to={'/delete_user'}>
-              Delete Account
-            </Link>
+            <button>
+              <Link reloadDocument to={'/delete_user'}>
+                Delete Account
+              </Link>
+            </button>
           </li>
           <li>
             <button onClick={() => setDroppedDown(false)}>close</button>
@@ -49,7 +53,11 @@ export function UserStatus() {
       ) : userService.signedIn() ? (
         <button onClick={() => setDroppedDown(true)}>Welcome: {userService.getUsername()} </button>
       ) : (
-        <button onClick={() => go('/login')}>Sign In/Up</button>
+        <button>
+          <Link reloadDocument to={'/login'}>
+            Sign In/Up
+          </Link>
+        </button>
       )}
     </div>
   );

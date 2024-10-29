@@ -4,5 +4,5 @@ export interface PostRefreshInput {
 
 export interface PostRefreshOutput {
     accessToken: string;
-    refreshToken: string;
+    refreshToken?: string;
 }

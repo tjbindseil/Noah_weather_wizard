@@ -8,6 +8,7 @@ import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
 import { PostSpotInput, Spot } from 'ww-3-models-tjb';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
+import { UserStatus } from '../user_status';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
@@ -80,6 +81,7 @@ export function SpotCreationScreen() {
   return (
     <div className='Home'>
       <NavBar />
+      <UserStatus />
       <p>Create and save spots here.</p>
       <p>
         Either select a point on the map to have the latitude and longitude autopopulate, or enter

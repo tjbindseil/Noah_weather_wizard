@@ -23,12 +23,14 @@ export class TokenStorageObject {
   }
 
   // TODO determine expiration time
-  public setTokens(accessToken: string, refreshToken: string) {
+  public setTokens(accessToken: string, refreshToken?: string) {
     this.accessToken = accessToken;
-    this.refreshToken = refreshToken;
-
     Cookies.set(ACCESS_TOKEN_KEY, this.accessToken, { secure: true });
-    Cookies.set(REFRESH_TOKEN_KEY, this.refreshToken, { secure: true });
+
+    if (refreshToken) {
+      this.refreshToken = refreshToken;
+      Cookies.set(REFRESH_TOKEN_KEY, this.refreshToken, { secure: true });
+    }
   }
 
   public getAccessToken() {

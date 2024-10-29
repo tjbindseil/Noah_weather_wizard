@@ -621,7 +621,7 @@ const schema = {
                 accessToken: { type: 'string' },
                 refreshToken: { type: 'string' },
             },
-            required: ['accessToken', 'refreshToken'],
+            required: ['accessToken'],
         },
         DeleteUserInput: {
             type: 'object',
