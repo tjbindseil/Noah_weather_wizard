@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useUserService } from '../services/user_service';
 
 export function UserStatus() {
@@ -16,11 +16,6 @@ export function UserStatus() {
   // 3. delete account
 
   const userService = useUserService();
-
-  const navigate = useNavigate();
-  const go = (url: string) => {
-    navigate(url);
-  };
 
   const [droppedDown, setDroppedDown] = useState(false);
 

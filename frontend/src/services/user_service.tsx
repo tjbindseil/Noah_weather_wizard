@@ -162,6 +162,21 @@ const UserService = ({ children }: any) => {
     // 1) get 403, try to refresh token
     // 2) try to know when a token is in need of a refresh, and schedule it?
     // 3) try to refresh before any authenticaion of fetch happens
+    //
+    //
+    // I think it would be good to take a step back
+    //
+    // on startup:
+    //   load tokens from cookies
+    //   immediately try to validate tokens
+    //   if successful
+    //     set username
+    //   if immediately usuccessful
+    //     a refresh is attempted
+    //     if successful
+    //       username is set
+    //     else
+    //       user is logged out, cookies are cleared
 
     async deleteUser() {
       console.log('@@ @@ begin deleteUser');
