@@ -11,6 +11,7 @@ import ProvidedServices from './provided_services';
 import { defaultVerifier } from 'ww-3-api-tjb';
 import Ajv from 'ajv';
 import { TokenStorageObject } from './utils/token_storage_obj';
+import { useEffect } from 'react';
 
 export interface IUserService {
   createUser(postUserInput: PostUserInput): Promise<void>;
@@ -181,12 +182,21 @@ const UserService = ({ children }: any) => {
       return tokenStorageObject.loggedIn();
     },
 
+    // do this in the backend?
     async setUsername() {
       console.log('@@ @@ begin setUsername');
       const accessToken = tokenStorageObject.getAccessToken();
+      // const refreshToken = tokenStorageObject.getRefreshToken();
       if (accessToken) {
-        const decoded = await defaultVerifier.verify(accessToken);
-        this.username = decoded.username;
+        try {
+          const decoded = await defaultVerifier.verify(accessToken);
+          this.username = decoded.username;
+        } catch (e: any) {
+          // `e instanceof JwtExpiredError` is not working,
+          // so just try to refresh anyways
+
+          await this.refreshUser();
+        }
       }
     },
 
@@ -204,6 +214,13 @@ const UserService = ({ children }: any) => {
       tokenStorageObject.signOut();
     },
   } as UserServiceImpl;
+
+  useEffect(() => {
+    console.log('@@ @@ user_service useEffect');
+    if (tokenStorageObject.loggedIn()) {
+      userService.setUsername();
+    }
+  });
 
   return (
     <>

@@ -22,6 +22,7 @@ export class PostRefresh extends LooselyAuthenticatedAPI<
             throw new APIError(500, 'authResult does not contain accessToken');
         }
         if (!authResult.RefreshToken) {
+            console.log(`authResult is: ${JSON.stringify(authResult)}`);
             throw new APIError(500, 'authResult does not contain refreshToken');
         }
 

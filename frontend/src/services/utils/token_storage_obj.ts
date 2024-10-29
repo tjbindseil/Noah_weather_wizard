@@ -39,6 +39,7 @@ export class TokenStorageObject {
     return this.refreshToken;
   }
 
+  // TODO this is not really accurate, could have issues refreshing
   public loggedIn() {
     return this.accessToken !== undefined && this.refreshToken !== undefined;
   }

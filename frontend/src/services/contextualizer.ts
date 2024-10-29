@@ -29,7 +29,6 @@ const Contextualizer = {
       throw new Error(`${ProvidedServices[requestedService]} was not created`);
     }
     const service = React.useContext(context);
-    service.init();
 
     if (service === undefined) {
       throw new Error(`You must use ${ProvidedServices[requestedService]} from within its service`);

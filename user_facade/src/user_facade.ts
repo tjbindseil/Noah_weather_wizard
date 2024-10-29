@@ -89,7 +89,7 @@ export const confirmUser = async (
 
 export const refreshUser = async (refreshToken: string) => {
     const command = new InitiateAuthCommand({
-        AuthFlow: AuthFlowType.USER_PASSWORD_AUTH,
+        AuthFlow: AuthFlowType.REFRESH_TOKEN_AUTH,
         AuthParameters: {
             REFRESH_TOKEN: refreshToken,
         },
