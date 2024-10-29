@@ -15,10 +15,10 @@ import { useEffect } from 'react';
 
 export interface IUserService {
   createUser(postUserInput: PostUserInput): Promise<void>;
-  authorizeUser(postAuthInput: PostAuthInput): Promise<void>;
+  authorizeUser(postAuthInput: PostAuthInput): Promise<void>; // TODO rename to sign in
   confirmUser(postConfirmationInput: PostConfirmationInput): Promise<void>;
   deleteUser(): Promise<void>;
-  signedIn(): boolean;
+  signedIn(): boolean; // TODO change to logged in
   getUsername(): string | undefined;
   logout(): void;
 }
@@ -178,6 +178,25 @@ const UserService = ({ children }: any) => {
     //     else
     //       user is logged out, cookies are cleared
 
+    async init() {
+      if (!tokenStorageObject.loggedIn()) {
+        return;
+      }
+
+      try {
+        await this.setUsername();
+      } catch (e: any) {
+        // currently unable to detect what type of errors we are getting ...
+        //
+        // so assuming an expired token first
+        try {
+          await this.refreshUser();
+        } catch (e: any) {
+          this.logout();
+        }
+      }
+    },
+
     async deleteUser() {
       console.log('@@ @@ begin deleteUser');
       if (tokenStorageObject.getAccessToken()) {
@@ -205,24 +224,16 @@ const UserService = ({ children }: any) => {
       return tokenStorageObject.loggedIn();
     },
 
-    // do this in the backend?
     async setUsername() {
       console.log('@@ @@ begin setUsername');
       const accessToken = tokenStorageObject.getAccessToken();
       if (accessToken) {
-        try {
-          const decoded = await defaultVerifier.verify(accessToken);
-          this.username = decoded.username;
-        } catch (e: any) {
-          await this.refreshUser();
-        }
+        const decoded = await defaultVerifier.verify(accessToken);
+        this.username = decoded.username;
       }
     },
 
     getUsername() {
-      //       if (!this.username && tokenStorageObject.loggedIn()) {
-      //         this.setUsername();
-      //       }
       return this.username;
     },
 
