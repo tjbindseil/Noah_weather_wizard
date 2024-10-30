@@ -193,6 +193,8 @@ const UserService = ({ children }: any) => {
         const decoded = await defaultVerifier.verify(accessToken);
         this.username = decoded.username;
         this.userSignInStatus = UserSignInStatus.LOGGED_IN;
+      } else {
+        this.logout();
       }
     },
 
