@@ -141,13 +141,11 @@ const UserService = ({ children }: any) => {
     },
 
     async init() {
-      console.log(`@@ @@ UserService::init - usis is: ${this.userSignInStatus}`);
       if (this.userSignInStatus !== UserSignInStatus.LOADING) {
         return;
       }
 
       try {
-        console.log('@@ @@ UserService::init - verifying access token');
         await this.verifyAccessToken();
       } catch (e: any) {
         // currently unable to detect what type of errors we are getting ...
@@ -156,12 +154,8 @@ const UserService = ({ children }: any) => {
         //
         // TODO do this better
         try {
-          console.log(
-            '@@ @@ UserService::init - verifying access token failed, attempting to refresh',
-          );
           await this.refreshUser();
         } catch (e: any) {
-          console.log('@@ @@ UserService::init - refrshing failed, logging out');
           this.logout();
         }
       }
@@ -189,20 +183,15 @@ const UserService = ({ children }: any) => {
     },
 
     getUserSignInStatus() {
-      this.userSignInStatus;
+      return this.userSignInStatus;
     },
 
     async verifyAccessToken() {
-      console.log('@@ @@ UserService::verifyAccessToken');
       const accessToken = tokenStorageObject.getAccessToken();
       if (accessToken) {
-        console.log('@@ @@ UserService::verifyAccessToken access token exists');
         const decoded = await defaultVerifier.verify(accessToken);
         this.username = decoded.username;
         this.userSignInStatus = UserSignInStatus.LOGGED_IN;
-        console.log(
-          `@@ @@ UserService::verifyAccessToken finished decoding and username is: ${this.username}`,
-        );
       }
     },
 

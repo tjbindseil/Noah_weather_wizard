@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { UserSignInStatus, useUserService } from '../services/user_service';
 
@@ -11,21 +11,9 @@ export function UserStatus() {
   // In order to make sure things work, we will track the user status here and
   // refresh while its trying
   const [localUserSignInStatus, setLocalUserSignInStatus] = useState(UserSignInStatus.LOADING);
-
-  //   const userStatusPollFunc = useCallback(() => {
-  //     while (localUserSignInStatus === UserSignInStatus.LOADING) {
-  //
-  //       setLocalUserSignInStatus(userService.getUserSignInStatus);
-  //     }
-  //   }, [userService, localUserSignInStatus, setLocalUserSignInStatus]);
-  //
-  //   useEffect(userStatusPollFunc, [userStatusPollFunc]);
-
   useEffect(() => {
-    console.log('setting timeout');
     setTimeout(() => {
       const newUserSignInStatus = userService.getUserSignInStatus();
-      console.log(`@@ @@ in timeout, and newUserSignInStatus is: ${newUserSignInStatus}`);
       if (newUserSignInStatus !== localUserSignInStatus) {
         setLocalUserSignInStatus(newUserSignInStatus);
       }
