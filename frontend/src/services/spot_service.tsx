@@ -8,6 +8,7 @@ import {
 import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
 import Ajv from 'ajv';
+import { useUserService } from './user_service';
 
 export interface ISpotService {
   createSpot(input: PostSpotInput): Promise<PostSpotOutput>;
@@ -27,6 +28,8 @@ const ajv = new Ajv();
 // TODO incorporate eslint and prettier in build process for frontend like backend
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const SpotService = ({ children }: any) => {
+  const userService = useUserService();
+
   const baseUrl = 'http://localhost:8080';
   const postSpotOutputValidator = ajv.compile(_schema.PostSpotOutput);
   const getSpotsOutputValidator = ajv.compile(_schema.GetSpotsOutput);
@@ -40,7 +43,10 @@ const SpotService = ({ children }: any) => {
         await fetch(`${baseUrl}/spot`, {
           method: 'POST',
           mode: 'cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer: ${userService.getAccessToken()}`,
+          },
           body: JSON.stringify({
             ...postSpotInput,
           }),

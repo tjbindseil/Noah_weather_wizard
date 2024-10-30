@@ -28,6 +28,7 @@ export interface IUserService {
   getUserSignInStatus(): UserSignInStatus; // TODO change to logged in
   getUsername(): string | undefined;
   logout(): void;
+  getAccessToken(): string;
 }
 
 export const UserServiceContext = Contextualizer.createContext(ProvidedServices.UserService);
@@ -203,6 +204,10 @@ const UserService = ({ children }: any) => {
       this.username = undefined;
       tokenStorageObject.clearTokens();
       this.userSignInStatus = UserSignInStatus.LOGGED_OUT;
+    },
+
+    getAccessToken() {
+      return tokenStorageObject.getAccessToken();
     },
   } as UserServiceImpl;
 
