@@ -45,14 +45,34 @@ export function ForecastScreen() {
     <div className='Home'>
       <NavBar />
       <p>See the forecast here!</p>
-      {forecasts.map(({ forecast, spot }) => {
-        return (
-          <>
-            <p key={spot.id}>forecast for spot: {spot.name}</p>
-            <img src={forecast.periods[0].icon} />
-          </>
-        );
-      })}
+      <table>
+        <thead>
+          <tr>
+            <th>Spot Name</th>
+            {forecasts.length > 0 ? (
+              forecasts[0].forecast.periods.map((period) => (
+                <th key={period.name}>{period.name}</th>
+              ))
+            ) : (
+              <p>
+                Select some spots to compare forecast (TODO go to spot selection page from here)
+              </p>
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {forecasts.map(({ forecast, spot }) => (
+            <tr key={spot.name}>
+              <td>{spot.name}</td>
+              {forecast.periods.map((period) => (
+                <td key={`${spot.id} - ${period.name}`}>
+                  <img src={period.icon} />
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
