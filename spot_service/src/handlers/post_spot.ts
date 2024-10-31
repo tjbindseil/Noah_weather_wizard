@@ -61,6 +61,19 @@ export class PostSpot extends StrictlyAuthenticatedAPI<
                     forecastKey
                 );
 
+                // TODO this could be encapsulated
+                // validate<T>(schema, obj: a): T {
+                //   const validator = ajv.compile(schema);
+                //   if (!validator(obj) {
+                //     throw error
+                //   }
+                //   return obj as T;
+                const forecastValidator = this.ajv.compile(_schema.Forecast);
+                if (!forecastValidator(forecastJson)) {
+                    console.error('forecast is invalivid');
+                    throw new APIError(500, 'noaa issue');
+                }
+
                 await this.s3Adapter.putForecastJson(forecastKey, forecastJson);
                 await this.s3Adapter.putGeometryJson(forecastKey, geometryJson);
             } else {

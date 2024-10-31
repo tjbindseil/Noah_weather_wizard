@@ -73,7 +73,7 @@ export class S3Adapter {
     }
 
     /* eslint-disable  @typescript-eslint/no-explicit-any */
-    public async putForecastJson(forecastKey: ForecastKey, forecast: any) {
+    public async putForecastJson(forecastKey: ForecastKey, forecast: Forecast) {
         await this.putObject(
             `${forecastKey.getKeyStr()}/${this.FORECAST_FILE_NAME}`,
             forecast

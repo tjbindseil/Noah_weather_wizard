@@ -15,3 +15,4 @@ export { PostAuthInput } from '../user_service/post_auth';
 export { PostConfirmationInput } from '../user_service/post_confirmation';
 export { PostRefreshInput } from '../user_service/post_refresh';
 export { DeleteUserInput } from '../user_service/delete_user';
+export { PostForecastRefreshInput } from '../forecast_service_models/post_forecast_refresh';

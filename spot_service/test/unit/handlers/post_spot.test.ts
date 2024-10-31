@@ -1,6 +1,7 @@
 import { PostSpot } from '../../../src/handlers/index';
 import { Client } from 'ts-postgres';
 import { APIError } from 'ww-3-api-tjb';
+import { Forecast } from 'ww-3-models-tjb';
 
 import {
     makeInitialCall,
@@ -36,7 +37,7 @@ describe('PostSpot tests', () => {
     const gridX = 420;
     const gridY = 69;
     const forecastKey = new ForecastKey(polygonID, gridX, gridY);
-    const forecast = { forecast: 'clear' };
+    const forecast = { forecast: 'clear' } as unknown as Forecast;
     const existingGeometry = { g: 'om' };
 
     const postSpot = new PostSpot(mockS3Adapter);
@@ -91,7 +92,10 @@ describe('PostSpot tests', () => {
     it('checks the presence of geometry, and if already present but different, throws 500', async () => {
         const fetchedGeometry = { g: 'DIFFERENT' };
         mockGetForecast.mockClear();
-        mockGetForecast.mockResolvedValue(['unused', fetchedGeometry]);
+        mockGetForecast.mockResolvedValue([
+            'unused' as unknown as Forecast,
+            fetchedGeometry,
+        ]);
 
         await expect(
             postSpot.process(postedSpot, mockDbClient)

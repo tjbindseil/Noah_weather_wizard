@@ -765,6 +765,12 @@ const schema = {
             required: ['accessToken'],
         },
         DeleteUserOutput: { type: 'object' },
+        PostForecastRefreshInput: {
+            type: 'object',
+            properties: { spotId: { type: 'number' } },
+            required: ['spotId'],
+        },
+        PostForecastRefreshOutput: { type: 'object' },
     },
 } as const;
 export default schema.definitions;

@@ -1,6 +1,10 @@
 // TODO handle 5 second wait and retry when issues arise
 
+import { _schema, Forecast } from 'ww-3-models-tjb';
 import { ForecastKey } from './forecast_key';
+
+import Ajv from 'ajv';
+import { APIError } from 'ww-3-api-tjb';
 
 export const makeInitialCall = async (latitude: number, longitude: number) => {
     const noaaURL = `https://api.weather.gov/points/${latitude},${longitude}`;
@@ -23,7 +27,10 @@ export const makeInitialCall = async (latitude: number, longitude: number) => {
     );
 };
 
-export const getForecast = async (forecastKey: ForecastKey) => {
+export const getForecast = async (
+    forecastKey: ForecastKey
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+): Promise<[Forecast, any]> => {
     const fetchResult = (await (
         await fetch(forecastKey.getForecastUrl(), {
             method: 'GET',
@@ -32,5 +39,21 @@ export const getForecast = async (forecastKey: ForecastKey) => {
         /* eslint-disable  @typescript-eslint/no-explicit-any */
         .json()) as { properties: any; geometry: any };
 
-    return [fetchResult.properties, fetchResult.geometry];
+    const ajv = new Ajv({ strict: false });
+    const validator = ajv.compile(_schema.Forecast);
+    if (!validator(fetchResult.properties)) {
+        console.log(
+            `forecastKey is: ${JSON.stringify(
+                forecastKey
+            )} validator.errors is: ${JSON.stringify(validator.errors)}`
+        );
+        console.error(
+            `invalid forecast object: ${JSON.stringify(fetchResult.properties)}`
+        );
+        throw new APIError(500, 'forecast fetched from noaa is not valid');
+    }
+
+    const forecast = fetchResult.properties as Forecast;
+
+    return [forecast, fetchResult.geometry];
 };

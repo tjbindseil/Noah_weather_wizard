@@ -58,5 +58,9 @@ export {
     DeleteFavoriteInput,
     DeleteFavoriteOutput,
 } from './spot_service_models/delete_favorite';
+export {
+    PostForecastRefreshInput,
+    PostForecastRefreshOutput,
+} from './forecast_service_models/post_forecast_refresh';
 import _schema from './schema_validation/_schema';
 export { _schema };

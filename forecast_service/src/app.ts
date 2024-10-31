@@ -9,6 +9,7 @@ import {
     GetRankedForecasts,
     GetPossibleForecastsHourly,
     GetRankedForecastsHourly,
+    PostForecastRefresh,
 } from './handlers/index';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
@@ -103,6 +104,19 @@ app.get(
     '/ranked_forecasts_hourly',
     (req: Request, res: Response, next: NextFunction) => {
         new GetRankedForecastsHourly(forecastHourlyProcessor).call(
+            req,
+            res,
+            next,
+            pgContextController
+        );
+    }
+);
+
+// backdoor way to clean up forecasts that get uploaded incorrectly
+app.post(
+    '/forecast_refresh',
+    (req: Request, res: Response, next: NextFunction) => {
+        new PostForecastRefresh(s3Adapter).call(
             req,
             res,
             next,

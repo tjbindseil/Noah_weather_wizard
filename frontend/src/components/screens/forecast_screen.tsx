@@ -22,8 +22,9 @@ export function ForecastScreen() {
       return;
     }
 
+    console.log(`@@ @@ spot IDs are : ${selectedSpots.toString()}`);
+
     forecastService.getForecasts({ spotIDs: selectedSpots }).then((result) => {
-      console.log(`got forecasts, length is: ${forecasts.length}`);
       setForecasts(result.forecasts);
     });
   }, [forecastService, setForecasts]);
