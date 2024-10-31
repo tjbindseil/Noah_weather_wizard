@@ -222,6 +222,95 @@ const schema = {
             properties: { spotIDs: { type: 'string' } },
             required: ['spotIDs'],
         },
+        SpotToForecast: {
+            type: 'object',
+            properties: {
+                spot: {
+                    type: 'object',
+                    properties: {
+                        id: { type: 'number' },
+                        name: { type: 'string' },
+                        latitude: { type: 'number' },
+                        longitude: { type: 'number' },
+                        polygonID: { type: 'string' },
+                        gridX: { type: 'number' },
+                        gridY: { type: 'number' },
+                        creator: { type: 'string' },
+                    },
+                    required: [
+                        'creator',
+                        'gridX',
+                        'gridY',
+                        'id',
+                        'latitude',
+                        'longitude',
+                        'name',
+                        'polygonID',
+                    ],
+                },
+                forecast: {
+                    type: 'object',
+                    properties: {
+                        units: { type: 'string' },
+                        elevation: {
+                            type: 'object',
+                            properties: {
+                                unitCode: { type: 'string' },
+                                value: { type: 'number' },
+                            },
+                            required: ['unitCode', 'value'],
+                        },
+                        periods: {
+                            type: 'array',
+                            items: {
+                                type: 'object',
+                                properties: {
+                                    number: { type: 'number' },
+                                    name: { type: 'string' },
+                                    startTime: { type: 'string' },
+                                    endTime: { type: 'string' },
+                                    isDaytime: { type: 'boolean' },
+                                    temperature: { type: 'number' },
+                                    temperatureUnit: { type: 'string' },
+                                    temperatureTrend: { type: 'string' },
+                                    probabilityOfPrecipitation: {
+                                        type: 'object',
+                                        properties: {
+                                            unitCode: { type: 'string' },
+                                            value: { type: ['null', 'number'] },
+                                        },
+                                        required: ['unitCode', 'value'],
+                                    },
+                                    windSpeed: { type: 'string' },
+                                    windDirection: { type: 'string' },
+                                    icon: { type: 'string' },
+                                    shortForecast: { type: 'string' },
+                                    detailedForecast: { type: 'string' },
+                                },
+                                required: [
+                                    'detailedForecast',
+                                    'endTime',
+                                    'icon',
+                                    'isDaytime',
+                                    'name',
+                                    'number',
+                                    'probabilityOfPrecipitation',
+                                    'shortForecast',
+                                    'startTime',
+                                    'temperature',
+                                    'temperatureTrend',
+                                    'temperatureUnit',
+                                    'windDirection',
+                                    'windSpeed',
+                                ],
+                            },
+                        },
+                    },
+                    required: ['elevation', 'periods', 'units'],
+                },
+            },
+            required: ['forecast', 'spot'],
+        },
         GetForecastsOutput: {
             type: 'object',
             properties: {
@@ -230,64 +319,111 @@ const schema = {
                     items: {
                         type: 'object',
                         properties: {
-                            units: { type: 'string' },
-                            elevation: {
+                            spot: {
                                 type: 'object',
                                 properties: {
-                                    unitCode: { type: 'string' },
-                                    value: { type: 'number' },
+                                    id: { type: 'number' },
+                                    name: { type: 'string' },
+                                    latitude: { type: 'number' },
+                                    longitude: { type: 'number' },
+                                    polygonID: { type: 'string' },
+                                    gridX: { type: 'number' },
+                                    gridY: { type: 'number' },
+                                    creator: { type: 'string' },
                                 },
-                                required: ['unitCode', 'value'],
+                                required: [
+                                    'creator',
+                                    'gridX',
+                                    'gridY',
+                                    'id',
+                                    'latitude',
+                                    'longitude',
+                                    'name',
+                                    'polygonID',
+                                ],
                             },
-                            periods: {
-                                type: 'array',
-                                items: {
-                                    type: 'object',
-                                    properties: {
-                                        number: { type: 'number' },
-                                        name: { type: 'string' },
-                                        startTime: { type: 'string' },
-                                        endTime: { type: 'string' },
-                                        isDaytime: { type: 'boolean' },
-                                        temperature: { type: 'number' },
-                                        temperatureUnit: { type: 'string' },
-                                        temperatureTrend: { type: 'string' },
-                                        probabilityOfPrecipitation: {
+                            forecast: {
+                                type: 'object',
+                                properties: {
+                                    units: { type: 'string' },
+                                    elevation: {
+                                        type: 'object',
+                                        properties: {
+                                            unitCode: { type: 'string' },
+                                            value: { type: 'number' },
+                                        },
+                                        required: ['unitCode', 'value'],
+                                    },
+                                    periods: {
+                                        type: 'array',
+                                        items: {
                                             type: 'object',
                                             properties: {
-                                                unitCode: { type: 'string' },
-                                                value: {
-                                                    type: ['null', 'number'],
+                                                number: { type: 'number' },
+                                                name: { type: 'string' },
+                                                startTime: { type: 'string' },
+                                                endTime: { type: 'string' },
+                                                isDaytime: { type: 'boolean' },
+                                                temperature: { type: 'number' },
+                                                temperatureUnit: {
+                                                    type: 'string',
+                                                },
+                                                temperatureTrend: {
+                                                    type: 'string',
+                                                },
+                                                probabilityOfPrecipitation: {
+                                                    type: 'object',
+                                                    properties: {
+                                                        unitCode: {
+                                                            type: 'string',
+                                                        },
+                                                        value: {
+                                                            type: [
+                                                                'null',
+                                                                'number',
+                                                            ],
+                                                        },
+                                                    },
+                                                    required: [
+                                                        'unitCode',
+                                                        'value',
+                                                    ],
+                                                },
+                                                windSpeed: { type: 'string' },
+                                                windDirection: {
+                                                    type: 'string',
+                                                },
+                                                icon: { type: 'string' },
+                                                shortForecast: {
+                                                    type: 'string',
+                                                },
+                                                detailedForecast: {
+                                                    type: 'string',
                                                 },
                                             },
-                                            required: ['unitCode', 'value'],
+                                            required: [
+                                                'detailedForecast',
+                                                'endTime',
+                                                'icon',
+                                                'isDaytime',
+                                                'name',
+                                                'number',
+                                                'probabilityOfPrecipitation',
+                                                'shortForecast',
+                                                'startTime',
+                                                'temperature',
+                                                'temperatureTrend',
+                                                'temperatureUnit',
+                                                'windDirection',
+                                                'windSpeed',
+                                            ],
                                         },
-                                        windSpeed: { type: 'string' },
-                                        windDirection: { type: 'string' },
-                                        icon: { type: 'string' },
-                                        shortForecast: { type: 'string' },
-                                        detailedForecast: { type: 'string' },
                                     },
-                                    required: [
-                                        'detailedForecast',
-                                        'endTime',
-                                        'icon',
-                                        'isDaytime',
-                                        'name',
-                                        'number',
-                                        'probabilityOfPrecipitation',
-                                        'shortForecast',
-                                        'startTime',
-                                        'temperature',
-                                        'temperatureTrend',
-                                        'temperatureUnit',
-                                        'windDirection',
-                                        'windSpeed',
-                                    ],
                                 },
+                                required: ['elevation', 'periods', 'units'],
                             },
                         },
-                        required: ['elevation', 'periods', 'units'],
+                        required: ['forecast', 'spot'],
                     },
                 },
             },

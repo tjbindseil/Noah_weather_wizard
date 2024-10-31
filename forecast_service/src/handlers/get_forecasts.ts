@@ -36,20 +36,41 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
         for (let i = 0; i < spotIds.length; ++i) {
             spotPromises.push(getSpot(pgClient, spotIds[i]));
         }
-        const forecastKeys = (await Promise.all(spotPromises)).map(
-            (spot) => new ForecastKey(spot.polygonID, spot.gridX, spot.gridY)
+        const spotToForecastKeyMap = new Map<Spot, ForecastKey>();
+        (await Promise.all(spotPromises)).forEach((spot) =>
+            spotToForecastKeyMap.set(
+                spot,
+                new ForecastKey(spot.polygonID, spot.gridX, spot.gridY)
+            )
         );
 
-        const forecastJsonPromises: Promise<Forecast>[] = [];
-        for (let i = 0; i < forecastKeys.length; ++i) {
-            forecastJsonPromises.push(
-                this.s3Adapter.getForecastJson(forecastKeys[i])
-            );
-        }
-        const forecasts = await Promise.all(forecastJsonPromises);
+        const spotToForecastMap = new Map<Spot, Forecast>();
 
-        return {
-            forecasts,
+        const getForecastPromises: Promise<void>[] = [];
+
+        const setForecast = async (spot: Spot, forecastKey: ForecastKey) => {
+            const forecast = await this.s3Adapter.getForecastJson(forecastKey);
+            spotToForecastMap.set(spot, forecast);
         };
+
+        spotToForecastKeyMap.forEach((forecastKey, spot) => {
+            getForecastPromises.push(setForecast(spot, forecastKey));
+        });
+
+        for (let i = 0; i < getForecastPromises.length; ++i) {
+            await getForecastPromises[i];
+        }
+
+        const ret: GetForecastsOutput = {
+            forecasts: [],
+        };
+        spotToForecastMap.forEach((forecast, spot) =>
+            ret.forecasts.push({
+                spot,
+                forecast,
+            })
+        );
+
+        return ret;
     }
 }

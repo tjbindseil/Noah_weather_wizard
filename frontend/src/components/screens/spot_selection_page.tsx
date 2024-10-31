@@ -8,16 +8,22 @@ import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
+import { useNavigate } from 'react-router-dom';
 
 export function SpotSelectionScreen() {
   const spotService = useSpotService();
 
+  const navigate = useNavigate();
   const longsPeak = {
     lat: 40.255014,
     long: -105.615115,
   };
 
   const [checkedSpots, setCheckedSpots] = useState<number[]>([]);
+
+  const toForecastPage = useCallback(() => {
+    navigate('/forecast', { state: { selectedSpots: [checkedSpots] } });
+  }, [checkedSpots, navigate]);
 
   const [mapBounds, setMapBounds] = useState<LatLngBounds>(
     new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0)),
@@ -121,6 +127,8 @@ export function SpotSelectionScreen() {
           ))}
         </tbody>
       </table>
+
+      <button onClick={() => toForecastPage()}>Compare Forecasts</button>
 
       <MapContainer
         center={[longsPeak.lat, longsPeak.long]}
