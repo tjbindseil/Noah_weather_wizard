@@ -1,14 +1,16 @@
 import React, { useState, useCallback } from 'react';
 import { NavBar } from '../nav_bar';
 import { SelectedSpot } from '../map_stuff/selected_spot';
-import { PostSpotInput, Spot } from 'ww-3-models-tjb';
+import { DeleteSpotInput, PostSpotInput, Spot } from 'ww-3-models-tjb';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
 import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
+import { useUserService } from '../../services/user_service';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
+  const userService = useUserService();
 
   const longsPeak = {
     lat: 40.255014,
@@ -25,6 +27,14 @@ export function SpotCreationScreen() {
   const saveSpotFunc = useCallback(
     async (selectedSpot: PostSpotInput) => {
       await spotService.createSpot(selectedSpot);
+      setToggleToRefreshExistingSpots(!toggleToRefreshExistingSpots);
+    },
+    [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots, spotService],
+  );
+
+  const removeSpotFunc = useCallback(
+    async (selectedSpot: DeleteSpotInput) => {
+      await spotService.deleteSpot(selectedSpot);
       setToggleToRefreshExistingSpots(!toggleToRefreshExistingSpots);
     },
     [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots, spotService],
@@ -97,13 +107,27 @@ export function SpotCreationScreen() {
       </button>
 
       <h3>Existing Spots</h3>
-      {existingSpots.map((existingSpot) => (
-        <p key={existingSpot.id}>
-          {`${existingSpot.name} lat: ${existingSpot.latitude} long: ${existingSpot.longitude}`}
-        </p>
-      ))}
+      {existingSpots.map((existingSpot) => {
+        if (existingSpot.creator === userService.getUsername()) {
+          return (
+            <p key={existingSpot.id}>
+              {`${existingSpot.name} lat: ${existingSpot.latitude} long: ${existingSpot.longitude}`}{' '}
+              - <button onClick={() => removeSpotFunc({ id: existingSpot.id })}>Delete Spot</button>
+            </p>
+          );
+        } else {
+          return (
+            <p key={existingSpot.id}>
+              {`${existingSpot.name} lat: ${existingSpot.latitude} long: ${existingSpot.longitude}`}
+            </p>
+          );
+        }
+      })}
 
-      <MapContainerWrapper setExistingSpots={setExistingSpots} toggleToRefreshExistingSpots={true}>
+      <MapContainerWrapper
+        setExistingSpots={setExistingSpots}
+        toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
+      >
         {existingSpots.map((existingSpot) => (
           <SelectedSpot
             key={existingSpot.id}

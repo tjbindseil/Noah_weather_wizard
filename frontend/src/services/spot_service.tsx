@@ -4,6 +4,8 @@ import {
   GetSpotsOutput,
   PostSpotInput,
   PostSpotOutput,
+  DeleteSpotInput,
+  DeleteSpotOutput,
 } from 'ww-3-models-tjb';
 import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
@@ -13,6 +15,7 @@ import { useUserService } from './user_service';
 export interface ISpotService {
   createSpot(input: PostSpotInput): Promise<PostSpotOutput>;
   getSpots(input: GetSpotsInput): Promise<GetSpotsOutput>;
+  deleteSpot(input: DeleteSpotInput): Promise<DeleteSpotOutput>;
 }
 
 export const SpotServiceContext = Contextualizer.createContext(ProvidedServices.SpotService);
@@ -73,6 +76,22 @@ const SpotService = ({ children }: any) => {
       }
 
       return result as GetSpotsOutput;
+    },
+
+    async deleteSpot(input: DeleteSpotInput): Promise<DeleteSpotOutput> {
+      await fetch(`${baseUrl}/spot`, {
+        method: 'DELETE',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer: ${userService.getAccessToken()}`,
+        },
+        body: JSON.stringify({
+          ...input,
+        }),
+      });
+
+      return {};
     },
   };
 
