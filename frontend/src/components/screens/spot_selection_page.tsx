@@ -10,21 +10,33 @@ import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { MapZoomController } from '../map_stuff/map_zoom_controller';
+import { useMapService } from '../../services/map_service';
+import { MapZoomMonitor } from '../map_stuff/map_zoom_monitor';
+import { MapCenterMonitor } from '../map_stuff/map_center_monitor';
 
 export function SpotSelectionScreen() {
   const spotService = useSpotService();
+  const mapService = useMapService();
 
   // We want to toggle between spot selection and forecast screens
   const location = useLocation();
   const initiallySelectedSpots = location.state?.selectedSpots;
 
   const navigate = useNavigate();
-  const longsPeak = {
-    lat: 40.255014,
-    long: -105.615115,
-  };
 
   const [checkedSpots, setCheckedSpots] = useState<number[]>([]);
+
+  const [zoom, setZoom] = useState(mapService.getZoom());
+  const [centerLat, setCenterLat] = useState(mapService.getCenterLat());
+  const [centerLng, setCenterLng] = useState(mapService.getCenterLng());
+
+  useEffect(() => {
+    return () => {
+      // on component clean up, we need to save the map zoom and center
+      mapService.saveZoom(zoom);
+      mapService.saveCenter(centerLat, centerLng);
+    };
+  }, []);
 
   const toForecastPage = useCallback(() => {
     navigate('/forecast', { state: { selectedSpots: [checkedSpots] } });
@@ -136,8 +148,8 @@ export function SpotSelectionScreen() {
       <button onClick={() => toForecastPage()}>Compare Forecasts</button>
 
       <MapContainer
-        center={[longsPeak.lat, longsPeak.long]}
-        zoom={13}
+        center={new LatLng(mapService.getCenterLat(), mapService.getCenterLng())}
+        zoom={mapService.getZoom()}
         ref={mapRef}
         style={{ height: '50vh', width: '50vw' }}
       >
@@ -168,6 +180,8 @@ export function SpotSelectionScreen() {
         ) : (
           <MapZoomController selectedSpots={initiallySelectedSpots} />
         )}
+        <MapZoomMonitor setMapZoom={setZoom} />
+        <MapCenterMonitor setCenterLat={setCenterLat} setCenterLng={setCenterLng} />
       </MapContainer>
     </div>
   );

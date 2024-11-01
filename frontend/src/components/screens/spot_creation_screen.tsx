@@ -9,9 +9,13 @@ import { PostSpotInput, Spot } from 'ww-3-models-tjb';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
+import { useMapService } from '../../services/map_service';
+import { MapZoomMonitor } from '../map_stuff/map_zoom_monitor';
+import { MapCenterMonitor } from '../map_stuff/map_center_monitor';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
+  const mapService = useMapService();
 
   const mapRef = useRef(null);
 
@@ -24,9 +28,18 @@ export function SpotCreationScreen() {
   const [longitude, setLongitude] = useState(longsPeak.long);
   const [name, setName] = useState('Longs Peak');
 
-  // TODO I dont think this mechanism works
-  const [centerLat, setCenterLat] = useState(longsPeak.lat);
-  const [centerLong, setCenterLong] = useState(longsPeak.long);
+  // TODO center map via text input
+  const [zoom, setZoom] = useState(mapService.getZoom());
+  const [centerLat, setCenterLat] = useState(mapService.getCenterLat());
+  const [centerLng, setCenterLng] = useState(mapService.getCenterLng());
+
+  useEffect(() => {
+    return () => {
+      // on component clean up, we need to save the map zoom and center
+      mapService.saveZoom(zoom);
+      mapService.saveCenter(centerLat, centerLng);
+    };
+  }, []);
 
   const [mapBounds, setMapBounds] = useState<LatLngBounds>(
     new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0)),
@@ -141,14 +154,6 @@ export function SpotCreationScreen() {
       >
         Save Spot
       </button>
-      <button
-        onClick={async () => {
-          setCenterLat(latitude);
-          setCenterLong(longitude);
-        }}
-      >
-        Center map
-      </button>
 
       <h3>Existing Spots</h3>
       {existingSpots.map((existingSpot) => (
@@ -158,8 +163,8 @@ export function SpotCreationScreen() {
       ))}
 
       <MapContainer
-        center={[centerLat, centerLong]}
-        zoom={13}
+        center={new LatLng(mapService.getCenterLat(), mapService.getCenterLng())}
+        zoom={mapService.getZoom()}
         ref={mapRef}
         style={{ height: '50vh', width: '50vw' }}
       >
@@ -183,6 +188,8 @@ export function SpotCreationScreen() {
           color={LeafletMarkerColorOptions.Green}
         />
         <MapBoundsMonitor setMapBounds={setMapBoundsIfChanged} />
+        <MapZoomMonitor setMapZoom={setZoom} />
+        <MapCenterMonitor setCenterLat={setCenterLat} setCenterLng={setCenterLng} />
       </MapContainer>
     </div>
   );
