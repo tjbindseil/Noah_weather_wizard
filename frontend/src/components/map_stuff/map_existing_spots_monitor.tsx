@@ -19,9 +19,7 @@ export const MapExistingSpotsMonitor = ({
   const map = useMap();
   const spotService = useSpotService();
 
-  const [mapBounds, setMapBounds] = useState<LatLngBounds>(
-    new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0)),
-  );
+  const [mapBounds, setMapBounds] = useState(map.getBounds());
 
   const setMapBoundsIfChanged = useCallback(
     (newMapBounds: LatLngBounds) => {
@@ -55,7 +53,7 @@ export const MapExistingSpotsMonitor = ({
       .catch(console.error);
   }, [mapBounds]);
 
-  useEffect(fetchExistingSpots, [mapBounds]);
+  useEffect(fetchExistingSpots, [mapBounds, toggleToRefreshExistingSpots]);
 
   // and when the map moves
   map.on('moveend', () => {

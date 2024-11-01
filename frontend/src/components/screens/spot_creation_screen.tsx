@@ -138,7 +138,7 @@ export function SpotCreationScreen() {
         />
         <MapExistingSpotsMonitor
           setExistingSpots={setExistingSpots}
-          toggleToRefreshExistingSpots={true}
+          toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
         />
         <MapViewMonitor />
       </MapContainer>
