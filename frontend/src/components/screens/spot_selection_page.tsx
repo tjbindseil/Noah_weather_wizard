@@ -8,10 +8,15 @@ import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { MapZoomController } from '../map_stuff/map_zoom_controller';
 
 export function SpotSelectionScreen() {
   const spotService = useSpotService();
+
+  // We want to toggle between spot selection and forecast screens
+  const location = useLocation();
+  const initiallySelectedSpots = location.state?.selectedSpots;
 
   const navigate = useNavigate();
   const longsPeak = {
@@ -156,6 +161,13 @@ export function SpotSelectionScreen() {
           />
         ))}
         <MapBoundsMonitor setMapBounds={setMapBoundsIfChanged} />
+        {!initiallySelectedSpots ||
+        !initiallySelectedSpots.length ||
+        initiallySelectedSpots.length === 0 ? (
+          <></>
+        ) : (
+          <MapZoomController selectedSpots={initiallySelectedSpots} />
+        )}
       </MapContainer>
     </div>
   );

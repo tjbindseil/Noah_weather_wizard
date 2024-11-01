@@ -11,3 +11,4 @@ export { Queue, Priority } from './queue';
 export { waitUntil, waitForMS } from './wait';
 export { Job, JobState } from './job';
 export { makeCognitoJWTAuthenticator, defaultVerifier } from './auth';
+export { validate } from './validate';

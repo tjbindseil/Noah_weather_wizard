@@ -1,5 +1,10 @@
-import { PostSpotInput, PostSpotOutput, _schema } from 'ww-3-models-tjb';
-import { APIError, StrictlyAuthenticatedAPI } from 'ww-3-api-tjb';
+import {
+    Forecast,
+    PostSpotInput,
+    PostSpotOutput,
+    _schema,
+} from 'ww-3-models-tjb';
+import { APIError, StrictlyAuthenticatedAPI, validate } from 'ww-3-api-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 import {
@@ -61,20 +66,12 @@ export class PostSpot extends StrictlyAuthenticatedAPI<
                     forecastKey
                 );
 
-                // TODO this could be encapsulated
-                // validate<T>(schema, obj: a): T {
-                //   const validator = ajv.compile(schema);
-                //   if (!validator(obj) {
-                //     throw error
-                //   }
-                //   return obj as T;
-                const forecastValidator = this.ajv.compile(_schema.Forecast);
-                if (!forecastValidator(forecastJson)) {
-                    console.error('forecast is invalivid');
-                    throw new APIError(500, 'noaa issue');
-                }
+                const forecast = validate<Forecast>(
+                    _schema.Forecast,
+                    forecastJson
+                );
 
-                await this.s3Adapter.putForecastJson(forecastKey, forecastJson);
+                await this.s3Adapter.putForecastJson(forecastKey, forecast);
                 await this.s3Adapter.putGeometryJson(forecastKey, geometryJson);
             } else {
                 throw error;
