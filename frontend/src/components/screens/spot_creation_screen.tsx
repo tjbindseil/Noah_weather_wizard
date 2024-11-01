@@ -10,7 +10,7 @@ import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
 import { useMapService } from '../../services/map_service';
-import { MapMonitor } from '../map_stuff/map_zoom_monitor';
+import { MapViewMonitor } from '../map_stuff/map_view_monitor';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
@@ -174,7 +174,7 @@ export function SpotCreationScreen() {
           color={LeafletMarkerColorOptions.Green}
         />
         <MapBoundsMonitor setMapBounds={setMapBoundsIfChanged} />
-        <MapMonitor />
+        <MapViewMonitor />
       </MapContainer>
     </div>
   );

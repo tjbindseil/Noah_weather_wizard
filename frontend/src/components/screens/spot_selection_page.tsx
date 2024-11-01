@@ -10,7 +10,7 @@ import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
 import { useNavigate } from 'react-router-dom';
 import { useMapService } from '../../services/map_service';
-import { MapMonitor } from '../map_stuff/map_zoom_monitor';
+import { MapViewMonitor } from '../map_stuff/map_view_monitor';
 
 export function SpotSelectionScreen() {
   const spotService = useSpotService();
@@ -32,6 +32,20 @@ export function SpotSelectionScreen() {
   const mapRef = useRef(null);
 
   // TODO dry this out man!
+  // hmm, could this be absorbed into the map service?
+  //
+  // well, one way to do this would be to have the existing spots be a child of the map
+  //
+  // Q: how would we keep these dipslayed outside of the thing?
+  //   simply moving them under the MapContainer element is ineffective at first pass
+  //
+  // since that naive solution is ineffective, maybe I could find a middle ground
+  //
+  // track map bounds as a part of map view monitor (if this works, change its name back to map monitor)
+  // when map bounds change there, fetch existing spots (as done here and in spot creation, this will dry things out)
+  // pass a function in to set the existing spots
+  //
+  // lets do that
   const setMapBoundsIfChanged = useCallback(
     (newMapBounds: LatLngBounds) => {
       if (!mapBounds.equals(newMapBounds)) {
@@ -155,7 +169,7 @@ export function SpotSelectionScreen() {
           />
         ))}
         <MapBoundsMonitor setMapBounds={setMapBoundsIfChanged} />
-        <MapMonitor />
+        <MapViewMonitor />
       </MapContainer>
     </div>
   );

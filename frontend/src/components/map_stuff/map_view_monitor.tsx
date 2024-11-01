@@ -1,7 +1,7 @@
 import { useMap } from 'react-leaflet';
 import { useMapService } from '../../services/map_service';
 
-export const MapMonitor = () => {
+export const MapViewMonitor = () => {
   const map = useMap();
   const mapService = useMapService();
 
