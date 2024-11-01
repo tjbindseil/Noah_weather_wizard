@@ -5,7 +5,7 @@ import { ForecastScreen } from './forecast_screen';
 import { HomeScreen } from './home_screen';
 import { LoginScreen } from './login_screen';
 import { SpotCreationScreen } from './spot_creation_screen';
-import { SpotSelectionScreen } from './spot_selection_page';
+import { SpotSelectionScreen } from './spot_selection_screen';
 
 export const navBarScreens = [
   // TODO maybe screens could have their path and title as a static member?
