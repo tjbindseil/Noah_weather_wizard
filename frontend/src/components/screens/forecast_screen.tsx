@@ -1,23 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Forecast, Spot } from 'ww-3-models-tjb';
 import { useForecastService } from '../../services/forecast_service';
 import { NavBar } from '../nav_bar';
 
-// take in ids of selected spots
-// request the forecast from forecast service
-// display that shit
-
 export function ForecastScreen() {
   const forecastService = useForecastService();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const selectedSpots = location.state?.selectedSpots;
-
-  const toSpotSelectionPage = useCallback(() => {
-    navigate('/spot-selection', { state: { selectedSpots } });
-  }, [navigate]);
 
   const [forecasts, setForecasts] = useState<{ spot: Spot; forecast: Forecast }[]>([]);
 
@@ -53,7 +44,6 @@ export function ForecastScreen() {
     <div className='Home'>
       <NavBar />
       <p>See the forecast here!</p>
-      <button onClick={() => toSpotSelectionPage()}>Back to Spot Selection Page</button>
       <table>
         <thead>
           <tr>

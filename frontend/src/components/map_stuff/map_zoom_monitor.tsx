@@ -9,6 +9,7 @@ export const MapZoomMonitor = ({ setMapZoom }: MapZoomMonitorProps) => {
 
   // and when the map moves
   map.on('moveend', () => {
+    console.log(`on moveend - saving zoom, center is: ${map.getZoom()}`);
     setMapZoom(map.getZoom());
   });
 

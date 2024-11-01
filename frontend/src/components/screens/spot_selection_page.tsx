@@ -8,8 +8,7 @@ import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { MapZoomController } from '../map_stuff/map_zoom_controller';
+import { useNavigate } from 'react-router-dom';
 import { useMapService } from '../../services/map_service';
 import { MapZoomMonitor } from '../map_stuff/map_zoom_monitor';
 import { MapCenterMonitor } from '../map_stuff/map_center_monitor';
@@ -17,10 +16,6 @@ import { MapCenterMonitor } from '../map_stuff/map_center_monitor';
 export function SpotSelectionScreen() {
   const spotService = useSpotService();
   const mapService = useMapService();
-
-  // We want to toggle between spot selection and forecast screens
-  const location = useLocation();
-  const initiallySelectedSpots = location.state?.selectedSpots;
 
   const navigate = useNavigate();
 
@@ -33,6 +28,7 @@ export function SpotSelectionScreen() {
   useEffect(() => {
     return () => {
       // on component clean up, we need to save the map zoom and center
+      console.log(`use effect cleanup - saving zoom and zoom is: ${zoom}`);
       mapService.saveZoom(zoom);
       mapService.saveCenter(centerLat, centerLng);
     };
@@ -173,13 +169,6 @@ export function SpotSelectionScreen() {
           />
         ))}
         <MapBoundsMonitor setMapBounds={setMapBoundsIfChanged} />
-        {!initiallySelectedSpots ||
-        !initiallySelectedSpots.length ||
-        initiallySelectedSpots.length === 0 ? (
-          <></>
-        ) : (
-          <MapZoomController selectedSpots={initiallySelectedSpots} />
-        )}
         <MapZoomMonitor setMapZoom={setZoom} />
         <MapCenterMonitor setCenterLat={setCenterLat} setCenterLng={setCenterLng} />
       </MapContainer>

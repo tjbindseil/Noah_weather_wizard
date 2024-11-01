@@ -21,23 +21,29 @@ const MapService = ({ children }: any) => {
     centerLng: -105.615115,
 
     saveZoom(zoom: number) {
+      console.log(`MapService.saveZoom @@ @@ zoom is: ${zoom}`);
       this.zoom = zoom;
+      console.log(`MapService.saveZoom @@ @@ this.zoom is: ${this.zoom}`);
     },
 
     getZoom() {
+      console.log(`getting zoom and zoom is: ${this.zoom}`);
       return this.zoom;
     },
 
     saveCenter(lat: number, lng: number) {
+      // console.log(`saving center as: ${lat}, ${lng}`);
       this.centerLat = lat;
       this.centerLng = lng;
     },
 
     getCenterLat() {
+      // console.log(`getting centerLat and centerLat is: ${this.centerLat}`);
       return this.centerLat;
     },
 
     getCenterLng() {
+      // console.log(`getting centerLng and centerLng is: ${this.centerLng}`);
       return this.centerLng;
     },
   };
