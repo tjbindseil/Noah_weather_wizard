@@ -1,16 +1,16 @@
 import { useMap } from 'react-leaflet';
+import { useMapService } from '../../services/map_service';
 
-export interface MapZoomMonitorProps {
-  setMapZoom: (zoom: number) => void;
-}
-
-export const MapZoomMonitor = ({ setMapZoom }: MapZoomMonitorProps) => {
+export const MapMonitor = () => {
   const map = useMap();
+  const mapService = useMapService();
 
-  // and when the map moves
+  // all this does is save the zoom and center so that we can keep the map the same while moving from page to page
   map.on('moveend', () => {
-    console.log(`on moveend - saving zoom, center is: ${map.getZoom()}`);
-    setMapZoom(map.getZoom());
+    mapService.saveZoom(map.getZoom());
+
+    const center = map.getCenter();
+    mapService.saveCenter(center.lat, center.lng);
   });
 
   return <></>;

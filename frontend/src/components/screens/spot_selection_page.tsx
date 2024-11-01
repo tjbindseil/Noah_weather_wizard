@@ -10,8 +10,7 @@ import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
 import { useNavigate } from 'react-router-dom';
 import { useMapService } from '../../services/map_service';
-import { MapZoomMonitor } from '../map_stuff/map_zoom_monitor';
-import { MapCenterMonitor } from '../map_stuff/map_center_monitor';
+import { MapMonitor } from '../map_stuff/map_zoom_monitor';
 
 export function SpotSelectionScreen() {
   const spotService = useSpotService();
@@ -20,19 +19,6 @@ export function SpotSelectionScreen() {
   const navigate = useNavigate();
 
   const [checkedSpots, setCheckedSpots] = useState<number[]>([]);
-
-  const [zoom, setZoom] = useState(mapService.getZoom());
-  const [centerLat, setCenterLat] = useState(mapService.getCenterLat());
-  const [centerLng, setCenterLng] = useState(mapService.getCenterLng());
-
-  useEffect(() => {
-    return () => {
-      // on component clean up, we need to save the map zoom and center
-      console.log(`use effect cleanup - saving zoom and zoom is: ${zoom}`);
-      mapService.saveZoom(zoom);
-      mapService.saveCenter(centerLat, centerLng);
-    };
-  }, []);
 
   const toForecastPage = useCallback(() => {
     navigate('/forecast', { state: { selectedSpots: [checkedSpots] } });
@@ -169,8 +155,7 @@ export function SpotSelectionScreen() {
           />
         ))}
         <MapBoundsMonitor setMapBounds={setMapBoundsIfChanged} />
-        <MapZoomMonitor setMapZoom={setZoom} />
-        <MapCenterMonitor setCenterLat={setCenterLat} setCenterLng={setCenterLng} />
+        <MapMonitor />
       </MapContainer>
     </div>
   );
