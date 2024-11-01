@@ -1,31 +1,28 @@
 import { LatLng, LatLngBounds } from 'leaflet';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMap } from 'react-leaflet';
 import { Spot } from 'ww-3-models-tjb';
+import { useSpotService } from '../../services/spot_service';
 
 export interface MapExistingSpotsMonitorProps {
   setExistingSpots: (existingSpots: Spot[]) => void;
+  toggleToRefreshExistingSpots: boolean;
 }
 
-export const MapExistingSpotsMonitorProps = ({
+export const MapExistingSpotsMonitor = ({
   setExistingSpots,
+  toggleToRefreshExistingSpots,
 }: MapExistingSpotsMonitorProps) => {
+  toggleToRefreshExistingSpots; // dummy prop to allow parent to force this to refresh
+
+  // TODO do we need to use the map service here?
   const map = useMap();
-  // TODO dry this out man!
-  // hmm, could this be absorbed into the map service?
-  //
-  // well, one way to do this would be to have the existing spots be a child of the map
-  //
-  // Q: how would we keep these dipslayed outside of the thing?
-  //   simply moving them under the MapContainer element is ineffective at first pass
-  //
-  // since that naive solution is ineffective, maybe I could find a middle ground
-  //
-  // track map bounds as a part of map view monitor (if this works, change its name back to map monitor)
-  // when map bounds change there, fetch existing spots (as done here and in spot creation, this will dry things out)
-  // pass a function in to set the existing spots
-  //
-  // lets do that
+  const spotService = useSpotService();
+
+  const [mapBounds, setMapBounds] = useState<LatLngBounds>(
+    new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0)),
+  );
+
   const setMapBoundsIfChanged = useCallback(
     (newMapBounds: LatLngBounds) => {
       if (!mapBounds.equals(newMapBounds)) {
@@ -35,7 +32,6 @@ export const MapExistingSpotsMonitorProps = ({
     [mapBounds, setMapBounds],
   );
 
-  // TODO dry this out man!
   const fetchExistingSpots = useCallback(() => {
     // weird initial situation...
     // the asynchronous calls here are returning out of order, so the initial call with a 0/0 window
@@ -57,14 +53,17 @@ export const MapExistingSpotsMonitorProps = ({
         setExistingSpots(result.spots);
       })
       .catch(console.error);
-  }, [mapBounds, fetchExistingSpots]);
+  }, [mapBounds]);
 
-  useEffect(fetchExistingSpots, [mapBounds, setExistingSpots]);
+  useEffect(fetchExistingSpots, [mapBounds]);
 
   // and when the map moves
   map.on('moveend', () => {
-    setMapBounds(map.getBounds());
+    setMapBoundsIfChanged(map.getBounds());
   });
 
   return <></>;
 };
+
+// county office: 303 271 1388
+// main office (last resort): 800 221 3943

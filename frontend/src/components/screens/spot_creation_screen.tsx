@@ -1,16 +1,16 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { NavBar } from '../nav_bar';
 import { SelectedSpot } from '../map_stuff/selected_spot';
 import { MapClickController } from '../map_stuff/map_click_controller';
-import { LatLng, LatLngBounds } from 'leaflet';
-import { MapBoundsMonitor } from '../map_stuff/map_bounds_monitor';
+import { LatLng } from 'leaflet';
 import { PostSpotInput, Spot } from 'ww-3-models-tjb';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
 import { useMapService } from '../../services/map_service';
 import { MapViewMonitor } from '../map_stuff/map_view_monitor';
+import { MapExistingSpotsMonitor } from '../map_stuff/map_existing_spots_monitor';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
@@ -27,52 +27,15 @@ export function SpotCreationScreen() {
   const [longitude, setLongitude] = useState(longsPeak.long);
   const [name, setName] = useState('Longs Peak');
 
-  const [mapBounds, setMapBounds] = useState<LatLngBounds>(
-    new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0)),
-  );
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
-
-  const setMapBoundsIfChanged = useCallback(
-    (newMapBounds: LatLngBounds) => {
-      if (!mapBounds.equals(newMapBounds)) {
-        setMapBounds(newMapBounds);
-      }
-    },
-    [mapBounds, setMapBounds],
-  );
-
-  const fetchExistingSpots = useCallback(() => {
-    // weird initial situation...
-    // the asynchronous calls here are returning out of order, so the initial call with a 0/0 window
-    // will return after the call with the real window. this results in there being no spots
-    // this solution does not address the root cause but seems to work
-    const zeroMapBounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0));
-    if (mapBounds.equals(zeroMapBounds)) {
-      return;
-    }
-
-    spotService
-      .getSpots({
-        minLat: mapBounds.getSouth().toString(),
-        maxLat: mapBounds.getNorth().toString(),
-        minLong: mapBounds.getWest().toString(),
-        maxLong: mapBounds.getEast().toString(),
-      })
-      .then((result) => {
-        setExistingSpots(result.spots);
-      })
-      .catch(console.error);
-  }, [mapBounds, setExistingSpots]);
-
-  useEffect(fetchExistingSpots, [fetchExistingSpots, mapBounds]);
+  const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
 
   const saveSpotFunc = useCallback(
     async (selectedSpot: PostSpotInput) => {
       await spotService.createSpot(selectedSpot);
-      // TODO i think this still doesn't work
-      fetchExistingSpots();
+      setToggleToRefreshExistingSpots(!toggleToRefreshExistingSpots);
     },
-    [fetchExistingSpots, spotService],
+    [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots, spotService],
   );
 
   // TODO upon clicing on map, set the lat/long input values
@@ -173,7 +136,10 @@ export function SpotCreationScreen() {
           saveSelectedSpot={saveSpotFunc}
           color={LeafletMarkerColorOptions.Green}
         />
-        <MapBoundsMonitor setMapBounds={setMapBoundsIfChanged} />
+        <MapExistingSpotsMonitor
+          setExistingSpots={setExistingSpots}
+          toggleToRefreshExistingSpots={true}
+        />
         <MapViewMonitor />
       </MapContainer>
     </div>
