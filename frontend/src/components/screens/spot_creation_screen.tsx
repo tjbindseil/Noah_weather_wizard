@@ -1,22 +1,14 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import React, { useState, useCallback } from 'react';
 import { NavBar } from '../nav_bar';
 import { SelectedSpot } from '../map_stuff/selected_spot';
-import { MapClickController } from '../map_stuff/map_click_controller';
-import { LatLng } from 'leaflet';
 import { PostSpotInput, Spot } from 'ww-3-models-tjb';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
-import { useMapService } from '../../services/map_service';
-import { MapViewMonitor } from '../map_stuff/map_view_monitor';
-import { MapExistingSpotsMonitor } from '../map_stuff/map_existing_spots_monitor';
+import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
-  const mapService = useMapService();
-
-  const mapRef = useRef(null);
 
   const longsPeak = {
     lat: 40.255014,
@@ -111,18 +103,7 @@ export function SpotCreationScreen() {
         </p>
       ))}
 
-      <MapContainer
-        center={new LatLng(mapService.getCenterLat(), mapService.getCenterLng())}
-        zoom={mapService.getZoom()}
-        ref={mapRef}
-        style={{ height: '50vh', width: '50vw' }}
-      >
-        <TileLayer
-          attribution={
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          }
-          url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
-        />
+      <MapContainerWrapper setExistingSpots={setExistingSpots} toggleToRefreshExistingSpots={true}>
         {existingSpots.map((existingSpot) => (
           <SelectedSpot
             key={existingSpot.id}
@@ -132,16 +113,7 @@ export function SpotCreationScreen() {
             color={LeafletMarkerColorOptions.Blue}
           />
         ))}
-        <MapClickController
-          saveSelectedSpot={saveSpotFunc}
-          color={LeafletMarkerColorOptions.Green}
-        />
-        <MapExistingSpotsMonitor
-          setExistingSpots={setExistingSpots}
-          toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
-        />
-        <MapViewMonitor />
-      </MapContainer>
+      </MapContainerWrapper>
     </div>
   );
 }

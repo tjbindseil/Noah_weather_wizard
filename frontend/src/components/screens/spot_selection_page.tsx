@@ -1,19 +1,13 @@
-import { useState, useRef, useCallback } from 'react';
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { useState, useCallback } from 'react';
 import { NavBar } from '../nav_bar';
 import { SelectedSpot } from '../map_stuff/selected_spot';
-import { LatLng } from 'leaflet';
 import { Spot } from 'ww-3-models-tjb';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { UserStatus } from '../user_status';
 import { useNavigate } from 'react-router-dom';
-import { useMapService } from '../../services/map_service';
-import { MapViewMonitor } from '../map_stuff/map_view_monitor';
-import { MapExistingSpotsMonitor } from '../map_stuff/map_existing_spots_monitor';
+import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
 
 export function SpotSelectionScreen() {
-  const mapService = useMapService();
-
   const navigate = useNavigate();
 
   const [checkedSpots, setCheckedSpots] = useState<number[]>([]);
@@ -23,8 +17,6 @@ export function SpotSelectionScreen() {
   }, [checkedSpots, navigate]);
 
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
-
-  const mapRef = useRef(null);
 
   return (
     <div className='Home'>
@@ -88,18 +80,7 @@ export function SpotSelectionScreen() {
 
       <button onClick={() => toForecastPage()}>Compare Forecasts</button>
 
-      <MapContainer
-        center={new LatLng(mapService.getCenterLat(), mapService.getCenterLng())}
-        zoom={mapService.getZoom()}
-        ref={mapRef}
-        style={{ height: '50vh', width: '50vw' }}
-      >
-        <TileLayer
-          attribution={
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          }
-          url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
-        />
+      <MapContainerWrapper setExistingSpots={setExistingSpots} toggleToRefreshExistingSpots={true}>
         {existingSpots.map((existingSpot) => (
           <SelectedSpot
             key={existingSpot.id}
@@ -113,12 +94,7 @@ export function SpotSelectionScreen() {
             }
           />
         ))}
-        <MapExistingSpotsMonitor
-          setExistingSpots={setExistingSpots}
-          toggleToRefreshExistingSpots={true}
-        />
-        <MapViewMonitor />
-      </MapContainer>
+      </MapContainerWrapper>
     </div>
   );
 }
