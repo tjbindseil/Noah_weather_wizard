@@ -23,6 +23,8 @@ export function SpotCreationScreen() {
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
   const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
 
+  const [hoveredSpotId, setHoveredSpotId] = useState<number | undefined>(undefined);
+
   const saveSpotFunc = useCallback(
     async (selectedSpot: PostSpotInput) => {
       await spotService.createSpot(selectedSpot);
@@ -101,7 +103,12 @@ export function SpotCreationScreen() {
         Save Spot
       </button>
 
-      <DeletableExistingSpots existingSpots={existingSpots} removeSpotFunc={removeSpotFunc} />
+      <DeletableExistingSpots
+        existingSpots={existingSpots}
+        removeSpotFunc={removeSpotFunc}
+        hoveredSpotId={hoveredSpotId}
+        setHoveredSpotId={setHoveredSpotId}
+      />
 
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}
@@ -113,7 +120,11 @@ export function SpotCreationScreen() {
             latitude={existingSpot.latitude}
             longitude={existingSpot.longitude}
             name={existingSpot.name}
+            spotId={existingSpot.id}
             color={LeafletMarkerColorOptions.Blue}
+            hoveredColor={LeafletMarkerColorOptions.Red}
+            hoveredSpotId={hoveredSpotId}
+            setHoveredSpotId={setHoveredSpotId}
           />
         ))}
       </MapContainerWrapper>

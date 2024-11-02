@@ -13,6 +13,10 @@ export function SpotSelectionScreen() {
 
   const [checkedSpots, setCheckedSpots] = useState<number[]>([]);
 
+  // so, when the row is hovered, the spot on the map is hovered
+  // and vice versa (when spot is hovered, row is hovered)
+  const [hoveredSpotId, setHoveredSpotId] = useState<number | undefined>(undefined);
+
   const toForecastPage = useCallback(() => {
     navigate('/forecast', { state: { selectedSpots: [checkedSpots] } });
   }, [checkedSpots, navigate]);
@@ -42,6 +46,8 @@ export function SpotSelectionScreen() {
         checkedSpots={checkedSpots}
         setCheckedSpots={setCheckedSpots}
         existingSpots={existingSpots}
+        hoveredSpotId={hoveredSpotId}
+        setHoveredSpotId={setHoveredSpotId}
       />
 
       <button onClick={() => toForecastPage()}>Compare Forecasts</button>
@@ -53,11 +59,15 @@ export function SpotSelectionScreen() {
             latitude={existingSpot.latitude}
             longitude={existingSpot.longitude}
             name={existingSpot.name}
+            spotId={existingSpot.id}
             color={
               checkedSpots.includes(existingSpot.id)
                 ? LeafletMarkerColorOptions.Green
                 : LeafletMarkerColorOptions.Blue
             }
+            hoveredColor={LeafletMarkerColorOptions.Red}
+            hoveredSpotId={hoveredSpotId}
+            setHoveredSpotId={setHoveredSpotId}
           />
         ))}
       </MapContainerWrapper>

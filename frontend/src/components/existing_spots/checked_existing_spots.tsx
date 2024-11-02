@@ -1,3 +1,4 @@
+import '../../App.css';
 import { Spot } from 'ww-3-models-tjb';
 import { CheckedExistingSpotExtension } from './checked_existing_spot_extension';
 import { ExistingSpot } from './existing_spot';
@@ -7,6 +8,8 @@ export interface ExistingSpotsProps {
   checkedSpots: number[];
   setCheckedSpots: (arg: number[]) => void;
   existingSpots: Spot[];
+  hoveredSpotId: number | undefined;
+  setHoveredSpotId: (arg: number | undefined) => void;
 }
 
 // need to pass in a map of:
@@ -26,6 +29,8 @@ export const CheckedExistingSpots = ({
   checkedSpots,
   setCheckedSpots,
   existingSpots,
+  hoveredSpotId,
+  setHoveredSpotId,
 }: ExistingSpotsProps) => {
   return (
     <>
@@ -33,18 +38,29 @@ export const CheckedExistingSpots = ({
       <table>
         <ExistingSpotsHeader extraColumns={['Selected']} />
         <tbody>
-          {existingSpots.map((existingSpot) => (
-            <>
-              <tr>
-                <ExistingSpot existingSpot={existingSpot} />
-                <CheckedExistingSpotExtension
-                  existingSpot={existingSpot}
-                  checkedSpots={checkedSpots}
-                  setCheckedSpots={setCheckedSpots}
-                />
-              </tr>
-            </>
-          ))}
+          {existingSpots.map((existingSpot) => {
+            const style = existingSpot.id === hoveredSpotId ? { backgroundColor: 'yellow' } : {};
+            return (
+              <>
+                <tr
+                  onMouseOver={() => {
+                    setHoveredSpotId(existingSpot.id);
+                  }}
+                  onMouseOut={() => {
+                    setHoveredSpotId(undefined);
+                  }}
+                  style={style}
+                >
+                  <ExistingSpot existingSpot={existingSpot} />
+                  <CheckedExistingSpotExtension
+                    existingSpot={existingSpot}
+                    checkedSpots={checkedSpots}
+                    setCheckedSpots={setCheckedSpots}
+                  />
+                </tr>
+              </>
+            );
+          })}
         </tbody>
       </table>
     </>
