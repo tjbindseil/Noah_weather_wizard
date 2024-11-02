@@ -6,6 +6,7 @@ import {
     defaultVerifier,
 } from './auth';
 import { ContextController } from './context_controllers';
+import { APIError } from './api_error';
 
 export abstract class StrictlyAuthenticatedAPI<I, O, C> extends API<I, O, C> {
     protected validatedUsername!: string;
@@ -22,9 +23,15 @@ export abstract class StrictlyAuthenticatedAPI<I, O, C> extends API<I, O, C> {
         next: NextFunction,
         contextController: ContextController<C>
     ) {
-        this.validatedUsername = await this.jwtAuthenticator(
-            req.headers.authorization
-        );
+        try {
+            this.validatedUsername = await this.jwtAuthenticator(
+                req.headers.authorization
+            );
+        } catch (error: unknown) {
+            console.error('Issue authenticating');
+            console.error(error);
+            next(new APIError(403, 'unauthorized'));
+        }
         super.call(req, res, next, contextController);
     }
 }
