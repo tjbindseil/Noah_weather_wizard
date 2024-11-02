@@ -122,3 +122,12 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 * on a four hour interval, fetch forecast hourly for each polygon
 * wire up forecast hourly provider (just the one that gets them all, not filter or sort)
 * forecast hourly comparison page
+
+
+## latest and greatest todos
+* select favorites (small)
+* implement show favorites button in userstatus dropdown (small)
+* implement show (select?) favorites button in spot selection page (small)
+* page layout formatting (medium)
+* center map button on spot creation page (small)
+* short, long, hourly forecast comparison screens (large)
