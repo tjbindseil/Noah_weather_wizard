@@ -20,6 +20,8 @@ export function ForecastScreen() {
       return;
     }
 
+    console.log(`ss is: ${selectedSpots.toString()}`);
+
     forecastService.getForecasts({ spotIDs: selectedSpots }).then((result) => {
       setForecasts(result.forecasts);
     });

@@ -6,6 +6,7 @@ import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { UserStatus } from '../user_status';
 import { useNavigate } from 'react-router-dom';
 import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
+import { CheckedExistingSpots } from '../existing_spots/checked_existing_spots';
 
 export function SpotSelectionScreen() {
   const navigate = useNavigate();
@@ -37,46 +38,11 @@ export function SpotSelectionScreen() {
       </p>
       <br />
 
-      <h3>Existing Spots</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            <th>Selected</th>
-          </tr>
-        </thead>
-        <tbody>
-          {existingSpots.map((existingSpot) => (
-            <>
-              <tr>
-                <td>{existingSpot.name}</td>
-                <td>{existingSpot.latitude}</td>
-                <td>{existingSpot.longitude}</td>
-                <td>
-                  <input
-                    type='checkbox'
-                    id={existingSpot.id.toString()}
-                    name='selected'
-                    checked={!!checkedSpots.includes(existingSpot.id)}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      checkedSpots.includes(Number(event.target.id))
-                        ? checkedSpots.splice(
-                            checkedSpots.findIndex((spotId) => spotId === Number(event.target.id)),
-                            1,
-                          )
-                        : checkedSpots.push(Number(event.target.id));
-
-                      setCheckedSpots([...checkedSpots]);
-                    }}
-                  />
-                </td>
-              </tr>
-            </>
-          ))}
-        </tbody>
-      </table>
+      <CheckedExistingSpots
+        checkedSpots={checkedSpots}
+        setCheckedSpots={setCheckedSpots}
+        existingSpots={existingSpots}
+      />
 
       <button onClick={() => toForecastPage()}>Compare Forecasts</button>
 

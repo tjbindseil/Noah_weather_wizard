@@ -6,11 +6,10 @@ import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
 import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
-import { useUserService } from '../../services/user_service';
+import { DeletableExistingSpots } from '../existing_spots/deletable_existing_spots';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
-  const userService = useUserService();
 
   const longsPeak = {
     lat: 40.255014,
@@ -97,32 +96,12 @@ export function SpotCreationScreen() {
       <button
         onClick={async () => {
           await saveSpotFunc({ latitude, longitude, name });
-          // TODO refresh shown spots (this should turn the current spot from blue to red)
-          // this is getting done now, but initial spots are an issue because the map bounds monitor has trouble setting them initially
-          //
-          // could pass in some rigged one time setter to use
         }}
       >
         Save Spot
       </button>
 
-      <h3>Existing Spots</h3>
-      {existingSpots.map((existingSpot) => {
-        if (existingSpot.creator === userService.getUsername()) {
-          return (
-            <p key={existingSpot.id}>
-              {`${existingSpot.name} lat: ${existingSpot.latitude} long: ${existingSpot.longitude}`}{' '}
-              - <button onClick={() => removeSpotFunc({ id: existingSpot.id })}>Delete Spot</button>
-            </p>
-          );
-        } else {
-          return (
-            <p key={existingSpot.id}>
-              {`${existingSpot.name} lat: ${existingSpot.latitude} long: ${existingSpot.longitude}`}
-            </p>
-          );
-        }
-      })}
+      <DeletableExistingSpots existingSpots={existingSpots} removeSpotFunc={removeSpotFunc} />
 
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}
