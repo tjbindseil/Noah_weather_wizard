@@ -42,6 +42,8 @@ const MapService = ({ children }: any) => {
     },
   };
 
+  // TODO save in cookies cuz i can
+
   return (
     <>
       <MapServiceContext.Provider value={mapService}>{children}</MapServiceContext.Provider>

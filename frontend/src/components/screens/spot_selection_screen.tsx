@@ -9,9 +9,26 @@ import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
 import { FavoritedExistingSpotExtension } from '../existing_spots/favorite_existing_spot_extension';
+import { LatLngInput } from '../lat_lng_input';
+import { LatLng } from 'leaflet';
+import { useMapService } from '../../services/map_service';
 
 export function SpotSelectionScreen() {
   const navigate = useNavigate();
+  const mapService = useMapService();
+
+  const longsPeak = {
+    lat: 40.255014,
+    long: -105.615115,
+  };
+
+  const [lat, setLat] = useState(longsPeak.lat);
+  const [lng, setLng] = useState(longsPeak.long);
+  const [name, setName] = useState('Longs Peak');
+
+  const [desiredCenter, setDesiredCenter] = useState(
+    new LatLng(mapService.getCenterLat(), mapService.getCenterLng()),
+  );
 
   const [checkedSpots, setCheckedSpots] = useState<number[]>([]);
 
@@ -56,6 +73,16 @@ export function SpotSelectionScreen() {
       </p>
       <br />
 
+      <LatLngInput
+        lat={lat}
+        setLat={setLat}
+        lng={lng}
+        setLng={setLng}
+        name={name}
+        setName={setName}
+        setDesiredCenter={setDesiredCenter}
+      />
+
       <ExistingSpots
         existingSpots={existingSpots}
         hoveredSpotId={hoveredSpotId}
@@ -65,7 +92,11 @@ export function SpotSelectionScreen() {
 
       <button onClick={() => toForecastPage()}>Compare Forecasts</button>
 
-      <MapContainerWrapper setExistingSpots={setExistingSpots} toggleToRefreshExistingSpots={true}>
+      <MapContainerWrapper
+        setExistingSpots={setExistingSpots}
+        toggleToRefreshExistingSpots={true}
+        desiredCenter={desiredCenter}
+      >
         {existingSpots.map((existingSpot) => (
           <SelectedSpot
             key={existingSpot.id}

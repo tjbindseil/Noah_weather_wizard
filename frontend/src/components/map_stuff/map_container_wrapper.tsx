@@ -5,17 +5,20 @@ import { MapViewMonitor } from '../map_stuff/map_view_monitor';
 import { MapExistingSpotsMonitor } from '../map_stuff/map_existing_spots_monitor';
 import { Spot } from 'ww-3-models-tjb';
 import { LatLng } from 'leaflet';
+import { MapCenterController } from './map_center_controller';
 
 export interface MapContainerWrapperProps {
   children: React.ReactNode;
   setExistingSpots: (existingSpots: Spot[]) => void;
   toggleToRefreshExistingSpots: boolean;
+  desiredCenter: LatLng;
 }
 
 export const MapContainerWrapper = ({
   children,
   setExistingSpots,
   toggleToRefreshExistingSpots,
+  desiredCenter,
 }: MapContainerWrapperProps) => {
   const mapRef = useRef(null);
   const mapService = useMapService();
@@ -38,6 +41,7 @@ export const MapContainerWrapper = ({
         toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
       />
       <MapViewMonitor />
+      <MapCenterController desiredCenter={desiredCenter} />
       {children}
     </MapContainer>
   );

@@ -10,9 +10,9 @@ import { ExistingSpots } from '../existing_spots/existing_spots';
 import { DeletableExistingSpotExtension } from '../existing_spots/deletable_existing_spot_extension';
 import { MapClickController } from '../map_stuff/map_click_controller';
 import { Link } from 'react-router-dom';
-import { MapCenterController } from '../map_stuff/map_center_controller';
 import { useMapService } from '../../services/map_service';
 import { LatLng } from 'leaflet';
+import { LatLngInput } from '../lat_lng_input';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
@@ -23,8 +23,8 @@ export function SpotCreationScreen() {
     long: -105.615115,
   };
 
-  const [latitude, setLatitude] = useState(longsPeak.lat);
-  const [longitude, setLongitude] = useState(longsPeak.long);
+  const [lat, setLat] = useState(longsPeak.lat);
+  const [lng, setLng] = useState(longsPeak.long);
   const [name, setName] = useState('Longs Peak');
 
   const [desiredCenter, setDesiredCenter] = useState(
@@ -83,50 +83,22 @@ export function SpotCreationScreen() {
       </p>
       <br />
 
-      <label htmlFor='latitude'>Latitude:</label>
-      <input
-        type='number'
-        id='latitude'
-        value={latitude}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setLatitude(parseFloat(event.target.value));
-        }}
-      />
-
-      <label htmlFor='longitude'>Longitude:</label>
-      <input
-        type='number'
-        id='longitude'
-        value={longitude}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setLongitude(parseFloat(event.target.value));
-        }}
-      />
-
-      <label htmlFor='name'>Name:</label>
-      <input
-        type='text'
-        id='name'
-        value={name}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setName(event.target.value);
-        }}
+      <LatLngInput
+        lat={lat}
+        setLat={setLat}
+        lng={lng}
+        setLng={setLng}
+        name={name}
+        setName={setName}
+        setDesiredCenter={setDesiredCenter}
       />
 
       <button
         onClick={async () => {
-          await saveSpotFunc({ latitude, longitude, name });
+          await saveSpotFunc({ latitude: lat, longitude: lng, name });
         }}
       >
-        Save Spot
-      </button>
-
-      <button
-        onClick={async () => {
-          setDesiredCenter(new LatLng(latitude, longitude));
-        }}
-      >
-        Center Map
+        Create Spot
       </button>
 
       <ExistingSpots
@@ -139,6 +111,7 @@ export function SpotCreationScreen() {
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}
         toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
+        desiredCenter={desiredCenter}
       >
         {existingSpots.map((existingSpot) => (
           <SelectedSpot
@@ -157,7 +130,6 @@ export function SpotCreationScreen() {
           saveSelectedSpot={saveSpotFunc}
           color={LeafletMarkerColorOptions.Green}
         />
-        <MapCenterController desiredCenter={desiredCenter} />
       </MapContainerWrapper>
     </div>
   );
