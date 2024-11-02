@@ -27,7 +27,6 @@ export function MapClickController({ saveSelectedSpot, color }: MapClickControll
 
   const coloredIcon = makeColoredIcon(color);
 
-  // TODO remove the popup marker
   return popupOpen ? (
     <Marker position={[popupLat, popupLong]} icon={coloredIcon} eventHandlers={{ add: openPopup }}>
       <Popup>

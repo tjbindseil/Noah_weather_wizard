@@ -10,9 +10,13 @@ import { ExistingSpots } from '../existing_spots/existing_spots';
 import { DeletableExistingSpotExtension } from '../existing_spots/deletable_existing_spot_extension';
 import { MapClickController } from '../map_stuff/map_click_controller';
 import { Link } from 'react-router-dom';
+import { MapCenterController } from '../map_stuff/map_center_controller';
+import { useMapService } from '../../services/map_service';
+import { LatLng } from 'leaflet';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
+  const mapService = useMapService();
 
   const longsPeak = {
     lat: 40.255014,
@@ -22,6 +26,10 @@ export function SpotCreationScreen() {
   const [latitude, setLatitude] = useState(longsPeak.lat);
   const [longitude, setLongitude] = useState(longsPeak.long);
   const [name, setName] = useState('Longs Peak');
+
+  const [desiredCenter, setDesiredCenter] = useState(
+    new LatLng(mapService.getCenterLat(), mapService.getCenterLng()),
+  );
 
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
   const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
@@ -113,6 +121,14 @@ export function SpotCreationScreen() {
         Save Spot
       </button>
 
+      <button
+        onClick={async () => {
+          setDesiredCenter(new LatLng(latitude, longitude));
+        }}
+      >
+        Center Map
+      </button>
+
       <ExistingSpots
         existingSpots={existingSpots}
         hoveredSpotId={hoveredSpotId}
@@ -141,6 +157,7 @@ export function SpotCreationScreen() {
           saveSelectedSpot={saveSpotFunc}
           color={LeafletMarkerColorOptions.Green}
         />
+        <MapCenterController desiredCenter={desiredCenter} />
       </MapContainerWrapper>
     </div>
   );
