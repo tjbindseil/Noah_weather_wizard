@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSpotService } from '../services/spot_service';
 import { UserSignInStatus, useUserService } from '../services/user_service';
 
 export function UserStatus() {
@@ -45,11 +46,23 @@ interface UserStatusDroppedDownProps {
 
 function UserStatusDroppedDown({ setDroppedDown }: UserStatusDroppedDownProps) {
   const userService = useUserService();
+  const spotService = useSpotService();
+
+  const navigate = useNavigate();
 
   return (
     <ul>
       <li>
-        <button>Favorites page</button>
+        <button
+          onClick={async () => {
+            const favoriteSpotIds = await spotService.getFavorites({});
+            navigate('/forecast', {
+              state: { selectedSpots: [favoriteSpotIds.favoriteSpots.map((spot) => spot.id)] },
+            });
+          }}
+        >
+          Favorites page
+        </button>
       </li>
       <li>
         <button onClick={() => userService.logout()}>
