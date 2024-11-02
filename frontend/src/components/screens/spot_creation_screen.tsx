@@ -6,7 +6,8 @@ import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
 import { UserStatus } from '../user_status';
 import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
-import { DeletableExistingSpots } from '../existing_spots/deletable_existing_spots';
+import { ExistingSpots } from '../existing_spots/existing_spots';
+import { DeletableExistingSpotExtension } from '../existing_spots/deletable_existing_spot_extension';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
@@ -42,6 +43,13 @@ export function SpotCreationScreen() {
   );
 
   // TODO upon clicing on map, set the lat/long input values
+
+  const spotCreationCustomizations = new Map<string, (existingSpot: Spot) => React.ReactNode>();
+  spotCreationCustomizations.set('Checked', (existingSpot: Spot) => {
+    return (
+      <DeletableExistingSpotExtension existingSpot={existingSpot} removeSpotFunc={removeSpotFunc} />
+    );
+  });
 
   return (
     <div className='Home'>
@@ -103,11 +111,11 @@ export function SpotCreationScreen() {
         Save Spot
       </button>
 
-      <DeletableExistingSpots
+      <ExistingSpots
         existingSpots={existingSpots}
-        removeSpotFunc={removeSpotFunc}
         hoveredSpotId={hoveredSpotId}
         setHoveredSpotId={setHoveredSpotId}
+        customizations={spotCreationCustomizations}
       />
 
       <MapContainerWrapper

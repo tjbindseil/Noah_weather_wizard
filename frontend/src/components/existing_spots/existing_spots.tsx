@@ -1,45 +1,35 @@
-import '../../App.css';
 import { Spot } from 'ww-3-models-tjb';
-import { CheckedExistingSpotExtension } from './checked_existing_spot_extension';
 import { ExistingSpot } from './existing_spot';
 import { ExistingSpotsHeader } from './header';
 
 export interface ExistingSpotsProps {
-  checkedSpots: number[];
-  setCheckedSpots: (arg: number[]) => void;
   existingSpots: Spot[];
   hoveredSpotId: number | undefined;
   setHoveredSpotId: (arg: number | undefined) => void;
+  customizations: Map<string, (existingSpot: Spot) => React.ReactNode>; // column name to factory
 }
 
-// need to pass in a map of:
-// <
-// string (ie extra column name)
-// and
-// function that returns a react element given... an existing spot and some other stuff?
-//
-// or, we don't have to get hella generic, and can just make a delete existing spots and a check existing spots and
-// a favorite existing spots
-//
-// i like that best
-//
-// middle path
-
-export const CheckedExistingSpots = ({
-  checkedSpots,
-  setCheckedSpots,
+export const ExistingSpots = ({
   existingSpots,
   hoveredSpotId,
   setHoveredSpotId,
+  customizations,
 }: ExistingSpotsProps) => {
+  const extraColumnNames = Array.from(customizations.keys());
+
   return (
     <>
       <h3>Existing Spots</h3>
       <table>
-        <ExistingSpotsHeader extraColumns={['Selected']} />
+        <ExistingSpotsHeader extraColumns={extraColumnNames} />
         <tbody>
           {existingSpots.map((existingSpot) => {
             const style = existingSpot.id === hoveredSpotId ? { backgroundColor: 'yellow' } : {};
+
+            const extraColumns = Array.from(customizations.values()).map((extensionFactory) =>
+              extensionFactory(existingSpot),
+            );
+
             return (
               <>
                 <tr
@@ -52,11 +42,7 @@ export const CheckedExistingSpots = ({
                   style={style}
                 >
                   <ExistingSpot existingSpot={existingSpot} />
-                  <CheckedExistingSpotExtension
-                    existingSpot={existingSpot}
-                    checkedSpots={checkedSpots}
-                    setCheckedSpots={setCheckedSpots}
-                  />
+                  {extraColumns}
                 </tr>
               </>
             );

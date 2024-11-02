@@ -6,7 +6,8 @@ import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { UserStatus } from '../user_status';
 import { useNavigate } from 'react-router-dom';
 import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
-import { CheckedExistingSpots } from '../existing_spots/checked_existing_spots';
+import { ExistingSpots } from '../existing_spots/existing_spots';
+import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
 
 export function SpotSelectionScreen() {
   const navigate = useNavigate();
@@ -22,6 +23,17 @@ export function SpotSelectionScreen() {
   }, [checkedSpots, navigate]);
 
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
+
+  const existingSpotCustomizations = new Map<string, (existingSpot: Spot) => React.ReactNode>();
+  existingSpotCustomizations.set('Checked', (existingSpot: Spot) => {
+    return (
+      <CheckedExistingSpotExtension
+        existingSpot={existingSpot}
+        checkedSpots={checkedSpots}
+        setCheckedSpots={setCheckedSpots}
+      />
+    );
+  });
 
   return (
     <div className='Home'>
@@ -42,12 +54,11 @@ export function SpotSelectionScreen() {
       </p>
       <br />
 
-      <CheckedExistingSpots
-        checkedSpots={checkedSpots}
-        setCheckedSpots={setCheckedSpots}
+      <ExistingSpots
         existingSpots={existingSpots}
         hoveredSpotId={hoveredSpotId}
         setHoveredSpotId={setHoveredSpotId}
+        customizations={existingSpotCustomizations}
       />
 
       <button onClick={() => toForecastPage()}>Compare Forecasts</button>
