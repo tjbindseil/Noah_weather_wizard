@@ -209,7 +209,21 @@ const UserService = ({ children }: any) => {
     },
 
     async getAccessToken() {
-      await this.verifyAccessToken();
+      // TODO - this try catch try catch is repeated
+      try {
+        await this.verifyAccessToken();
+      } catch (e: any) {
+        // currently unable to detect what type of errors we are getting ...
+        //
+        // so assuming an expired token first
+        //
+        // TODO do this better
+        try {
+          await this.refreshUser();
+        } catch (e: any) {
+          this.logout();
+        }
+      }
       return tokenStorageObject.getAccessToken();
     },
   } as UserServiceImpl;

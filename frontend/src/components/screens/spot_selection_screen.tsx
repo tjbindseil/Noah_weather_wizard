@@ -4,7 +4,7 @@ import { SelectedSpot } from '../map_stuff/selected_spot';
 import { Spot } from 'ww-3-models-tjb';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { UserStatus } from '../user_status';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
@@ -44,8 +44,7 @@ export function SpotSelectionScreen() {
       <UserStatus />
       <p>Select spots for which you would like a forecast.</p>
       <p>
-        To create new spots, use the{' '}
-        <a href={'localhost:3000/spot-creation'}> Spot Creation Page</a>
+        To create new spots, use the <Link to={'/spot-creation'}> Spot Creation Page</Link>
       </p>
       <p>
         Once all desired spots are selected, click the compare button to compare their forecasts.

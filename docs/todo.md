@@ -125,8 +125,8 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 
 
 ## latest and greatest todos
-* select favorites (small)
-* implement show favorites button in userstatus dropdown (small)
+* select favorites (small) - done
+* implement show favorites button in userstatus dropdown (small) - done
 * implement show (select?) favorites button in spot selection page (small)
 * page layout formatting (medium)
 * center map button on spot creation page (small)
