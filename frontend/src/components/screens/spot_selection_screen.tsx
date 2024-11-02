@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
+import { FavoritedExistingSpotExtension } from '../existing_spots/favorite_existing_spot_extension';
 
 export function SpotSelectionScreen() {
   const navigate = useNavigate();
@@ -25,15 +26,17 @@ export function SpotSelectionScreen() {
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
 
   const existingSpotCustomizations = new Map<string, (existingSpot: Spot) => React.ReactNode>();
-  existingSpotCustomizations.set('Checked', (existingSpot: Spot) => {
-    return (
-      <CheckedExistingSpotExtension
-        existingSpot={existingSpot}
-        checkedSpots={checkedSpots}
-        setCheckedSpots={setCheckedSpots}
-      />
-    );
-  });
+  existingSpotCustomizations.set('Checked', (existingSpot: Spot) => (
+    <CheckedExistingSpotExtension
+      existingSpot={existingSpot}
+      checkedSpots={checkedSpots}
+      setCheckedSpots={setCheckedSpots}
+    />
+  ));
+
+  existingSpotCustomizations.set('Favorited', (existingSpot: Spot) => (
+    <FavoritedExistingSpotExtension existingSpot={existingSpot} />
+  ));
 
   return (
     <div className='Home'>

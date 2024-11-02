@@ -6,16 +6,26 @@ import {
   PostSpotOutput,
   DeleteSpotInput,
   DeleteSpotOutput,
+  PostFavoriteInput,
+  PostFavoriteOutput,
+  DeleteFavoriteInput,
+  DeleteFavoriteOutput,
+  GetFavoritesInput,
+  GetFavoritesOutput,
 } from 'ww-3-models-tjb';
 import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
 import Ajv from 'ajv';
 import { useUserService } from './user_service';
+import { validate } from 'ww-3-api-tjb';
 
 export interface ISpotService {
   createSpot(input: PostSpotInput): Promise<PostSpotOutput>;
   getSpots(input: GetSpotsInput): Promise<GetSpotsOutput>;
   deleteSpot(input: DeleteSpotInput): Promise<DeleteSpotOutput>;
+  getFavorites(input: GetFavoritesInput): Promise<GetFavoritesOutput>;
+  postFavorite(input: PostFavoriteInput): Promise<PostFavoriteOutput>;
+  deleteFavorite(input: DeleteFavoriteInput): Promise<DeleteFavoriteOutput>;
 }
 
 export const SpotServiceContext = Contextualizer.createContext(ProvidedServices.SpotService);
@@ -80,6 +90,57 @@ const SpotService = ({ children }: any) => {
 
     async deleteSpot(input: DeleteSpotInput): Promise<DeleteSpotOutput> {
       await fetch(`${baseUrl}/spot`, {
+        method: 'DELETE',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer: ${await userService.getAccessToken()}`,
+        },
+        body: JSON.stringify({
+          ...input,
+        }),
+      });
+
+      return {};
+    },
+
+    async getFavorites(input: GetFavoritesInput): Promise<GetFavoritesOutput> {
+      input;
+
+      const result = await (
+        await fetch(`${baseUrl}/favorites`, {
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer: ${await userService.getAccessToken()}`,
+          },
+        })
+      ).json();
+
+      const validatedOutput = validate<GetFavoritesOutput>(_schema.GetFavoritesOutput, result);
+
+      return validatedOutput;
+    },
+
+    // TODO definitely gotta dry this fetch stuff out right?
+    async postFavorite(input: PostFavoriteInput): Promise<PostFavoriteOutput> {
+      await fetch(`${baseUrl}/favorite`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer: ${await userService.getAccessToken()}`,
+        },
+        body: JSON.stringify({
+          ...input,
+        }),
+      });
+
+      return {};
+    },
+
+    async deleteFavorite(input: DeleteFavoriteInput): Promise<DeleteFavoriteOutput> {
+      await fetch(`${baseUrl}/favorite`, {
         method: 'DELETE',
         mode: 'cors',
         headers: {
