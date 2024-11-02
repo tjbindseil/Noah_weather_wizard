@@ -23,11 +23,9 @@ export function SelectedSpot(props: SelectedSpotProps) {
       eventHandlers={{
         mouseover: () => {
           props.setHoveredSpotId(props.spotId);
-          console.log('onMouseEnter');
         },
         mouseout: () => {
           props.setHoveredSpotId(undefined);
-          console.log('onMouseLeave');
         },
       }}
       key={props.name}

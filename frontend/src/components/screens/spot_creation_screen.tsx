@@ -8,6 +8,7 @@ import { UserStatus } from '../user_status';
 import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { DeletableExistingSpotExtension } from '../existing_spots/deletable_existing_spot_extension';
+import { MapClickController } from '../map_stuff/map_click_controller';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
@@ -135,6 +136,10 @@ export function SpotCreationScreen() {
             setHoveredSpotId={setHoveredSpotId}
           />
         ))}
+        <MapClickController
+          saveSelectedSpot={saveSpotFunc}
+          color={LeafletMarkerColorOptions.Green}
+        />
       </MapContainerWrapper>
     </div>
   );
