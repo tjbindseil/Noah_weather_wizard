@@ -18,14 +18,9 @@ export function SpotCreationScreen() {
   const spotService = useSpotService();
   const mapService = useMapService();
 
-  const longsPeak = {
-    lat: 40.255014,
-    long: -105.615115,
-  };
-
-  const [lat, setLat] = useState(longsPeak.lat);
-  const [lng, setLng] = useState(longsPeak.long);
-  const [name, setName] = useState('Longs Peak');
+  const [lat, setLat] = useState(mapService.getCenterLat());
+  const [lng, setLng] = useState(mapService.getCenterLng());
+  const [name, setName] = useState('');
 
   const [desiredCenter, setDesiredCenter] = useState(
     new LatLng(mapService.getCenterLat(), mapService.getCenterLng()),
