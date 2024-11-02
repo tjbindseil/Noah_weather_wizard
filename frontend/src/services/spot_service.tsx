@@ -48,7 +48,7 @@ const SpotService = ({ children }: any) => {
           mode: 'cors',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer: ${userService.getAccessToken()}`,
+            Authorization: `Bearer: ${await userService.getAccessToken()}`,
           },
           body: JSON.stringify({
             ...postSpotInput,
@@ -84,7 +84,7 @@ const SpotService = ({ children }: any) => {
         mode: 'cors',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer: ${userService.getAccessToken()}`,
+          Authorization: `Bearer: ${await userService.getAccessToken()}`,
         },
         body: JSON.stringify({
           ...input,
