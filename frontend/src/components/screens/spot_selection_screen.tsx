@@ -3,7 +3,6 @@ import { NavBar } from '../nav_bar';
 import { SelectedSpot } from '../map_stuff/selected_spot';
 import { Spot } from 'ww-3-models-tjb';
 import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
-import { UserStatus } from '../user_status';
 import { Link, useNavigate } from 'react-router-dom';
 import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
 import { ExistingSpots } from '../existing_spots/existing_spots';
@@ -53,7 +52,6 @@ export function SpotSelectionScreen() {
   return (
     <div className='Home'>
       <NavBar />
-      <UserStatus />
       <p>Select spots for which you would like a forecast.</p>
       <p>
         To create new spots, use the <Link to={'/spot-creation'}> Spot Creation Page</Link>

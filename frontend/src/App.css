@@ -1,10 +1,37 @@
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+.root {
+  margin: 0;
+  height: 100%;
+}
+
 .App {
   text-align: center;
+  width: 100%;
+  min-height: 100%;
 }
 
 .NavBar {
-  display: inline-flex;
   list-style-type: none;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.NavBarButton {
+  height: 100%;
+  width: fit-content;
+  float: left;
+}
+
+.NavBarUser {
+  height: 100%;
+  width: fit-content;
+  float: right;
 }
 
 .App-logo {
@@ -40,4 +67,12 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.nav-bar-button {
+  float: left;
+}
+
+.nav-bar-user {
+  float: right;
 }

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSpotService } from '../services/spot_service';
 import { UserSignInStatus, useUserService } from '../services/user_service';
 
+// TODO UserStatus is a part of NavBar
 export function UserStatus() {
   const userService = useUserService();
 
