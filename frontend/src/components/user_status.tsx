@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSpotService } from '../services/spot_service';
 import { UserSignInStatus, useUserService } from '../services/user_service';
 
-// TODO UserStatus is a part of NavBar
 export function UserStatus() {
   const userService = useUserService();
 
@@ -55,6 +54,7 @@ function UserStatusDroppedDown({ setDroppedDown }: UserStatusDroppedDownProps) {
     <ul>
       <li>
         <button
+          className={'UserStatusDropDown'}
           onClick={async () => {
             const favoriteSpotIds = await spotService.getFavorites({});
             navigate('/forecast', {
@@ -66,21 +66,23 @@ function UserStatusDroppedDown({ setDroppedDown }: UserStatusDroppedDownProps) {
         </button>
       </li>
       <li>
-        <button onClick={() => userService.logout()}>
+        <button className={'UserStatusDropDown'} onClick={() => userService.logout()}>
           <Link reloadDocument to={'/'}>
             logout
           </Link>
         </button>
       </li>
       <li>
-        <button>
+        <button className={'UserStatusDropDown'}>
           <Link reloadDocument to={'/delete_user'}>
             Delete Account
           </Link>
         </button>
       </li>
       <li>
-        <button onClick={() => setDroppedDown(false)}>close</button>
+        <button className={'UserStatusDropDown'} onClick={() => setDroppedDown(false)}>
+          close
+        </button>
       </li>
     </ul>
   );

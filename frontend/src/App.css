@@ -34,6 +34,12 @@ html, body {
   height: 50px;
 }
 
+.UserStatusDropDown {
+  width: 100%;
+  z-index: 300;
+  position: relative;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
