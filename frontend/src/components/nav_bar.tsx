@@ -11,6 +11,8 @@ export function NavBar() {
     navigate(url);
   };
 
+  // TODO now, the drop down needs to be styled. It is cut off when it goes below the grid
+
   return (
     <div>
       <ul className='NavBar'>
