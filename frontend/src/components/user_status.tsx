@@ -23,15 +23,17 @@ export function UserStatus() {
   }, []);
 
   return (
-    <div className='UserStatus'>
+    <div style={{ height: '100%' }}>
       {droppedDown ? (
         <UserStatusDroppedDown setDroppedDown={setDroppedDown} />
       ) : localUserSignInStatus === UserSignInStatus.LOGGED_IN ? (
-        <button onClick={() => setDroppedDown(true)}>Welcome: {userService.getUsername()} </button>
+        <button style={{ height: '100%' }} onClick={() => setDroppedDown(true)}>
+          Welcome: {userService.getUsername()}{' '}
+        </button>
       ) : localUserSignInStatus === UserSignInStatus.LOADING ? (
         <p>LOADING USER</p>
       ) : (
-        <button>
+        <button style={{ height: '100%' }}>
           <Link reloadDocument to={'/login'}>
             Sign In/Up
           </Link>

@@ -19,12 +19,13 @@ export function NavBar() {
             <></>
           ) : (
             <div
-              className='NavBarButton'
+              className={'NavBarButton'}
               key={route.path.replace('/', '_')}
               style={{ float: 'left' }}
             >
               <li className={'NavBarButton'} key={route.path.replace('/', '_')}>
                 <button
+                  style={{ height: '100%' }}
                   key={route.path.replace('/', '_')}
                   onClick={() => {
                     go(route.path);
@@ -36,8 +37,8 @@ export function NavBar() {
             </div>
           ),
         )}
-        <div className='NavBarUser' style={{ float: 'right' }}>
-          <li>
+        <div className={'NavBarUser'} style={{ float: 'right' }}>
+          <li className={'NavBarUser'}>
             <UserStatus />
           </li>
         </div>
