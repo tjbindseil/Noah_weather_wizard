@@ -11,14 +11,19 @@ export function UserStatus() {
   // So, its hard to tell when the user context finishes initializing
   // In order to make sure things work, we will track the user status here and
   // refresh while its trying
-  const [localUserSignInStatus, setLocalUserSignInStatus] = useState(UserSignInStatus.LOADING);
+  const [localUserSignInStatus, setLocalUserSignInStatus] = useState(
+    userService.getUserSignInStatus(),
+  );
   useEffect(() => {
-    setTimeout(() => {
+    const to = setTimeout(() => {
       const newUserSignInStatus = userService.getUserSignInStatus();
       if (newUserSignInStatus !== localUserSignInStatus) {
         setLocalUserSignInStatus(newUserSignInStatus);
       }
     }, 200);
+    return () => {
+      clearTimeout(to);
+    };
   }, []);
 
   return (
@@ -27,8 +32,6 @@ export function UserStatus() {
         <UserStatusDroppedDown setDroppedDown={setDroppedDown} />
       ) : localUserSignInStatus === UserSignInStatus.LOGGED_IN ? (
         <button onClick={() => setDroppedDown(true)}>Welcome: {userService.getUsername()} </button>
-      ) : localUserSignInStatus === UserSignInStatus.LOADING ? (
-        <p>LOADING USER</p>
       ) : (
         <button>
           <Link reloadDocument to={'/login'}>

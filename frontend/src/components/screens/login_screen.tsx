@@ -23,7 +23,7 @@ export function LoginScreen() {
 
   // TODO UserStatus on these pages???
   return (
-    <div className='Screen'>
+    <div className='wrapper'>
       <NavBar />
       <p>Login screen</p>
       <label>enter username here:</label>

@@ -27,7 +27,7 @@ export function CreateUserScreen() {
   }, [username, password, email]);
 
   return (
-    <div className='Screen'>
+    <div className='wrapper'>
       <NavBar />
       <p>Create User screen</p>
       <label>enter username here:</label>

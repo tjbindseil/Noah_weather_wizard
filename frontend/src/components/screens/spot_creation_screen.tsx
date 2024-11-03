@@ -56,7 +56,7 @@ export function SpotCreationScreen() {
   });
 
   return (
-    <div className='Home'>
+    <div className='wrapper'>
       <NavBar />
       <p>Create and save spots here.</p>
       <p>

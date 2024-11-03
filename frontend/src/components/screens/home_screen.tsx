@@ -1,4 +1,3 @@
-import '../../Home.css';
 import { NavBar } from '../nav_bar';
 
 export function HomeScreen() {

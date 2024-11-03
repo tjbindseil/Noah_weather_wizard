@@ -1,6 +1,7 @@
+import './App.css';
+import './Grid.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { implicitScreens, navBarScreens } from './components/screens';
-import './App.css';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css'; // Re-uses images from ~leaflet package
 import 'leaflet-defaulticon-compatibility';

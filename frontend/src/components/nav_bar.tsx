@@ -12,17 +12,19 @@ export function NavBar() {
   };
 
   // TODO now, the drop down needs to be styled. It is cut off when it goes below the grid
-
+  // currentLocation.endsWith(route.path) ?
   return (
     <div>
       <ul className='NavBar'>
-        {navBarScreens.map((route) =>
-          currentLocation.endsWith(route.path) ? (
-            <></>
-          ) : (
+        {navBarScreens.map((route) => {
+          const bgColorStyle = currentLocation.endsWith(route.path)
+            ? { backgroundColor: 'white' }
+            : undefined;
+          return (
             <div className={'float-left'} key={route.path.replace('/', '_')}>
               <li key={route.path.replace('/', '_')}>
                 <button
+                  style={bgColorStyle}
                   key={route.path.replace('/', '_')}
                   onClick={() => {
                     go(route.path);
@@ -32,8 +34,8 @@ export function NavBar() {
                 </button>
               </li>
             </div>
-          ),
-        )}
+          );
+        })}
         <div className={'float-right'}>
           <li>
             <UserStatus />

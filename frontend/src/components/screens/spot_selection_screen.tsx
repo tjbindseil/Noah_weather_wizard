@@ -50,7 +50,7 @@ export function SpotSelectionScreen() {
   ));
 
   return (
-    <div className='Home'>
+    <div className='wrapper'>
       <NavBar />
       <p>Select spots for which you would like a forecast.</p>
       <p>
