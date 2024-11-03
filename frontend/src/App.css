@@ -22,16 +22,16 @@ html, body {
   padding: 0;
 }
 
-.NavBarButton {
-  height: 100%;
-  width: fit-content;
+.float-left {
   float: left;
 }
 
-.NavBarUser {
-  height: 100%;
-  width: fit-content;
+.float-right {
   float: right;
+}
+
+.NavBar p, .NavBar li, .NavBar button, .NavBar div {
+  height: 100%;
 }
 
 .App-logo {

@@ -18,14 +18,9 @@ export function NavBar() {
           currentLocation.endsWith(route.path) ? (
             <></>
           ) : (
-            <div
-              className={'NavBarButton'}
-              key={route.path.replace('/', '_')}
-              style={{ float: 'left' }}
-            >
-              <li className={'NavBarButton'} key={route.path.replace('/', '_')}>
+            <div className={'float-left'} key={route.path.replace('/', '_')}>
+              <li key={route.path.replace('/', '_')}>
                 <button
-                  style={{ height: '100%' }}
                   key={route.path.replace('/', '_')}
                   onClick={() => {
                     go(route.path);
@@ -37,8 +32,8 @@ export function NavBar() {
             </div>
           ),
         )}
-        <div className={'NavBarUser'} style={{ float: 'right' }}>
-          <li className={'NavBarUser'}>
+        <div className={'float-right'}>
+          <li>
             <UserStatus />
           </li>
         </div>
