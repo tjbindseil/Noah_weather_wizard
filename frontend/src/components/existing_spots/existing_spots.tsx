@@ -21,6 +21,8 @@ export const ExistingSpots = ({
   const makeExistingSpotRowId = (existingSpotId: number) => `existing_spot_id_${existingSpotId}`;
 
   useEffect(() => {
+    // interesting, causes difficulty scrolling
+    // maybe, on scroll, clear hovered spot
     if (hoveredSpotId) {
       const existingSpotRowId = makeExistingSpotRowId(hoveredSpotId);
       const existingSpotRowElement = document.getElementById(existingSpotRowId);

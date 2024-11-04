@@ -99,3 +99,7 @@ html, body {
   overflow-y: scroll;
   display: block;
 }
+
+.ExistingSpots tr, td {
+  height: 40px;
+}

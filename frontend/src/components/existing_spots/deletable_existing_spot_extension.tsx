@@ -13,13 +13,13 @@ export const CreatorExistingSpotExtension = ({
   const userService = useUserService();
 
   return (
-    <p>
+    <td>
       {existingSpot.creator}
       {userService.getUsername() === existingSpot.creator ? (
         <button onClick={() => removeSpotFunc({ id: existingSpot.id })}>Delete Spot</button>
       ) : (
         <></>
       )}
-    </p>
+    </td>
   );
 };
