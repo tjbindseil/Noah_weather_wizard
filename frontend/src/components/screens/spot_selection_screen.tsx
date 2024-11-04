@@ -1,16 +1,14 @@
 import { useState, useCallback } from 'react';
 import { NavBar } from '../nav_bar';
-import { SelectedSpot } from '../map_stuff/selected_spot';
 import { Spot } from 'ww-3-models-tjb';
-import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { Link, useNavigate } from 'react-router-dom';
-import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
 import { FavoritedExistingSpotExtension } from '../existing_spots/favorite_existing_spot_extension';
 import { LatLngInput } from '../lat_lng_input';
 import { LatLng } from 'leaflet';
 import { useMapService } from '../../services/map_service';
+import { MapContainerWrapper, LeafletMarkerColorOptions, SelectedSpot } from '../map_stuff';
 
 export function SpotSelectionScreen() {
   const navigate = useNavigate();

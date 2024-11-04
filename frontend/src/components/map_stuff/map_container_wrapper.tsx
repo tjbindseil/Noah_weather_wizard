@@ -1,11 +1,9 @@
 import { MapContainer, TileLayer } from 'react-leaflet';
 import { useRef } from 'react';
 import { useMapService } from '../../services/map_service';
-import { MapViewMonitor } from '../map_stuff/map_view_monitor';
-import { MapExistingSpotsMonitor } from '../map_stuff/map_existing_spots_monitor';
 import { Spot } from 'ww-3-models-tjb';
 import { LatLng } from 'leaflet';
-import { MapCenterController } from './map_center_controller';
+import { MapCenterController, MapViewMonitor, MapExistingSpotsMonitor } from './';
 
 export interface MapContainerWrapperProps {
   children: React.ReactNode;
@@ -23,12 +21,13 @@ export const MapContainerWrapper = ({
   const mapRef = useRef(null);
   const mapService = useMapService();
 
+  // TODO move this and all style to CSS
   return (
     <MapContainer
       center={new LatLng(mapService.getCenterLat(), mapService.getCenterLng())}
       zoom={mapService.getZoom()}
       ref={mapRef}
-      style={{ height: '50vh', width: '50vw' }}
+      style={{ height: '50vh', width: '100vw' }}
     >
       <TileLayer
         attribution={

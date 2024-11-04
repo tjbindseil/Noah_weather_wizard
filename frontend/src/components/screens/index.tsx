@@ -9,10 +9,10 @@ import { SpotSelectionScreen } from './spot_selection_screen';
 
 export const navBarScreens = [
   // TODO maybe screens could have their path and title as a static member?
-  { title: 'Home Page', path: '/', element: <HomeScreen /> },
-  { title: 'Spot Creation Page', path: '/spot-creation', element: <SpotCreationScreen /> },
-  { title: 'Spot Selection Page', path: '/spot-selection', element: <SpotSelectionScreen /> },
-  { title: 'Forecast Page', path: '/forecast', element: <ForecastScreen /> },
+  { title: 'Home', path: '/', element: <HomeScreen /> },
+  { title: 'Spot Creation', path: '/spot-creation', element: <SpotCreationScreen /> },
+  { title: 'Spot Selection', path: '/spot-selection', element: <SpotSelectionScreen /> },
+  { title: 'Forecast', path: '/forecast', element: <ForecastScreen /> },
 ];
 
 export const implicitScreens = [

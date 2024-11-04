@@ -1,17 +1,19 @@
 import React, { useState, useCallback } from 'react';
 import { NavBar } from '../nav_bar';
-import { SelectedSpot } from '../map_stuff/selected_spot';
 import { DeleteSpotInput, PostSpotInput, Spot } from 'ww-3-models-tjb';
-import { LeafletMarkerColorOptions } from '../map_stuff/marker_color';
 import { useSpotService } from '../../services/spot_service';
-import { MapContainerWrapper } from '../map_stuff/map_container_wrapper';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { DeletableExistingSpotExtension } from '../existing_spots/deletable_existing_spot_extension';
-import { MapClickController } from '../map_stuff/map_click_controller';
 import { Link } from 'react-router-dom';
 import { useMapService } from '../../services/map_service';
 import { LatLng } from 'leaflet';
 import { LatLngInput } from '../lat_lng_input';
+import {
+  MapContainerWrapper,
+  LeafletMarkerColorOptions,
+  MapClickController,
+  SelectedSpot,
+} from '../map_stuff';
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
