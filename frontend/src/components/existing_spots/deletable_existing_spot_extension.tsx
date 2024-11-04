@@ -1,20 +1,25 @@
 import { DeleteSpotInput, Spot } from 'ww-3-models-tjb';
 import { useUserService } from '../../services/user_service';
 
-export interface DeletableExistingSpotExtensionProps {
+export interface CreatorExistingSpotExtensionProps {
   existingSpot: Spot;
   removeSpotFunc: (arg: DeleteSpotInput) => void;
 }
 
-export const DeletableExistingSpotExtension = ({
+export const CreatorExistingSpotExtension = ({
   existingSpot,
   removeSpotFunc,
-}: DeletableExistingSpotExtensionProps) => {
+}: CreatorExistingSpotExtensionProps) => {
   const userService = useUserService();
 
-  if (userService.getUsername() === existingSpot.creator) {
-    return <button onClick={() => removeSpotFunc({ id: existingSpot.id })}>Delete Spot</button>;
-  } else {
-    return <></>;
-  }
+  return (
+    <p>
+      {existingSpot.creator}
+      {userService.getUsername() === existingSpot.creator ? (
+        <button onClick={() => removeSpotFunc({ id: existingSpot.id })}>Delete Spot</button>
+      ) : (
+        <></>
+      )}
+    </p>
+  );
 };
