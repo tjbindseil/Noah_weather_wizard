@@ -82,3 +82,13 @@ html, body {
 .nav-bar-user {
   float: right;
 }
+
+.ExistingSpots {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+.ExistingSpots table {
+  height: 100%;
+  overflow-y: scroll;
+}

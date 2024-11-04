@@ -57,56 +57,44 @@ export function SpotCreationScreen() {
     );
   });
 
+  // TODO - turn into an info thing
+  const title =
+    'Either select a point on the map to have the latitude and longitude autopopulate, or enter them in manually. Then, name your spot and save it. Once all your spots are created, check out the LINK(Spot Selection Page) to select the spots you would like to compare. <br /> Blue spots are spots that are already created, while a green spot is what is currently being created.';
+
   return (
     <div className='wrapper'>
       <NavBar />
-      <h2>Create Spots</h2>
-      <div>
-        <p>
-          Either select a point on the map to have the latitude and longitude autopopulate, or enter
-          them in manually. Then, name your spot and save it. Once all your spots are created, check
-          out the
-          <Link to={'/spot-selection'}> Spot Selection Page</Link> to select the spots you would
-          like to compare.
-          <br />
-          Blue spots are spots that are already created, while a green spot is what is currently
-          being created.
-        </p>
-        <br />
-      </div>
+      <h2 title={title}>Create Spots {'&#x1F6C8'}</h2>
 
       {
         //
         // so, i'd like to move this in to map wrapper thing
         // then, place it on the top right corner of the map
         //
+        // to do this, i need a
+        //
       }
 
-      <LatLngInput
-        lat={lat}
-        setLat={setLat}
-        lng={lng}
-        setLng={setLng}
-        name={name}
-        setName={setName}
-        setDesiredCenter={setDesiredCenter}
-      />
-
-      <button
-        onClick={async () => {
-          await saveSpotFunc({ latitude: lat, longitude: lng, name });
-        }}
-      >
-        Create Spot
-      </button>
-
-      <ExistingSpots
-        existingSpots={existingSpots}
-        hoveredSpotId={hoveredSpotId}
-        setHoveredSpotId={setHoveredSpotId}
-        customizations={spotCreationCustomizations}
-      />
-
+      {
+        //       <LatLngInput
+        //         lat={lat}
+        //         setLat={setLat}
+        //         lng={lng}
+        //         setLng={setLng}
+        //         name={name}
+        //         setName={setName}
+        //         setDesiredCenter={setDesiredCenter}
+        //       />
+        //
+        //       <button
+        //         onClick={async () => {
+        //           await saveSpotFunc({ latitude: lat, longitude: lng, name });
+        //         }}
+        //       >
+        //         Create Spot
+        //       </button>
+        //
+      }
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}
         toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
@@ -130,6 +118,13 @@ export function SpotCreationScreen() {
           color={LeafletMarkerColorOptions.Green}
         />
       </MapContainerWrapper>
+
+      <ExistingSpots
+        existingSpots={existingSpots}
+        hoveredSpotId={hoveredSpotId}
+        setHoveredSpotId={setHoveredSpotId}
+        customizations={spotCreationCustomizations}
+      />
     </div>
   );
 }

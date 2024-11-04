@@ -23,25 +23,27 @@ export const MapContainerWrapper = ({
 
   // TODO move this and all style to CSS
   return (
-    <MapContainer
-      center={new LatLng(mapService.getCenterLat(), mapService.getCenterLng())}
-      zoom={mapService.getZoom()}
-      ref={mapRef}
-      style={{ height: '50vh', width: '100vw' }}
-    >
-      <TileLayer
-        attribution={
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }
-        url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
-      />
-      <MapExistingSpotsMonitor
-        setExistingSpots={setExistingSpots}
-        toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
-      />
-      <MapViewMonitor />
-      <MapCenterController desiredCenter={desiredCenter} />
-      {children}
-    </MapContainer>
+    <div className='map'>
+      <MapContainer
+        center={new LatLng(mapService.getCenterLat(), mapService.getCenterLng())}
+        zoom={mapService.getZoom()}
+        ref={mapRef}
+        style={{ height: '50vh', width: '100vw' }}
+      >
+        <TileLayer
+          attribution={
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          }
+          url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
+        />
+        <MapExistingSpotsMonitor
+          setExistingSpots={setExistingSpots}
+          toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
+        />
+        <MapViewMonitor />
+        <MapCenterController desiredCenter={desiredCenter} />
+        {children}
+      </MapContainer>
+    </div>
   );
 };

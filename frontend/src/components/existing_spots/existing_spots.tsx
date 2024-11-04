@@ -18,8 +18,10 @@ export const ExistingSpots = ({
   const extraColumnNames = Array.from(customizations.keys());
 
   return (
-    <>
-      <h3>Existing Spots</h3>
+    <div className={'ExistingSpots'}>
+      <p style={{ margin: 2 }}>
+        <em>Existing Spots</em>
+      </p>
       <table>
         <ExistingSpotsHeader extraColumns={extraColumnNames} />
         <tbody>
@@ -49,6 +51,6 @@ export const ExistingSpots = ({
           })}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
