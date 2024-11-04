@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Spot } from 'ww-3-models-tjb';
 import { ExistingSpot } from './existing_spot';
 import { ExistingSpotsHeader } from './header';
@@ -17,6 +18,16 @@ export const ExistingSpots = ({
 }: ExistingSpotsProps) => {
   const extraColumnNames = Array.from(customizations.keys());
 
+  const makeExistingSpotRowId = (existingSpotId: number) => `existing_spot_id_${existingSpotId}`;
+
+  useEffect(() => {
+    if (hoveredSpotId) {
+      const existingSpotRowId = makeExistingSpotRowId(hoveredSpotId);
+      const existingSpotRowElement = document.getElementById(existingSpotRowId);
+      existingSpotRowElement?.scrollIntoView();
+    }
+  }, [hoveredSpotId]);
+
   return (
     <div className={'ExistingSpots'}>
       <p style={{ margin: 2 }}>
@@ -26,27 +37,27 @@ export const ExistingSpots = ({
         <ExistingSpotsHeader extraColumns={extraColumnNames} />
         <tbody>
           {existingSpots.map((existingSpot) => {
-            const style = existingSpot.id === hoveredSpotId ? { backgroundColor: 'yellow' } : {};
+            const style = existingSpot.id == hoveredSpotId ? { backgroundColor: 'yellow' } : {};
 
             const extraColumns = Array.from(customizations.values()).map((extensionFactory) =>
               extensionFactory(existingSpot),
             );
 
             return (
-              <>
-                <tr
-                  onMouseOver={() => {
-                    setHoveredSpotId(existingSpot.id);
-                  }}
-                  onMouseOut={() => {
-                    setHoveredSpotId(undefined);
-                  }}
-                  style={style}
-                >
-                  <ExistingSpot existingSpot={existingSpot} />
-                  {extraColumns}
-                </tr>
-              </>
+              <tr
+                key={existingSpot.id}
+                id={makeExistingSpotRowId(existingSpot.id)}
+                onMouseOver={() => {
+                  setHoveredSpotId(existingSpot.id);
+                }}
+                onMouseOut={() => {
+                  setHoveredSpotId(undefined);
+                }}
+                style={style}
+              >
+                <ExistingSpot existingSpot={existingSpot} />
+                {extraColumns}
+              </tr>
             );
           })}
         </tbody>
