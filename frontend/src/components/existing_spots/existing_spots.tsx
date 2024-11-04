@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Spot } from 'ww-3-models-tjb';
 import { ExistingSpot } from './existing_spot';
 import { ExistingSpotsHeader } from './header';
@@ -16,9 +16,30 @@ export const ExistingSpots = ({
   setHoveredSpotId,
   customizations,
 }: ExistingSpotsProps) => {
+  const tableRef = useRef<HTMLTableElement>(null);
+
   const extraColumnNames = Array.from(customizations.keys());
 
   const makeExistingSpotRowId = (existingSpotId: number) => `existing_spot_id_${existingSpotId}`;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      console.log('@@ @@ @@');
+      setHoveredSpotId(undefined);
+    };
+
+    if (tableRef.current) {
+      tableRef.current.addEventListener('scroll', handleScroll);
+    } else {
+      console.log('ELSE');
+    }
+
+    return () => {
+      if (tableRef.current) {
+        tableRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     // interesting, causes difficulty scrolling
@@ -35,7 +56,7 @@ export const ExistingSpots = ({
       <p style={{ margin: 2 }}>
         <em>Existing Spots</em>
       </p>
-      <table>
+      <table ref={tableRef}>
         <ExistingSpotsHeader extraColumns={extraColumnNames} />
         <tbody>
           {existingSpots.map((existingSpot) => {
