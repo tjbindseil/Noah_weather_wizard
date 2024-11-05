@@ -4,7 +4,6 @@ import { DeleteSpotInput, PostSpotInput, Spot } from 'ww-3-models-tjb';
 import { useSpotService } from '../../services/spot_service';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CreatorExistingSpotExtension } from '../existing_spots/deletable_existing_spot_extension';
-import { useMapService } from '../../services/map_service';
 import {
   MapContainerWrapper,
   LeafletMarkerColorOptions,
@@ -62,6 +61,7 @@ export function SpotCreationScreen() {
 
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}
+        saveSpotFunc={saveSpotFunc}
         toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
       >
         {existingSpots.map((existingSpot) => (

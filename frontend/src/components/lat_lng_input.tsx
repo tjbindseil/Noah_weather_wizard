@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { LatLng } from 'leaflet';
 import { useMapService } from '../services/map_service';
+import { PostSpotInput, PostSpotOutput } from 'ww-3-models-tjb';
 
 export interface LatLngInputProps {
   setDesiredCenter: (arg: LatLng) => void;
+
+  saveSpotFunc: (input: PostSpotInput) => Promise<PostSpotOutput>;
 }
 
-export const LatLngInput = ({ setDesiredCenter }: LatLngInputProps) => {
+export const LatLngInput = ({ setDesiredCenter, saveSpotFunc }: LatLngInputProps) => {
   const mapService = useMapService();
 
   const [lat, setLat] = useState(mapService.getCenterLat());
@@ -51,6 +54,14 @@ export const LatLngInput = ({ setDesiredCenter }: LatLngInputProps) => {
         }}
       >
         Center Map
+      </button>
+
+      <button
+        onClick={async () => {
+          await saveSpotFunc({ latitude: lat, longitude: lng, name });
+        }}
+      >
+        Create Spot
       </button>
     </>
   );

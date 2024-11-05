@@ -1,27 +1,17 @@
 import { useState, useCallback } from 'react';
 import { NavBar } from '../nav_bar';
-import { Spot } from 'ww-3-models-tjb';
+import { PostSpotInput, Spot } from 'ww-3-models-tjb';
 import { Link, useNavigate } from 'react-router-dom';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
 import { FavoritedExistingSpotExtension } from '../existing_spots/favorite_existing_spot_extension';
-import { LatLngInput } from '../lat_lng_input';
-import { LatLng } from 'leaflet';
-import { useMapService } from '../../services/map_service';
 import { MapContainerWrapper, LeafletMarkerColorOptions, SelectedSpot } from '../map_stuff';
 import { HoveredSpot } from './spot_creation_screen';
+import { useSpotService } from '../../services/spot_service';
 
 export function SpotSelectionScreen() {
   const navigate = useNavigate();
-  const mapService = useMapService();
-
-  const [lat, setLat] = useState(mapService.getCenterLat());
-  const [lng, setLng] = useState(mapService.getCenterLng());
-  const [name, setName] = useState('');
-
-  const [desiredCenter, setDesiredCenter] = useState(
-    new LatLng(mapService.getCenterLat(), mapService.getCenterLng()),
-  );
+  const spotService = useSpotService();
 
   const [checkedSpots, setCheckedSpots] = useState<number[]>([]);
 
@@ -34,6 +24,16 @@ export function SpotSelectionScreen() {
   }, [checkedSpots, navigate]);
 
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
+
+  const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
+  const saveSpotFunc = useCallback(
+    async (selectedSpot: PostSpotInput) => {
+      const ret = await spotService.createSpot(selectedSpot);
+      setToggleToRefreshExistingSpots(!toggleToRefreshExistingSpots);
+      return ret;
+    },
+    [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots, spotService],
+  );
 
   const existingSpotCustomizations = new Map<string, (existingSpot: Spot) => React.ReactNode>();
   existingSpotCustomizations.set('Checked', (existingSpot: Spot) => (
@@ -48,46 +48,19 @@ export function SpotSelectionScreen() {
     <FavoritedExistingSpotExtension existingSpot={existingSpot} />
   ));
 
+  const title =
+    'To create new spots, use the <Link to={/spot-creation}> Spot Creation Page</Link>' +
+    'Once all desired spots are selected, click the compare button to compare their forecasts. Blue spots are' +
+    'existing spots which are not selected for comparison, while green spots are selected for comparison.';
   return (
     <div className='wrapper'>
       <NavBar />
-      <p>Select spots for which you would like a forecast.</p>
-      <p>
-        To create new spots, use the <Link to={'/spot-creation'}> Spot Creation Page</Link>
-      </p>
-      <p>
-        Once all desired spots are selected, click the compare button to compare their forecasts.
-      </p>
-      <br />
-      <p>
-        Blue spots are existing spots which are not selected for comparison, while green spots are
-        selected for comparison.
-      </p>
-      <br />
-
-      <LatLngInput
-        lat={lat}
-        setLat={setLat}
-        lng={lng}
-        setLng={setLng}
-        name={name}
-        setName={setName}
-        setDesiredCenter={setDesiredCenter}
-      />
-
-      <ExistingSpots
-        existingSpots={existingSpots}
-        hoveredSpot={hoveredSpot}
-        setHoveredSpot={setHoveredSpot}
-        customizations={existingSpotCustomizations}
-      />
-
-      <button onClick={() => toForecastPage()}>Compare Forecasts</button>
+      <h2 title={title}>Select spots for which you would like a forecast.</h2>
 
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}
-        toggleToRefreshExistingSpots={true}
-        desiredCenter={desiredCenter}
+        saveSpotFunc={saveSpotFunc}
+        toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
       >
         {existingSpots.map((existingSpot) => (
           <SelectedSpot
@@ -107,6 +80,20 @@ export function SpotSelectionScreen() {
           />
         ))}
       </MapContainerWrapper>
+
+      <ExistingSpots
+        existingSpots={existingSpots}
+        hoveredSpot={hoveredSpot}
+        setHoveredSpot={setHoveredSpot}
+        customizations={existingSpotCustomizations}
+      />
+      <button onClick={() => toForecastPage()}>Compare Forecasts</button>
     </div>
   );
 }
+
+// this and spot creation are mighty similar
+// maybe:
+// * my spots
+// * search spots
+// * favorite spots
