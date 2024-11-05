@@ -1,24 +1,18 @@
+import { useState } from 'react';
 import { LatLng } from 'leaflet';
+import { useMapService } from '../services/map_service';
 
 export interface LatLngInputProps {
-  lat: number;
-  setLat: (arg: number) => void;
-  lng: number;
-  setLng: (arg: number) => void;
-  name: string;
-  setName: (arg: string) => void;
   setDesiredCenter: (arg: LatLng) => void;
 }
 
-export const LatLngInput = ({
-  lat,
-  lng,
-  setLat,
-  setLng,
-  name,
-  setName,
-  setDesiredCenter,
-}: LatLngInputProps) => {
+export const LatLngInput = ({ setDesiredCenter }: LatLngInputProps) => {
+  const mapService = useMapService();
+
+  const [lat, setLat] = useState(mapService.getCenterLat());
+  const [lng, setLng] = useState(mapService.getCenterLng());
+  const [name, setName] = useState('');
+
   return (
     <>
       <label htmlFor='latitude'>Latitude:</label>

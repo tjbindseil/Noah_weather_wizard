@@ -4,10 +4,7 @@ import { DeleteSpotInput, PostSpotInput, Spot } from 'ww-3-models-tjb';
 import { useSpotService } from '../../services/spot_service';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CreatorExistingSpotExtension } from '../existing_spots/deletable_existing_spot_extension';
-import { Link } from 'react-router-dom';
 import { useMapService } from '../../services/map_service';
-import { LatLng } from 'leaflet';
-import { LatLngInput } from '../lat_lng_input';
 import {
   MapContainerWrapper,
   LeafletMarkerColorOptions,
@@ -22,15 +19,6 @@ export interface HoveredSpot {
 
 export function SpotCreationScreen() {
   const spotService = useSpotService();
-  const mapService = useMapService();
-
-  const [lat, setLat] = useState(mapService.getCenterLat());
-  const [lng, setLng] = useState(mapService.getCenterLng());
-  const [name, setName] = useState('');
-
-  const [desiredCenter, setDesiredCenter] = useState(
-    new LatLng(mapService.getCenterLat(), mapService.getCenterLng()),
-  );
 
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
   const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
@@ -39,8 +27,9 @@ export function SpotCreationScreen() {
 
   const saveSpotFunc = useCallback(
     async (selectedSpot: PostSpotInput) => {
-      await spotService.createSpot(selectedSpot);
+      const ret = await spotService.createSpot(selectedSpot);
       setToggleToRefreshExistingSpots(!toggleToRefreshExistingSpots);
+      return ret;
     },
     [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots, spotService],
   );
@@ -71,39 +60,9 @@ export function SpotCreationScreen() {
       <NavBar />
       <h2 title={title}>Create Spots {'&#x1F6C8'}</h2>
 
-      {
-        //
-        // so, i'd like to move this in to map wrapper thing
-        // then, place it on the top right corner of the map
-        //
-        // to do this, i need a
-        //
-      }
-
-      {
-        //       <LatLngInput
-        //         lat={lat}
-        //         setLat={setLat}
-        //         lng={lng}
-        //         setLng={setLng}
-        //         name={name}
-        //         setName={setName}
-        //         setDesiredCenter={setDesiredCenter}
-        //       />
-        //
-        //       <button
-        //         onClick={async () => {
-        //           await saveSpotFunc({ latitude: lat, longitude: lng, name });
-        //         }}
-        //       >
-        //         Create Spot
-        //       </button>
-        //
-      }
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}
         toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
-        desiredCenter={desiredCenter}
       >
         {existingSpots.map((existingSpot) => (
           <SelectedSpot

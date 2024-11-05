@@ -1,25 +1,28 @@
 import { MapContainer, TileLayer } from 'react-leaflet';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useMapService } from '../../services/map_service';
 import { Spot } from 'ww-3-models-tjb';
 import { LatLng } from 'leaflet';
 import { MapCenterController, MapViewMonitor, MapExistingSpotsMonitor } from './';
+import { LatLngInput } from '../lat_lng_input';
 
 export interface MapContainerWrapperProps {
   children: React.ReactNode;
   setExistingSpots: (existingSpots: Spot[]) => void;
   toggleToRefreshExistingSpots: boolean;
-  desiredCenter: LatLng;
 }
 
 export const MapContainerWrapper = ({
   children,
   setExistingSpots,
   toggleToRefreshExistingSpots,
-  desiredCenter,
 }: MapContainerWrapperProps) => {
   const mapRef = useRef(null);
   const mapService = useMapService();
+
+  const [desiredCenter, setDesiredCenter] = useState(
+    new LatLng(mapService.getCenterLat(), mapService.getCenterLng()),
+  );
 
   // TODO move this and all style to CSS
   return (
@@ -43,6 +46,27 @@ export const MapContainerWrapper = ({
         <MapViewMonitor />
         <MapCenterController desiredCenter={desiredCenter} />
         {children}
+        <div
+          style={{
+            position: 'absolute',
+            width: '10vw',
+            height: '10vh',
+            top: 0,
+            right: 0,
+            zIndex: 10000,
+            backgroundColor: 'red',
+          }}
+        >
+          <LatLngInput setDesiredCenter={setDesiredCenter} />
+
+          <button
+            onClick={async () => {
+              const result = await saveSpotFunc({ latitude: lat, longitude: lng, name });
+            }}
+          >
+            Create Spot
+          </button>
+        </div>
       </MapContainer>
     </div>
   );
