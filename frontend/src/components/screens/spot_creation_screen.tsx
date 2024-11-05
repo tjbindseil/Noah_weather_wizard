@@ -15,6 +15,11 @@ import {
   SelectedSpot,
 } from '../map_stuff';
 
+export interface HoveredSpot {
+  spotId: number;
+  fromMap: boolean;
+}
+
 export function SpotCreationScreen() {
   const spotService = useSpotService();
   const mapService = useMapService();
@@ -30,7 +35,7 @@ export function SpotCreationScreen() {
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
   const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
 
-  const [hoveredSpotId, setHoveredSpotId] = useState<number | undefined>(undefined);
+  const [hoveredSpotId, setHoveredSpotId] = useState<HoveredSpot | undefined>(undefined);
 
   const saveSpotFunc = useCallback(
     async (selectedSpot: PostSpotInput) => {
@@ -109,8 +114,8 @@ export function SpotCreationScreen() {
             spotId={existingSpot.id}
             color={LeafletMarkerColorOptions.Blue}
             hoveredColor={LeafletMarkerColorOptions.Red}
-            hoveredSpotId={hoveredSpotId}
-            setHoveredSpotId={setHoveredSpotId}
+            hoveredSpot={hoveredSpotId}
+            setHoveredSpot={setHoveredSpotId}
           />
         ))}
         <MapClickController
@@ -121,8 +126,8 @@ export function SpotCreationScreen() {
 
       <ExistingSpots
         existingSpots={existingSpots}
-        hoveredSpotId={hoveredSpotId}
-        setHoveredSpotId={setHoveredSpotId}
+        hoveredSpot={hoveredSpotId}
+        setHoveredSpot={setHoveredSpotId}
         customizations={spotCreationCustomizations}
       />
     </div>

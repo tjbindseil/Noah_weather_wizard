@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
 import { Spot } from 'ww-3-models-tjb';
+import { HoveredSpot } from '../screens/spot_creation_screen';
 import { ExistingSpot } from './existing_spot';
 import { ExistingSpotsHeader } from './header';
 
 export interface ExistingSpotsProps {
   existingSpots: Spot[];
-  hoveredSpotId: number | undefined;
-  setHoveredSpotId: (arg: number | undefined) => void;
+  hoveredSpot: HoveredSpot | undefined;
+  setHoveredSpot: (arg: HoveredSpot | undefined) => void;
   customizations: Map<string, (existingSpot: Spot) => React.ReactNode>; // column name to factory
 }
 
 export const ExistingSpots = ({
   existingSpots,
-  hoveredSpotId,
-  setHoveredSpotId,
+  hoveredSpot,
+  setHoveredSpot,
   customizations,
 }: ExistingSpotsProps) => {
   const extraColumnNames = Array.from(customizations.keys());
@@ -21,14 +22,13 @@ export const ExistingSpots = ({
   const makeExistingSpotRowId = (existingSpotId: number) => `existing_spot_id_${existingSpotId}`;
 
   useEffect(() => {
-    // interesting, causes difficulty scrolling
-    // maybe, on scroll, clear hovered spot
-    if (hoveredSpotId) {
-      const existingSpotRowId = makeExistingSpotRowId(hoveredSpotId);
-      const existingSpotRowElement = document.getElementById(existingSpotRowId);
+    if (hoveredSpot && hoveredSpot.fromMap) {
+      const existingSpotRowElement = document.getElementById(
+        makeExistingSpotRowId(hoveredSpot.spotId),
+      );
       existingSpotRowElement?.scrollIntoView();
     }
-  }, [hoveredSpotId]);
+  }, [hoveredSpot]);
 
   return (
     <div className={'ExistingSpots'}>
@@ -39,7 +39,8 @@ export const ExistingSpots = ({
         <ExistingSpotsHeader extraColumns={extraColumnNames} />
         <tbody>
           {existingSpots.map((existingSpot) => {
-            const style = existingSpot.id == hoveredSpotId ? { backgroundColor: 'yellow' } : {};
+            const style =
+              existingSpot.id === hoveredSpot?.spotId ? { backgroundColor: 'yellow' } : {};
 
             const extraColumns = Array.from(customizations.values()).map((extensionFactory) =>
               extensionFactory(existingSpot),
@@ -50,10 +51,10 @@ export const ExistingSpots = ({
                 key={existingSpot.id}
                 id={makeExistingSpotRowId(existingSpot.id)}
                 onMouseOver={() => {
-                  setHoveredSpotId(existingSpot.id);
+                  setHoveredSpot({ spotId: existingSpot.id, fromMap: false });
                 }}
                 onMouseOut={() => {
-                  setHoveredSpotId(undefined);
+                  setHoveredSpot(undefined);
                 }}
                 style={style}
               >

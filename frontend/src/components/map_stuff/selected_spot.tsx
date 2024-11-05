@@ -1,4 +1,5 @@
 import { Marker, Popup } from 'react-leaflet';
+import { HoveredSpot } from '../screens/spot_creation_screen';
 import { LeafletMarkerColorOptions, makeColoredIcon } from './marker_color';
 
 export interface SelectedSpotProps {
@@ -8,13 +9,13 @@ export interface SelectedSpotProps {
   spotId: number;
   color: LeafletMarkerColorOptions;
   hoveredColor: LeafletMarkerColorOptions;
-  hoveredSpotId: number | undefined;
-  setHoveredSpotId: (arg: number | undefined) => void;
+  hoveredSpot: HoveredSpot | undefined;
+  setHoveredSpot: (arg: HoveredSpot | undefined) => void;
 }
 
 export function SelectedSpot(props: SelectedSpotProps) {
   const coloredIcon =
-    props.spotId === props.hoveredSpotId
+    props.spotId === props.hoveredSpot?.spotId
       ? makeColoredIcon(props.hoveredColor)
       : makeColoredIcon(props.color);
 
@@ -22,10 +23,10 @@ export function SelectedSpot(props: SelectedSpotProps) {
     <Marker
       eventHandlers={{
         mouseover: () => {
-          props.setHoveredSpotId(props.spotId);
+          props.setHoveredSpot({ spotId: props.spotId, fromMap: true });
         },
         mouseout: () => {
-          props.setHoveredSpotId(undefined);
+          props.setHoveredSpot(undefined);
         },
       }}
       key={props.name}

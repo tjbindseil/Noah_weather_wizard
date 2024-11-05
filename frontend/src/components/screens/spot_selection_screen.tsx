@@ -9,6 +9,7 @@ import { LatLngInput } from '../lat_lng_input';
 import { LatLng } from 'leaflet';
 import { useMapService } from '../../services/map_service';
 import { MapContainerWrapper, LeafletMarkerColorOptions, SelectedSpot } from '../map_stuff';
+import { HoveredSpot } from './spot_creation_screen';
 
 export function SpotSelectionScreen() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ export function SpotSelectionScreen() {
 
   // so, when the row is hovered, the spot on the map is hovered
   // and vice versa (when spot is hovered, row is hovered)
-  const [hoveredSpotId, setHoveredSpotId] = useState<number | undefined>(undefined);
+  const [hoveredSpot, setHoveredSpot] = useState<HoveredSpot | undefined>(undefined);
 
   const toForecastPage = useCallback(() => {
     navigate('/forecast', { state: { selectedSpots: [checkedSpots] } });
@@ -76,8 +77,8 @@ export function SpotSelectionScreen() {
 
       <ExistingSpots
         existingSpots={existingSpots}
-        hoveredSpotId={hoveredSpotId}
-        setHoveredSpotId={setHoveredSpotId}
+        hoveredSpot={hoveredSpot}
+        setHoveredSpot={setHoveredSpot}
         customizations={existingSpotCustomizations}
       />
 
@@ -101,8 +102,8 @@ export function SpotSelectionScreen() {
                 : LeafletMarkerColorOptions.Blue
             }
             hoveredColor={LeafletMarkerColorOptions.Red}
-            hoveredSpotId={hoveredSpotId}
-            setHoveredSpotId={setHoveredSpotId}
+            hoveredSpot={hoveredSpot}
+            setHoveredSpot={setHoveredSpot}
           />
         ))}
       </MapContainerWrapper>
