@@ -48,17 +48,7 @@ export const MapContainerWrapper = ({
         <MapViewMonitor />
         <MapCenterController desiredCenter={desiredCenter} />
         {children}
-        <div
-          style={{
-            position: 'absolute',
-            width: '10vw',
-            height: '10vh',
-            top: 0,
-            right: 0,
-            zIndex: 10000,
-            backgroundColor: 'red',
-          }}
-        >
+        <div onClick={() => console.log('latlong click handler')} className={'LatLngInput'}>
           <LatLngInput saveSpotFunc={saveSpotFunc} setDesiredCenter={setDesiredCenter} />
         </div>
       </MapContainer>

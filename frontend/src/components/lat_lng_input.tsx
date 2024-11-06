@@ -27,6 +27,7 @@ export const LatLngInput = ({ setDesiredCenter, saveSpotFunc }: LatLngInputProps
           setLat(parseFloat(event.target.value));
         }}
       />
+      <br />
 
       <label htmlFor='longitude'>Longitude:</label>
       <input
@@ -37,6 +38,7 @@ export const LatLngInput = ({ setDesiredCenter, saveSpotFunc }: LatLngInputProps
           setLng(parseFloat(event.target.value));
         }}
       />
+      <br />
 
       <label htmlFor='name'>Name:</label>
       <input
@@ -47,6 +49,7 @@ export const LatLngInput = ({ setDesiredCenter, saveSpotFunc }: LatLngInputProps
           setName(event.target.value);
         }}
       />
+      <br />
 
       <button
         onClick={async () => {
@@ -55,6 +58,7 @@ export const LatLngInput = ({ setDesiredCenter, saveSpotFunc }: LatLngInputProps
       >
         Center Map
       </button>
+      <br />
 
       <button
         onClick={async () => {
