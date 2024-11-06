@@ -29,6 +29,9 @@ export const MapContainerWrapper = ({
   // TODO move this and all style to CSS
   return (
     <div className='map'>
+      <div onClick={() => console.log('latlong click handler')} className={'LatLngInput'}>
+        <LatLngInput saveSpotFunc={saveSpotFunc} setDesiredCenter={setDesiredCenter} />
+      </div>
       <MapContainer
         center={new LatLng(mapService.getCenterLat(), mapService.getCenterLng())}
         zoom={mapService.getZoom()}
@@ -48,9 +51,6 @@ export const MapContainerWrapper = ({
         <MapViewMonitor />
         <MapCenterController desiredCenter={desiredCenter} />
         {children}
-        <div onClick={() => console.log('latlong click handler')} className={'LatLngInput'}>
-          <LatLngInput saveSpotFunc={saveSpotFunc} setDesiredCenter={setDesiredCenter} />
-        </div>
       </MapContainer>
     </div>
   );
