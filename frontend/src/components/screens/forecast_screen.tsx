@@ -52,8 +52,8 @@ export function ForecastScreen() {
         </table>
       ) : (
         <p>
-          Visit the <Link to={'/spot-selection-page'}>Spot Selection Page</Link> to choose some
-          spots and compare their forecasts!
+          Visit the <Link to={'/spot-selection'}>Spot Selection Page</Link> to choose some spots and
+          compare their forecasts!
         </p>
       )}
     </div>
