@@ -57,9 +57,7 @@ export function SpotCreationScreen() {
   return (
     <div className='MapWrapper'>
       <NavBar />
-      <h2 style={{ margin: 6 }} title={title}>
-        Create Spots {'&#x1F6C8'}
-      </h2>
+      <h2 title={title}>Create Spots {'&#x1F6C8'}</h2>
 
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}
