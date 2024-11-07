@@ -128,9 +128,12 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 * select favorites (small) - done
 * implement show favorites button in userstatus dropdown (small) - done
 * implement show (select?) favorites button in spot selection page (small)
-* page layout formatting (medium)
-  * propagate to login stuff
+* page layout formatting (medium) - done
+  * propagate to login stuff - done
 * center map button on spot creation page (small) - done
 * short, long, hourly forecast comparison screens (large)
+  * in order to do hourly, I will need to make changs to the background forecast fetcher,
+  and this stuff is really best done in AWS, so might as well start 
 
 ## Going live...
+* moved to `docs/going_live.md`
