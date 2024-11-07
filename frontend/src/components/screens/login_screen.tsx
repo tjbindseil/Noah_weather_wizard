@@ -27,7 +27,7 @@ export function LoginScreen() {
       <NavBar />
       <div>
         <p>Login screen</p>
-        <label>enter username here:</label>
+        <label>enter username here: </label>
         <input
           value={username}
           onChange={(e) => generalInputChangeHandler(e, setUsername)}
@@ -36,7 +36,7 @@ export function LoginScreen() {
         <br />
 
         <label>
-          enter password here <PasswordRequirements /> :
+          enter password here <PasswordRequirements />:{' '}
         </label>
         <input
           value={password}

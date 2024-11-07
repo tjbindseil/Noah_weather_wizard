@@ -10,6 +10,7 @@ import {
   MapClickController,
   SelectedSpot,
 } from '../map_stuff';
+import { Tooltip } from 'react-tooltip';
 
 export interface HoveredSpot {
   spotId: number;
@@ -50,14 +51,19 @@ export function SpotCreationScreen() {
     );
   });
 
-  // TODO - turn into an info thing
-  const title =
-    'Either select a point on the map to have the latitude and longitude autopopulate, or enter them in manually. Then, name your spot and save it. Once all your spots are created, check out the LINK(Spot Selection Page) to select the spots you would like to compare. <br /> Blue spots are spots that are already created, while a green spot is what is currently being created.';
+  const tooltipId = 'spot_creation_tooltip_id';
+  const toolTipContent =
+    '<p>Either select a point on the map to have the latitude and longitude autopopulate, or enter them in manually. Then, name your spot and save it. Once all your spots are created, check out the LINK(Spot Selection Page) to select the spots you would like to compare. <br /> Blue spots are spots that are already created, while a green spot is what is currently being created.</p>';
 
   return (
     <div className='MapWrapper'>
       <NavBar />
-      <h2 title={title}>Create Spots {'&#x1F6C8'}</h2>
+      <div style={{ zIndex: 200 }}>
+        <Tooltip id={tooltipId} />
+        <h2 data-tooltip-id={tooltipId} data-tooltip-html={toolTipContent}>
+          <a>Create Spots</a>
+        </h2>
+      </div>
 
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}

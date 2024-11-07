@@ -124,7 +124,7 @@ const SpotService = ({ children }: any) => {
 
     // TODO definitely gotta dry this fetch stuff out right?
     async postFavorite(input: PostFavoriteInput): Promise<PostFavoriteOutput> {
-      await fetch(`${baseUrl}/favorite`, {
+      const result = await fetch(`${baseUrl}/favorite`, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -136,11 +136,16 @@ const SpotService = ({ children }: any) => {
         }),
       });
 
+      console.log(`result is: ${result.status}`);
+
+      if (result.status !== 200) {
+        throw new Error();
+      }
       return {};
     },
 
     async deleteFavorite(input: DeleteFavoriteInput): Promise<DeleteFavoriteOutput> {
-      await fetch(`${baseUrl}/favorite`, {
+      const result = await fetch(`${baseUrl}/favorite`, {
         method: 'DELETE',
         mode: 'cors',
         headers: {
@@ -151,6 +156,12 @@ const SpotService = ({ children }: any) => {
           ...input,
         }),
       });
+
+      console.log(`result is: ${result.status}`);
+
+      if (result.status !== 200) {
+        throw new Error();
+      }
 
       return {};
     },

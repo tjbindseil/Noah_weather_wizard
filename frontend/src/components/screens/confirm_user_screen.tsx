@@ -25,7 +25,7 @@ export function ConfirmUserScreen() {
       <NavBar />
       <div>
         <p>Confirm User screen</p>
-        <label>enter username here:</label>
+        <label>enter username here: </label>
         <input
           value={username}
           onChange={(e) => generalInputChangeHandler(e, setUsername)}
@@ -33,7 +33,7 @@ export function ConfirmUserScreen() {
         ></input>
         <br />
 
-        <label>enter confirmationCode here:</label>
+        <label>enter confirmationCode here: </label>
         <input
           value={confirmationCode}
           onChange={(e) => generalInputChangeHandler(e, setConfirmationCode)}

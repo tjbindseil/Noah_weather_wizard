@@ -16,7 +16,11 @@ export const FavoritedExistingSpotExtension = ({
   useEffect(() => {
     spotService
       .getFavorites({})
-      .then((result) => setSelfManagedFavorites(result.favoriteSpots.map((spot) => spot.id)));
+      .then((result) => setSelfManagedFavorites(result.favoriteSpots.map((spot) => spot.id)))
+      .catch((e) => {
+        console.error(e);
+        setSelfManagedFavorites([]);
+      });
   }, [spotService, setSelfManagedFavorites]);
 
   const favorited = !!selfManagedFavorites.includes(existingSpot.id);
@@ -30,14 +34,23 @@ export const FavoritedExistingSpotExtension = ({
         checked={favorited}
         onChange={async () => {
           if (favorited) {
-            await spotService.deleteFavorite({ spotId: existingSpot.id });
-            const newFavorites = selfManagedFavorites.filter((id) => id !== existingSpot.id);
-            setSelfManagedFavorites(newFavorites);
+            try {
+              const result = await spotService.deleteFavorite({ spotId: existingSpot.id });
+              console.log(`result is: ${JSON.stringify(result)}`);
+              const newFavorites = selfManagedFavorites.filter((id) => id !== existingSpot.id);
+              setSelfManagedFavorites(newFavorites);
+            } catch (e: unknown) {
+              console.error(e);
+            }
           } else {
-            await spotService.postFavorite({ spotId: existingSpot.id });
-            const newFavorites = JSON.parse(JSON.stringify(selfManagedFavorites));
-            newFavorites.push(existingSpot.id);
-            setSelfManagedFavorites(newFavorites);
+            try {
+              await spotService.postFavorite({ spotId: existingSpot.id });
+              const newFavorites = JSON.parse(JSON.stringify(selfManagedFavorites));
+              newFavorites.push(existingSpot.id);
+              setSelfManagedFavorites(newFavorites);
+            } catch (e: unknown) {
+              console.error(e);
+            }
           }
         }}
       />

@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { NavBar } from '../nav_bar';
 import { PostSpotInput, Spot } from 'ww-3-models-tjb';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
 import { FavoritedExistingSpotExtension } from '../existing_spots/favorite_existing_spot_extension';
@@ -55,7 +55,7 @@ export function SpotSelectionScreen() {
   return (
     <div className='MapWrapper'>
       <NavBar />
-      <h2 title={title}>Select spots for which you would like a forecast.</h2>
+      <h2 title={title}>Select Spots</h2>
 
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}
@@ -91,9 +91,3 @@ export function SpotSelectionScreen() {
     </div>
   );
 }
-
-// this and spot creation are mighty similar
-// maybe:
-// * my spots
-// * search spots
-// * favorite spots

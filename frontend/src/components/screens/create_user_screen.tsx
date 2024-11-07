@@ -31,7 +31,7 @@ export function CreateUserScreen() {
       <NavBar />
       <div>
         <p>Create User screen</p>
-        <label>enter username here:</label>
+        <label>enter username here: </label>
         <input
           value={username}
           onChange={(e) => generalInputChangeHandler(e, setUsername)}
@@ -39,7 +39,7 @@ export function CreateUserScreen() {
         ></input>
         <br />
 
-        <label>enter Email here:</label>
+        <label>enter Email here: </label>
         <input
           value={email}
           onChange={(e) => generalInputChangeHandler(e, setEmail)}
@@ -47,7 +47,7 @@ export function CreateUserScreen() {
         ></input>
         <br />
         <label>
-          enter password here <PasswordRequirements /> :
+          enter password here <PasswordRequirements /> :{' '}
         </label>
 
         <input
