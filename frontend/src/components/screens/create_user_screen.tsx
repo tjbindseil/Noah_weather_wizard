@@ -27,32 +27,35 @@ export function CreateUserScreen() {
   }, [username, password, email]);
 
   return (
-    <div className='wrapper'>
+    <div className='LoginWrapper'>
       <NavBar />
-      <p>Create User screen</p>
-      <label>enter username here:</label>
-      <input
-        value={username}
-        onChange={(e) => generalInputChangeHandler(e, setUsername)}
-        type={'text'}
-      ></input>
-      <label>enter Email here:</label>
-      <input
-        value={email}
-        onChange={(e) => generalInputChangeHandler(e, setEmail)}
-        type={'text'}
-      ></input>
-      <PasswordRequirements />
-      <label>enter password here:</label>
-      <input
-        value={password}
-        onChange={(e) => generalInputChangeHandler(e, setPassword)}
-        type={'password'}
-      ></input>
-      <button onClick={() => createFunc()}>Create</button>
-      <p>
-        Existing User? Sign in here: <button onClick={() => go('/login')}>Sign In</button>
-      </p>
+      <div>
+        <p>Create User screen</p>
+        <label>enter username here:</label>
+        <input
+          value={username}
+          onChange={(e) => generalInputChangeHandler(e, setUsername)}
+          type={'text'}
+        ></input>
+        <br />
+        <label>enter Email here:</label>
+        <input
+          value={email}
+          onChange={(e) => generalInputChangeHandler(e, setEmail)}
+          type={'text'}
+        ></input>
+        <PasswordRequirements />
+        <label>enter password here:</label>
+        <input
+          value={password}
+          onChange={(e) => generalInputChangeHandler(e, setPassword)}
+          type={'password'}
+        ></input>
+        <button onClick={() => createFunc()}>Create</button>
+        <p>
+          Existing User? Sign in here: <button onClick={() => go('/login')}>Sign In</button>
+        </p>
+      </div>
     </div>
   );
 }

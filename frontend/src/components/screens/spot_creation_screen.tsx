@@ -55,7 +55,7 @@ export function SpotCreationScreen() {
     'Either select a point on the map to have the latitude and longitude autopopulate, or enter them in manually. Then, name your spot and save it. Once all your spots are created, check out the LINK(Spot Selection Page) to select the spots you would like to compare. <br /> Blue spots are spots that are already created, while a green spot is what is currently being created.';
 
   return (
-    <div className='wrapper'>
+    <div className='MapWrapper'>
       <NavBar />
       <h2 title={title}>Create Spots {'&#x1F6C8'}</h2>
 

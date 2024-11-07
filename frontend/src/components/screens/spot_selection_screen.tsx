@@ -53,7 +53,7 @@ export function SpotSelectionScreen() {
     'Once all desired spots are selected, click the compare button to compare their forecasts. Blue spots are' +
     'existing spots which are not selected for comparison, while green spots are selected for comparison.';
   return (
-    <div className='wrapper'>
+    <div className='MapWrapper'>
       <NavBar />
       <h2 title={title}>Select spots for which you would like a forecast.</h2>
 

@@ -32,9 +32,7 @@ export const ExistingSpots = ({
 
   return (
     <div className={'ExistingSpots'}>
-      <p style={{ margin: 2 }}>
-        <em>Existing Spots</em>
-      </p>
+      <h4 style={{ margin: 4 }}>Existing Spots</h4>
       <table>
         <ExistingSpotsHeader extraColumns={extraColumnNames} />
         <tbody>

@@ -58,7 +58,6 @@ export const LatLngInput = ({ setDesiredCenter, saveSpotFunc }: LatLngInputProps
       >
         Center Map
       </button>
-      <br />
 
       <button
         onClick={async () => {

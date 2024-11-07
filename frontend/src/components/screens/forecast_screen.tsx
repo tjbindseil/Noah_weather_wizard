@@ -41,7 +41,7 @@ export function ForecastScreen() {
   // Also, would a similar strategy solve the ordering of the map thing?
 
   return (
-    <div className='wrapper'>
+    <div className='MapWrapper'>
       <NavBar />
       <p>See the forecast here!</p>
       <table>

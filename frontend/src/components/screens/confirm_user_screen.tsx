@@ -21,7 +21,7 @@ export function ConfirmUserScreen() {
   }, [username, confirmationCode]);
 
   return (
-    <div className='wrapper'>
+    <div className='LoginWrapper'>
       <NavBar />
       <p>Confirm User screen</p>
       <label>enter username here:</label>

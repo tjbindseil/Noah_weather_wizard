@@ -36,7 +36,7 @@ html, body {
 
 .UserStatusDropDown {
   width: 100%;
-  z-index: 300;
+  z-index: 3000;
   position: relative;
 }
 
@@ -109,9 +109,8 @@ html, body {
   width: fit-content;
   height: fit-content;
   right: 0;
-  z-index: 10000;
+  z-index: 1000;
   background-color: red;
   grid-row: 3 / 4;
   grid-column: 1 / 2;
 }
-

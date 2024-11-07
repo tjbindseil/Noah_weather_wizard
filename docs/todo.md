@@ -129,5 +129,8 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 * implement show favorites button in userstatus dropdown (small) - done
 * implement show (select?) favorites button in spot selection page (small)
 * page layout formatting (medium)
-* center map button on spot creation page (small)
+  * propagate to login stuff
+* center map button on spot creation page (small) - done
 * short, long, hourly forecast comparison screens (large)
+
+## Going live...
