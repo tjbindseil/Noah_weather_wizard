@@ -9,6 +9,7 @@ import {
     PostRefresh,
     PostUser,
 } from './handlers';
+import { PostNewConfirmationCode } from './handlers/post_new_confirmation_code';
 
 const app: Express = express();
 
@@ -39,6 +40,17 @@ app.post('/refresh', (req: Request, res: Response, next: NextFunction) => {
 app.delete('/user', (req: Request, res: Response, next: NextFunction) => {
     new DeleteUser().call(req, res, next, unusedContextController);
 });
+app.post(
+    '/new-confirmation-code',
+    (req: Request, res: Response, next: NextFunction) => {
+        new PostNewConfirmationCode().call(
+            req,
+            res,
+            next,
+            unusedContextController
+        );
+    }
+);
 
 app.use(myErrorHandler);
 

@@ -62,5 +62,9 @@ export {
     PostForecastRefreshInput,
     PostForecastRefreshOutput,
 } from './forecast_service_models/post_forecast_refresh';
+export {
+    PostNewConfirmationCodeInput,
+    PostNewConfirmationCodeOutput,
+} from './user_service/post_new_confirmation_code';
 import _schema from './schema_validation/_schema';
 export { _schema };

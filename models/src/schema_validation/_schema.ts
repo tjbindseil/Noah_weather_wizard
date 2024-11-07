@@ -771,6 +771,12 @@ const schema = {
             required: ['spotId'],
         },
         PostForecastRefreshOutput: { type: 'object' },
+        PostNewConfirmationCodeInput: {
+            type: 'object',
+            properties: { username: { type: 'string' } },
+            required: ['username'],
+        },
+        PostNewConfirmationCodeOutput: { type: 'object' },
     },
 } as const;
 export default schema.definitions;

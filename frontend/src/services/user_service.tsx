@@ -2,6 +2,8 @@ import {
   PostAuthInput,
   PostAuthOutput,
   PostConfirmationInput,
+  PostNewConfirmationCodeInput,
+  PostNewConfirmationCodeOutput,
   PostRefreshOutput,
   PostUserInput,
   _schema,
@@ -29,6 +31,9 @@ export interface IUserService {
   getUsername(): string | undefined;
   logout(): void;
   getAccessToken(): Promise<string>;
+  getNewRefreshCode: (
+    input: PostNewConfirmationCodeInput,
+  ) => Promise<PostNewConfirmationCodeOutput>;
 }
 
 export const UserServiceContext = Contextualizer.createContext(ProvidedServices.UserService);
@@ -225,6 +230,21 @@ const UserService = ({ children }: any) => {
         }
       }
       return tokenStorageObject.getAccessToken();
+    },
+
+    async getNewRefreshCode(input: PostNewConfirmationCodeInput) {
+      await (
+        await fetch(`${baseUrl}/new-confirmation-code`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...input,
+          }),
+        })
+      ).json();
+
+      return {};
     },
   } as UserServiceImpl;
 

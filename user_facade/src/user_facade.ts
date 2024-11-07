@@ -5,6 +5,7 @@ import {
     ConfirmSignUpCommand,
     DeleteUserCommand,
     InitiateAuthCommand,
+    ResendConfirmationCodeCommand,
     SignUpCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { APIError } from 'ww-3-api-tjb';
@@ -116,4 +117,13 @@ export const deleteUser = async (token: string) => {
     });
 
     await client.send(deleteCommand);
+};
+
+export const getNewRefreshCode = async (username: string) => {
+    const newRefreshCodeCommand = new ResendConfirmationCodeCommand({
+        ClientId: clientId,
+        Username: username,
+    });
+
+    await client.send(newRefreshCodeCommand);
 };

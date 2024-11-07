@@ -4,4 +4,5 @@ export {
     confirmUser,
     refreshUser,
     deleteUser,
+    getNewRefreshCode,
 } from './user_facade';

@@ -23,24 +23,33 @@ export function ConfirmUserScreen() {
   return (
     <div className='LoginWrapper'>
       <NavBar />
-      <p>Confirm User screen</p>
-      <label>enter username here:</label>
-      <input
-        value={username}
-        onChange={(e) => generalInputChangeHandler(e, setUsername)}
-        type={'text'}
-      ></input>
-      <label>enter confirmationCode here:</label>
-      <input
-        value={confirmationCode}
-        onChange={(e) => generalInputChangeHandler(e, setConfirmationCode)}
-        type={'text'}
-      ></input>
-      <button onClick={() => confirmFunc()}>Confirm</button>
-      <p>
-        New User? Create account here: <button onClick={() => go('/create_user')}>Sign Up</button>
-      </p>
-      <p>(NOT DONE YET) Need a new code? click here:</p>
+      <div>
+        <p>Confirm User screen</p>
+        <label>enter username here:</label>
+        <input
+          value={username}
+          onChange={(e) => generalInputChangeHandler(e, setUsername)}
+          type={'text'}
+        ></input>
+        <br />
+
+        <label>enter confirmationCode here:</label>
+        <input
+          value={confirmationCode}
+          onChange={(e) => generalInputChangeHandler(e, setConfirmationCode)}
+          type={'text'}
+        ></input>
+        <br />
+
+        <button onClick={() => confirmFunc()}>Confirm</button>
+        <p>
+          New User? Create account here: <button onClick={() => go('/create_user')}>Sign Up</button>
+        </p>
+        <p>
+          Need a new code? Enter the username and then{' '}
+          <button onClick={() => userService.getNewRefreshCode({ username })}>Click Here</button>
+        </p>
+      </div>
     </div>
   );
 }
