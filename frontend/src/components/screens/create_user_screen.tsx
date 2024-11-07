@@ -38,14 +38,18 @@ export function CreateUserScreen() {
           type={'text'}
         ></input>
         <br />
+
         <label>enter Email here:</label>
         <input
           value={email}
           onChange={(e) => generalInputChangeHandler(e, setEmail)}
           type={'text'}
         ></input>
-        <PasswordRequirements />
-        <label>enter password here:</label>
+        <br />
+        <label>
+          enter password here <PasswordRequirements /> :
+        </label>
+
         <input
           value={password}
           onChange={(e) => generalInputChangeHandler(e, setPassword)}
@@ -59,16 +63,3 @@ export function CreateUserScreen() {
     </div>
   );
 }
-
-// import { NavBar } from '../nav_bar';
-//
-// export function CreateUserScreen() {
-//   return (
-//     <div className='Screen'>
-//       <NavBar />
-//       <p>Enter username here:</p>
-//       <p>Enter password here:</p>
-//       <p>Existing User? Sign in here:</p>
-//     </div>
-//   );
-// }

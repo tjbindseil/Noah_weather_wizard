@@ -25,24 +25,29 @@ export function LoginScreen() {
   return (
     <div className='LoginWrapper'>
       <NavBar />
-      <p>Login screen</p>
-      <label>enter username here:</label>
-      <input
-        value={username}
-        onChange={(e) => generalInputChangeHandler(e, setUsername)}
-        type={'text'}
-      ></input>
-      <PasswordRequirements />
-      <label>enter password here:</label>
-      <input
-        value={password}
-        onChange={(e) => generalInputChangeHandler(e, setPassword)}
-        type={'password'}
-      ></input>
-      <button onClick={() => loginFunc()}>Login</button>
-      <p>
-        New User? Create account here: <button onClick={() => go('/create_user')}>Sign Up</button>
-      </p>
+      <div>
+        <p>Login screen</p>
+        <label>enter username here:</label>
+        <input
+          value={username}
+          onChange={(e) => generalInputChangeHandler(e, setUsername)}
+          type={'text'}
+        ></input>
+        <br />
+
+        <label>
+          enter password here <PasswordRequirements /> :
+        </label>
+        <input
+          value={password}
+          onChange={(e) => generalInputChangeHandler(e, setPassword)}
+          type={'password'}
+        ></input>
+        <button onClick={() => loginFunc()}>Login</button>
+        <p>
+          New User? Create account here: <button onClick={() => go('/create_user')}>Sign Up</button>
+        </p>
+      </div>
     </div>
   );
 }
