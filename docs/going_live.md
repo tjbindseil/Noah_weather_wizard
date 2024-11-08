@@ -44,3 +44,26 @@
       * in the worst case, if a malicious user hacks the db it wouldn't be that bad, there is no user info, just forecasts, spots, and favorites
       * a malicious user could add bad data or remove data
       * this is mitigated by occasionally taking a snapshot
+
+## curve ball
+why not lambdas?
+
+pros:
+* 1 mil free requests per month
+* my weather app is very much a crud app
+* I've done it before and know how to do it
+
+cons:
+* have to rewrite a bit
+  * all my code is centered around full running services
+  * all my integ tests are this way too
+  * it seems possible via [aws sam](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-using-invoke.html)
+
+### another idea
+just run the services on the ec2 instance
+
+This will be pretty fast and pretty easy and would match whats going on on my laptop pretty well
+
+what happens when it crashes? - idk, maybe a script or something
+i think the same could be asked about ECS/Docker/Fargate
+not sure what happens if lambda fails
