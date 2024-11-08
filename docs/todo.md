@@ -122,6 +122,7 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 * on a four hour interval, fetch forecast hourly for each polygon
 * wire up forecast hourly provider (just the one that gets them all, not filter or sort)
 * forecast hourly comparison page
+* I think that i can now safely assume that geometry is static
 
 
 ## latest and greatest todos

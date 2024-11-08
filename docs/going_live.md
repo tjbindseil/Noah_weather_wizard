@@ -20,9 +20,13 @@
 
 ## Tracking in order to ultimately CDK this thing
 * making one RDS
+* honestly, would this be easier to just use CDK?
 
 ### DB subnet group
-* TODO continue here because I don't know what the subnet is gonna be
+* needs:
+  * private subnet for RDS
+  * public subnet with firewall for dockers
+  * connection between public and private subnets so that dockers can read and write to the RDS
 
 ## RDS
 * aurora vs rds?
