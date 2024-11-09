@@ -1,6 +1,4 @@
-import { get_app_config } from 'ww-3-app-config-tjb';
 import { Client } from 'ts-postgres';
-import { createPool } from 'generic-pool';
 import { Spot } from 'ww-3-models-tjb';
 import {
     deleteSpot,
@@ -15,6 +13,8 @@ import {
     getFavoritesByUsername,
     insertFavorite,
 } from '../../../src/db/favorite_db';
+import { getPgClientPool } from '../../../src';
+import { Pool } from 'generic-pool';
 
 // these tests will actually interface with a pg database on my local machine
 // see src/db/index.ts for a command to make the database
@@ -23,27 +23,7 @@ type PostedSpot = Omit<Spot, 'id'>;
 
 describe('dbo tests', () => {
     let pgClient: Client;
-    const pool = createPool(
-        {
-            create: async () => {
-                const client = new Client(
-                    get_app_config().spotDbConnectionConfig
-                );
-                await client.connect();
-                client.on('error', console.log);
-                return client;
-            },
-            destroy: async (client: Client) => client.end(),
-            validate: (client: Client) => {
-                return Promise.resolve(!client.closed);
-            },
-        },
-        {
-            testOnBorrow: true,
-            max: 1,
-            min: 1,
-        }
-    );
+    let pool: Pool<Client>;
 
     const ogCreator = 'OG_CREATOR';
     const otherCreator = 'OTHER_CREATOR';
@@ -93,6 +73,7 @@ describe('dbo tests', () => {
     const spotIds: number[] = [];
 
     beforeAll(async () => {
+        pool = await getPgClientPool();
         pgClient = await pool.acquire();
 
         const spots = await getAllSpots(pgClient);
