@@ -24,7 +24,7 @@ import { Client } from 'ts-postgres';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { makeTables } from './db';
 
-export const getSecretValue = async (secretName: string) => {
+const getSecretValue = async (secretName: string) => {
     const client = new SecretsManagerClient();
     const response = await client.send(
         new GetSecretValueCommand({
@@ -42,24 +42,27 @@ export const getSecretValue = async (secretName: string) => {
     }
 };
 
-const ONLY_CURRENT_SECRET =
-    'arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7';
-export const initializeTables = async (secretName = ONLY_CURRENT_SECRET) => {
-    const secretValue = JSON.parse(
-        (await getSecretValue(secretName)) as string
-    );
-
+export const getPgClientPool = async () => {
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    let authorizedDBConnectionConfig: any;
     const dbConnectionConfig = get_app_config().spotDbConnectionConfig;
-    const authorizedDBConnectionConfig = {
-        ...dbConnectionConfig,
-        database: secretValue.dbname,
-        host: secretValue.host,
-        port: secretValue.port,
-        user: secretValue.username,
-        password: secretValue.password,
-    };
+    if (dbConnectionConfig.secret) {
+        const secretValue = JSON.parse(
+            (await getSecretValue(dbConnectionConfig.secret)) as string
+        );
+        authorizedDBConnectionConfig = {
+            ...dbConnectionConfig,
+            database: secretValue.dbname,
+            host: secretValue.host,
+            port: secretValue.port,
+            user: secretValue.username,
+            password: secretValue.password,
+        };
+    } else {
+        authorizedDBConnectionConfig = dbConnectionConfig;
+    }
 
-    const pool = createPool(
+    return createPool(
         {
             create: async () => {
                 const client = new Client(authorizedDBConnectionConfig);
@@ -78,7 +81,10 @@ export const initializeTables = async (secretName = ONLY_CURRENT_SECRET) => {
             min: 1,
         }
     );
+};
 
+export const initializeTables = async () => {
+    const pool = await getPgClientPool();
     const pgClient = await pool.acquire();
 
     await makeTables(pgClient);

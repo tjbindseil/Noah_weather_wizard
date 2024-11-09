@@ -14,6 +14,8 @@ export interface AppConfig {
     spotServiceHost: string;
     spotServicePort: number;
     spotDbConnectionConfig: {
+        // in the case of a secret, the database,host,port,user,password will be coming from the secret
+        secret?: string;
         database: string;
         host: string;
         port: number;
@@ -122,9 +124,10 @@ const prodAppConfig: AppConfig = {
     spotServiceHost: 'localhost',
     spotServicePort: 8080,
     spotDbConnectionConfig: {
-        database: 'ww-prod',
-        host: 'localhost',
-        port: 5469,
+        secret: 'arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7',
+        database: '',
+        host: '',
+        port: 0,
         user: '',
         password: '',
         ssl: SSLMode.Disable,

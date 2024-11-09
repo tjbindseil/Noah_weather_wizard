@@ -12,9 +12,7 @@ import {
     DeleteFavorite,
 } from './handlers';
 import { get_app_config } from 'ww-3-app-config-tjb';
-import { Client } from 'ts-postgres';
-import { createPool } from 'generic-pool';
-import { S3Adapter } from 'ww-3-utilities-tjb';
+import { getPgClientPool, S3Adapter } from 'ww-3-utilities-tjb';
 
 const app: Express = express();
 
@@ -34,47 +32,35 @@ const s3Client = new S3Client({
 });
 const s3Adapter = new S3Adapter(s3Client, bucketName);
 
-const pool = createPool(
-    {
-        create: async () => {
-            const client = new Client(get_app_config().spotDbConnectionConfig);
-            await client.connect();
-            client.on('error', console.log);
-            return client;
-        },
-        destroy: async (client: Client) => client.end(),
-        validate: (client: Client) => {
-            return Promise.resolve(!client.closed);
-        },
-    },
-    {
-        testOnBorrow: true,
-        max: 10,
-        min: 2,
-    }
-);
-const pgContextController = new PGContextController(pool);
+export const createServer = async (): Promise<http.Server> => {
+    const pool = await getPgClientPool();
 
-app.get('/spots', (req: Request, res: Response, next: NextFunction) => {
-    new GetSpots().call(req, res, next, pgContextController);
-});
-app.post('/spot', (req: Request, res: Response, next: NextFunction) => {
-    new PostSpot(s3Adapter).call(req, res, next, pgContextController);
-});
-app.delete('/spot', (req: Request, res: Response, next: NextFunction) => {
-    new DeleteSpot().call(req, res, next, pool);
-});
+    const pgContextController = new PGContextController(pool);
 
-app.post('/favorite', (req: Request, res: Response, next: NextFunction) => {
-    new PostFavorite().call(req, res, next, pgContextController);
-});
-app.get('/favorites', (req: Request, res: Response, next: NextFunction) => {
-    new GetFavorites().call(req, res, next, pgContextController);
-});
-app.delete('/favorite', (req: Request, res: Response, next: NextFunction) => {
-    new DeleteFavorite().call(req, res, next, pgContextController);
-});
+    app.get('/spots', (req: Request, res: Response, next: NextFunction) => {
+        new GetSpots().call(req, res, next, pgContextController);
+    });
+    app.post('/spot', (req: Request, res: Response, next: NextFunction) => {
+        new PostSpot(s3Adapter).call(req, res, next, pgContextController);
+    });
+    app.delete('/spot', (req: Request, res: Response, next: NextFunction) => {
+        new DeleteSpot().call(req, res, next, pool);
+    });
 
-app.use(myErrorHandler);
+    app.post('/favorite', (req: Request, res: Response, next: NextFunction) => {
+        new PostFavorite().call(req, res, next, pgContextController);
+    });
+    app.get('/favorites', (req: Request, res: Response, next: NextFunction) => {
+        new GetFavorites().call(req, res, next, pgContextController);
+    });
+    app.delete(
+        '/favorite',
+        (req: Request, res: Response, next: NextFunction) => {
+            new DeleteFavorite().call(req, res, next, pgContextController);
+        }
+    );
 
-export const server: http.Server = http.createServer(app);
+    app.use(myErrorHandler);
+
+    return http.createServer(app);
+};

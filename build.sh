@@ -60,3 +60,14 @@ node -e 'require("./build/src/index.js").getSecretValue("arn:aws:secretsmanager:
 
 # actually, utilities module should do this as a package.json script
 # psql -U postgres -h cdkappstack-dbinstance310a317f-rxjhpgv1cvhn.cqwvcmqmveqv.us-east-1.rds.amazonaws.com -d 
+
+********************************* note to self *********************************:
+still working through the above
+node -e 'require("./build/src/index.js").initializeTables("arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7")'
+is mad that env var is not set
+which reminds me that i need to do some thign in app config to make it work
+then
+  db will work
+then its time to do integ tests, which will probably work (after giving permissions for ec2 to call cognito)
+then set up routing (using app_config and updating cdk as we go)
+getting frontend on laptop t owork tih it

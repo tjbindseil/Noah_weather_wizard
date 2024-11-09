@@ -54,4 +54,6 @@ app.post(
 
 app.use(myErrorHandler);
 
+// this is less involved than spot and forecast service because
+// it does not need to asynchronously get connection info (no db usage)
 export const server: http.Server = http.createServer(app);
