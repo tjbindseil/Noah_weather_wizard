@@ -35,7 +35,7 @@
 # 2. adjust tests st they call cloud db
 # 3. get tests to use secret manager
 
-set -o vi
+
 sudo install git
 git clone https://github.com/tjbindseil/Noah_weather_wizard.git
 
