@@ -58,7 +58,7 @@ export class CdkAppStack extends cdk.Stack {
             assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
             managedPolicies: [
                 iam.ManagedPolicy.fromAwsManagedPolicyName(
-                    'AmazonS3ReadOnlyAccess'
+                    'AmazonS3FullAccess'
                 ),
             ],
         });
