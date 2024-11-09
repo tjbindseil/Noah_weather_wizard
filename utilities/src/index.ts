@@ -31,7 +31,7 @@ const getSecretValue = async (secretName: string) => {
             SecretId: secretName,
         })
     );
-    console.log(response);
+    // console.log(response);
 
     if (response.SecretString) {
         return response.SecretString;

@@ -67,7 +67,7 @@ node -e 'require("./build/src/index.js").initializeTables("arn:aws:secretsmanage
 is mad that env var is not set
 which reminds me that i need to do some thign in app config to make it work
 then
-  db will work
+  db will work <-- here
 then its time to do integ tests, which will probably work (after giving permissions for ec2 to call cognito)
 then set up routing (using app_config and updating cdk as we go)
 getting frontend on laptop t owork tih it
