@@ -16,14 +16,15 @@
     "author": "TJB",
     "license": "ISC",
     "dependencies": {
-        "ajv": "^8.12.0",
         "@aws-sdk/client-s3": "^3.454.0",
-        "ww-3-api-tjb": "file:../api",
-        "ww-3-app-config-tjb": "file:../app_config",
-        "ww-3-models-tjb": "file:../models",
+        "@aws-sdk/client-secrets-manager": "^3.687.0",
+        "ajv": "^8.12.0",
         "generic-pool": "^3.9.0",
         "pg": "^8.10.0",
-        "ts-postgres": "^1.8.0"
+        "ts-postgres": "^1.8.0",
+        "ww-3-api-tjb": "file:../api",
+        "ww-3-app-config-tjb": "file:../app_config",
+        "ww-3-models-tjb": "file:../models"
     },
     "devDependencies": {
         "@types/jest": "^29.5.8",

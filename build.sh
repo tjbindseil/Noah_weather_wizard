@@ -53,3 +53,9 @@ do
   cd ../
 done
 
+
+# postgresql
+sudo yum install postgresql15
+
+# actually, utilities module should do this as a package.json script
+# psql -U postgres -h cdkappstack-dbinstance310a317f-rxjhpgv1cvhn.cqwvcmqmveqv.us-east-1.rds.amazonaws.com -d 
