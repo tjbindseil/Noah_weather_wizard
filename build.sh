@@ -40,6 +40,10 @@ sudo install git
 git clone https://github.com/tjbindseil/Noah_weather_wizard.git
 
 
+# node stuff
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash # TODO verify
+nvm install 16
+
 declare -a to_build=("models" "app_config" "api" "utilities" "user_facade" "forecast_service" "spot_service" "user_service")
 for dir in "${to_build[@]}"
 do
