@@ -67,3 +67,5 @@ This will be pretty fast and pretty easy and would match whats going on on my la
 what happens when it crashes? - idk, maybe a script or something
 i think the same could be asked about ECS/Docker/Fargate
 not sure what happens if lambda fails
+
+I could learn another cloud

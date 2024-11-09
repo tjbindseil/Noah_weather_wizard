@@ -58,7 +58,7 @@ export class CdkAppStack extends cdk.Stack {
             assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
             managedPolicies: [
                 iam.ManagedPolicy.fromAwsManagedPolicyName(
-                    'AmazonS3FullAccess'
+                    'AmazonS3FullAccess' // TODO create s3 bucket here (in cdk) and be more precise when granting permision
                 ),
             ],
         });
@@ -81,7 +81,7 @@ export class CdkAppStack extends cdk.Stack {
                 ec2.InstanceSize.MICRO
             ),
             machineImage: new ec2.AmazonLinuxImage({
-                generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2,
+                generation: ec2.AmazonLinuxGeneration.AMAZON_LINUX_2023,
             }),
             keyName: 'ec2-key-pair',
         });
@@ -108,11 +108,18 @@ export class CdkAppStack extends cdk.Stack {
             deleteAutomatedBackups: true,
             removalPolicy: cdk.RemovalPolicy.DESTROY,
             deletionProtection: false,
-            databaseName: 'dwf_db',
+            databaseName: 'dwf_db', // TODO if redoing this, change to ww_db
             publiclyAccessible: false,
         });
 
         dbInstance.connections.allowFrom(ec2Instance, ec2.Port.tcp(5432));
+        dbInstance.connections.securityGroups.forEach((sg) => {
+            sg.addIngressRule(
+                ec2.Peer.anyIpv4(),
+                ec2.Port.icmpPing(),
+                'Allow ping from anywhere'
+            );
+        });
 
         new cdk.CfnOutput(this, 'dbEndpoint', {
             value: dbInstance.instanceEndpoint.hostname,
