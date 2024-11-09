@@ -56,18 +56,24 @@ done
 
 # postgresql
 sudo yum install postgresql15
-node -e 'require("./build/src/index.js").getSecretValue("arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7")'
+set WW_ENV='prod' && node -e 'require("./build/src/index.js").initializeTables()'
 
 # actually, utilities module should do this as a package.json script
 # psql -U postgres -h cdkappstack-dbinstance310a317f-rxjhpgv1cvhn.cqwvcmqmveqv.us-east-1.rds.amazonaws.com -d 
 
-********************************* note to self *********************************:
-still working through the above
-node -e 'require("./build/src/index.js").initializeTables("arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7")'
-is mad that env var is not set
-which reminds me that i need to do some thign in app config to make it work
-then
-  db will work <-- here
-then its time to do integ tests, which will probably work (after giving permissions for ec2 to call cognito)
-then set up routing (using app_config and updating cdk as we go)
-getting frontend on laptop t owork tih it
+# ********************************* note to self *********************************:
+# still working through the above
+# node -e 'require("./build/src/index.js").initializeTables("arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7")'
+# is mad that env var is not set
+# which reminds me that i need to do some thign in app config to make it work
+# then
+#   db will work
+# then its time to do integ tests, which will probably work (after giving permissions for ec2 to call cognito)
+#   I think I'm skupping this because I am fairly confident these will work if I get all the pointers right
+# then set up routing (using app_config and updating cdk as we go)
+#   gonna do this with nginx
+#     calling <public ip>:443/spots -> localhost:8080/spot
+#     calling <public ip>:443/favorites -> localhost:8080/favorite
+#     calling <public ip>:443/forecasts -> localhost:8081/forecasts
+#     calling <public ip>:443/users -> localhost:8082/user
+# getting frontend on laptop t owork tih it

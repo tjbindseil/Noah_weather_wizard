@@ -69,3 +69,13 @@ i think the same could be asked about ECS/Docker/Fargate
 not sure what happens if lambda fails
 
 I could learn another cloud
+
+
+### app_config issues
+I'll try to quickly outlin these as there are some
+* building requires running unit tests which requires a db connection
+  * currently, this would require either:
+  1. another secret because I have no mechanism to set the database name/port/etc outside of the secret if the secret is present
+  2. a local instance of postgres that i can have another (insecure) config for
+  3. a non secure db on the rds
+  4. a way to override db characteristics when getting the connection config from app config
