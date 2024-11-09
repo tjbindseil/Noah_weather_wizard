@@ -56,6 +56,7 @@ done
 
 # postgresql
 sudo yum install postgresql15
+node -e 'require("./build/src/index.js").getSecretValue("arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7")'
 
 # actually, utilities module should do this as a package.json script
 # psql -U postgres -h cdkappstack-dbinstance310a317f-rxjhpgv1cvhn.cqwvcmqmveqv.us-east-1.rds.amazonaws.com -d 
