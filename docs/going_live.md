@@ -79,3 +79,4 @@ I'll try to quickly outlin these as there are some
   2. a local instance of postgres that i can have another (insecure) config for
   3. a non secure db on the rds
   4. a way to override db characteristics when getting the connection config from app config
+* the endpoints used to call the service will be different than those used to start the services, ie they run as local host, but the frontend calls them as <prodIP>

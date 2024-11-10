@@ -60,6 +60,9 @@ export class CdkAppStack extends cdk.Stack {
                 iam.ManagedPolicy.fromAwsManagedPolicyName(
                     'AmazonS3FullAccess' // TODO create s3 bucket here (in cdk) and be more precise when granting permision
                 ),
+                iam.ManagedPolicy.fromAwsManagedPolicyName(
+                    'AmazonCognitoPowerUser' // TODO absorb cognito identity pool here and be more specific
+                ),
             ],
         });
 

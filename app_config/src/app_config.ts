@@ -119,9 +119,10 @@ const unitTestAppConfig: AppConfig = {
     userServicePort: 8082,
 };
 
+const prodHost = '98.80.69.4';
 const prodAppConfig: AppConfig = {
     forecastBucketName: 'ww-prod-forecast',
-    spotServiceHost: 'localhost',
+    spotServiceHost: prodHost,
     spotServicePort: 8080,
     spotDbConnectionConfig: {
         secret: 'arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7',
@@ -132,9 +133,9 @@ const prodAppConfig: AppConfig = {
         password: '',
         ssl: SSLMode.Disable,
     },
-    forecastServiceHost: 'localhost',
+    forecastServiceHost: prodHost,
     forecastServicePort: 8081,
-    userServiceHost: 'localhost',
+    userServiceHost: prodHost,
     userServicePort: 8082,
 };
 

@@ -58,6 +58,10 @@ done
 sudo yum install postgresql15
 set WW_ENV='prod' && node -e 'require("./build/src/index.js").initializeTables()'
 
+# set up reverse proxy
+sudo dnf install nginx
+
+
 # actually, utilities module should do this as a package.json script
 # psql -U postgres -h cdkappstack-dbinstance310a317f-rxjhpgv1cvhn.cqwvcmqmveqv.us-east-1.rds.amazonaws.com -d 
 
@@ -76,4 +80,56 @@ set WW_ENV='prod' && node -e 'require("./build/src/index.js").initializeTables()
 #     calling <public ip>:443/favorites -> localhost:8080/favorite
 #     calling <public ip>:443/forecasts -> localhost:8081/forecasts
 #     calling <public ip>:443/users -> localhost:8082/user
+#   step 1 - install nginx, record command command to do so here - done
+#   step 2 - modify nginx.conf file such that it redirects to the correct service
+#            this will be a pain to redo, but might as well do it quickly once
+#            gonna run all these services and record their pids here: 78656 - 78849 - 78911
+# file additions:
+#        location /spot {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8080;
+#       }
+#       location /spots {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8080;
+#       }
+#       location /favorite {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8080;
+#       }
+#       location /favorites {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8080;
+#       }
+#
+#       location /forecast {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8081;
+#       }
+#       location /forecasts {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8081;
+#       }
+#
+#       location /user {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8082;
+#       }
+#       location /auth {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8082;
+#       }
+#       location /confirmation {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8082;
+#       }
+#       location /refresh {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8082;
+#       }
+#       location /new-confirmation-code {
+#           proxy_buffering off;
+#           proxy_pass http://localhost:8082;
+#       }
+#
 # getting frontend on laptop t owork tih it
