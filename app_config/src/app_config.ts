@@ -6,6 +6,7 @@ enum Environment {
     'dev', // TODO rename to docker
     'test',
     'unit_test',
+    'docker_unit_test',
     'prod',
 }
 
@@ -119,6 +120,24 @@ const unitTestAppConfig: AppConfig = {
     userServicePort: 8082,
 };
 
+const dockerUnitTestAppConfig: AppConfig = {
+    forecastBucketName: 'ww-dockerunitTest-forecast',
+    spotServiceHost: 'localhost',
+    spotServicePort: 8080,
+    spotDbConnectionConfig: {
+        database: 'ww-docker-unit-test',
+        host: 'localhost',
+        port: 5432,
+        user: 'postgres',
+        password: 'mysecretpassword',
+        ssl: SSLMode.Disable,
+    },
+    forecastServiceHost: 'localhost',
+    forecastServicePort: 8081,
+    userServiceHost: 'localhost',
+    userServicePort: 8082,
+};
+
 const prodHost = '98.80.69.4'; // heads up, services still come up serving to local host
 const prodAppConfig: AppConfig = {
     forecastBucketName: 'ww-prod-forecast',
@@ -154,6 +173,8 @@ const set_app_config = () => {
         app_config = testAppConfig;
     } else if (env_var === Environment[Environment.unit_test]) {
         app_config = unitTestAppConfig;
+    } else if (env_var === Environment[Environment.docker_unit_test]) {
+        app_config = dockerUnitTestAppConfig;
     } else if (env_var === Environment[Environment.prod]) {
         app_config = prodAppConfig;
     } else {

@@ -57,6 +57,8 @@ done
 # postgresql
 sudo yum install postgresql15
 set WW_ENV='prod' && node -e 'require("./build/src/index.js").initializeTables()'
+export WW_ENV='unit_test' && node -e 'require("./build/src/index.js").initializeTables()'
+export WW_ENV='docker_unit_test' && node -e 'require("./build/src/index.js").initializeTables()'
 
 # set up reverse proxy
 sudo dnf install nginx
