@@ -40,6 +40,14 @@ app.get('/', (_req: Request, res: Response, _next: NextFunction) => {
 // latest forecast for each
 //
 // until this gets moved to AWS and starts getting scaled, its not necessary
+// TODO delete is actually a bit more complicated,
+// if there is no more spots looking at it, we should delete the s3 folder and its contents
+// -- OR --
+// we could do that in the background as part of the updating of the cache
+//
+// ...
+//
+// while im at it, it could be helpful to delete duplicate rows in the spot table?
 const bucketName = get_app_config().forecastBucketName;
 const s3Client = new S3Client({
     region: 'us-east-1',

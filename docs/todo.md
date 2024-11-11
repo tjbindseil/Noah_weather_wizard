@@ -135,6 +135,7 @@ export const get_app_config_generic = <C>(appConfigMap: Map<string, C>) => {
 * short, long, hourly forecast comparison screens (large)
   * in order to do hourly, I will need to make changs to the background forecast fetcher,
   and this stuff is really best done in AWS, so might as well start 
+* remove geometry
 
 ## Going live...
 * moved to `docs/going_live.md`

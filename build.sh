@@ -132,4 +132,32 @@ sudo dnf install nginx
 #           proxy_pass http://localhost:8082;
 #       }
 #
+#  * now, set up app user:
+# 1. Create the user
+# sudo adduser appuser --gecos "App User"
+
+# 2. Disable login by setting the shell to /sbin/nologin
+# sudo usermod -s /sbin/nologin appuser
+
+# 3. (Optional) Lock the user’s password
+# sudo passwd -l appuser
+
+# now, how to run auotmatically/in background with pm2
+# https://pm2.keymetrics.io/docs/usage/quick-start/
+# * i can probably use 'Ecosystem File' to run the three services and weather updater
+# * how to run as specific user? - `sudo -u appuser pm2 start app.js` (from AI)
+#
+# now, I will pull and build code with appuser
+# naw, i will use the already pulled and built code and change ownership with:
+# sudo chown -R appuser:appuser /path/to/your/app
+# sudo chmod -R 750 /path/to/your/app
+
+# lets go quick,
+# push off specific user stuff
+# just do pm2 stuff
+# `npm install pm2@latest -g`
+
+
+#
+#
 # getting frontend on laptop t owork tih it

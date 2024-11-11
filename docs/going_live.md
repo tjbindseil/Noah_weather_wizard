@@ -80,3 +80,16 @@ I'll try to quickly outlin these as there are some
   3. a non secure db on the rds
   4. a way to override db characteristics when getting the connection config from app config
 * the endpoints used to call the service will be different than those used to start the services, ie they run as local host, but the frontend calls them as <prodIP>
+  * going further, the services are calling each other with localhost
+    * do the services ever call each other? dont think so, they def dont
+    * am i going in circles because i never deep dive any of these pieces?
+    * when i go to mess with a database thing, its fast cuz i know that pretty well
+    * when i 
+
+
+# todo
+1. pm2
+  * autoreload
+2. db connection when testing
+  * when unit testing, how easy is sqlite?
+  * when integ testing, have a dev env

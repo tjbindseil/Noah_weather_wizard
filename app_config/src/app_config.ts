@@ -119,11 +119,11 @@ const unitTestAppConfig: AppConfig = {
     userServicePort: 8082,
 };
 
-const prodHost = '98.80.69.4';
+const prodHost = '98.80.69.4'; // heads up, services still come up serving to local host
 const prodAppConfig: AppConfig = {
     forecastBucketName: 'ww-prod-forecast',
     spotServiceHost: prodHost,
-    spotServicePort: 8080,
+    spotServicePort: 80,
     spotDbConnectionConfig: {
         secret: 'arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7',
         database: '',
@@ -134,9 +134,9 @@ const prodAppConfig: AppConfig = {
         ssl: SSLMode.Disable,
     },
     forecastServiceHost: prodHost,
-    forecastServicePort: 8081,
+    forecastServicePort: 80,
     userServiceHost: prodHost,
-    userServicePort: 8082,
+    userServicePort: 80,
 };
 
 let appConfigSet = false;
