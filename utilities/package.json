@@ -5,7 +5,7 @@
     "main": "build/src/index.js",
     "types": "build/src/index.d.ts",
     "scripts": {
-        "test": "export WW_ENV='docker_unit_test' && jest unit --config jest.unit.config.js",
+        "test": "docker start my-postgres && export WW_ENV='docker_unit_test' && jest unit --config jest.unit.config.js && docker stop my-postgres",
         "tsc": "tsc",
         "ww-clean": "rm -rf node_modules package-lock.json build",
         "ww-format": "npx prettier --write $(find src test package*)",
