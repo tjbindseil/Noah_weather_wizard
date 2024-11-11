@@ -36,8 +36,8 @@
 # 3. get tests to use secret manager
 
 
-sudo install git
-git clone https://github.com/tjbindseil/Noah_weather_wizard.git
+# sudo install git
+# git clone https://github.com/tjbindseil/Noah_weather_wizard.git
 
 
 # node stuff
