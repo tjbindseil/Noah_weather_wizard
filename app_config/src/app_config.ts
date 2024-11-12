@@ -161,7 +161,7 @@ const prodAppConfig: AppConfig = {
 let appConfigSet = false;
 let app_config: AppConfig;
 const set_app_config = () => {
-    const env_var = process.env.WW_ENV;
+    const env_var = process.env.WW_ENV; // TODO should probably use NODE_ENV
 
     if (env_var === Environment[Environment.host]) {
         app_config = hostAppConfig;
