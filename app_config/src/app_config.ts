@@ -1,12 +1,9 @@
 import { SSL, SSLMode } from 'ts-postgres';
 
 enum Environment {
-    'host', // TODO rename to laptop
-    'laptopIT',
-    'dev', // TODO rename to docker
-    'test',
-    'unit_test',
     'docker_unit_test',
+    'laptop',
+    'staging',
     'prod',
 }
 
@@ -30,84 +27,12 @@ export interface AppConfig {
     userServicePort: number;
 }
 
-const hostAppConfig: AppConfig = {
-    forecastBucketName: 'ww-host-forecast',
+const laptopAppConfig: AppConfig = {
+    forecastBucketName: 'ww-laptop-forecast',
     spotServiceHost: 'localhost',
     spotServicePort: 8080,
     spotDbConnectionConfig: {
         database: 'ww',
-        host: 'localhost',
-        port: 5469,
-        user: '',
-        password: '',
-        ssl: SSLMode.Disable,
-    },
-    forecastServiceHost: 'localhost',
-    forecastServicePort: 8081,
-    userServiceHost: 'localhost',
-    userServicePort: 8082,
-};
-
-const laptopITConfig: AppConfig = {
-    forecastBucketName: 'ww-laptopIT-forecast',
-    spotServiceHost: 'localhost',
-    spotServicePort: 8080,
-    spotDbConnectionConfig: {
-        database: 'ww-laptop',
-        host: 'localhost',
-        port: 5469,
-        user: '',
-        password: '',
-        ssl: SSLMode.Disable,
-    },
-    forecastServiceHost: 'localhost',
-    forecastServicePort: 8081,
-    userServiceHost: 'localhost',
-    userServicePort: 8082,
-};
-
-const devAppConfig: AppConfig = {
-    forecastBucketName: 'ww-dev-forecast',
-    spotServiceHost: 'localhost',
-    spotServicePort: 8080,
-    spotDbConnectionConfig: {
-        database: 'ww-dev',
-        host: 'localhost',
-        port: 5469,
-        user: '',
-        password: '',
-        ssl: SSLMode.Disable,
-    },
-    forecastServiceHost: 'localhost',
-    forecastServicePort: 8081,
-    userServiceHost: 'localhost',
-    userServicePort: 8082,
-};
-
-const testAppConfig: AppConfig = {
-    forecastBucketName: 'ww-test-forecast',
-    spotServiceHost: 'localhost',
-    spotServicePort: 8080,
-    spotDbConnectionConfig: {
-        database: 'ww-test',
-        host: 'localhost',
-        port: 5469,
-        user: '',
-        password: '',
-        ssl: SSLMode.Disable,
-    },
-    forecastServiceHost: 'localhost',
-    forecastServicePort: 8081,
-    userServiceHost: 'localhost',
-    userServicePort: 8082,
-};
-
-const unitTestAppConfig: AppConfig = {
-    forecastBucketName: 'ww-unitTest-forecast',
-    spotServiceHost: 'localhost',
-    spotServicePort: 8080,
-    spotDbConnectionConfig: {
-        database: 'ww-unit-test',
         host: 'localhost',
         port: 5469,
         user: '',
@@ -138,7 +63,32 @@ const dockerUnitTestAppConfig: AppConfig = {
     userServicePort: 8082,
 };
 
-const prodHost = '98.80.69.4'; // heads up, services still come up serving to local host
+export const prodHost = '98.80.69.4'; // heads up, services still come up serving to local host
+export const prodFrontendPort = 443;
+export const stagingHost = prodHost;
+export const stagingFrontendPort = 4443;
+export const laptopHost = 'localhost';
+export const laptopFrontendPort = 3000;
+
+const stagingAppConfig: AppConfig = {
+    forecastBucketName: 'ww-staging-forecast',
+    spotServiceHost: prodHost,
+    spotServicePort: 8880,
+    spotDbConnectionConfig: {
+        secret: 'arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7',
+        database: '',
+        host: '',
+        port: 0,
+        user: '',
+        password: '',
+        ssl: SSLMode.Disable,
+    },
+    forecastServiceHost: prodHost,
+    forecastServicePort: 8881,
+    userServiceHost: prodHost,
+    userServicePort: 8882,
+};
+
 const prodAppConfig: AppConfig = {
     forecastBucketName: 'ww-prod-forecast',
     spotServiceHost: prodHost,
@@ -163,16 +113,10 @@ let app_config: AppConfig;
 const set_app_config = () => {
     const env_var = process.env.WW_ENV; // TODO should probably use NODE_ENV
 
-    if (env_var === Environment[Environment.host]) {
-        app_config = hostAppConfig;
-    } else if (env_var === Environment[Environment.laptopIT]) {
-        app_config = laptopITConfig;
-    } else if (env_var === Environment[Environment.dev]) {
-        app_config = devAppConfig;
-    } else if (env_var === Environment[Environment.test]) {
-        app_config = testAppConfig;
-    } else if (env_var === Environment[Environment.unit_test]) {
-        app_config = unitTestAppConfig;
+    if (env_var === Environment[Environment.laptop]) {
+        app_config = laptopAppConfig;
+    } else if (env_var === Environment[Environment.staging]) {
+        app_config = stagingAppConfig;
     } else if (env_var === Environment[Environment.docker_unit_test]) {
         app_config = dockerUnitTestAppConfig;
     } else if (env_var === Environment[Environment.prod]) {

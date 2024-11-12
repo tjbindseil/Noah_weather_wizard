@@ -5,10 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "export WW_ENV='unit_test' && jest unit --config jest.unit.config.js",
-        "dev": "export WW_ENV='dev' && concurrently \"npx tsc --watch\" \"nodemon -q build/src/index.js\"",
-        "start-host": "export WW_ENV='host' && concurrently \"npx tsc --watch\" \"nodemon -q src/index.ts\"",
-        "start-laptopIT": "export WW_ENV='laptopIT' && ts-node src/index.ts",
-        "start-dev": "export WW_ENV='dev' && ts-node src/index.ts",
+        "start-laptop": "export WW_ENV='laptop' && concurrently \"npx tsc --watch\" \"nodemon -q src/index.ts\"",
         "prod-start": "export NODE_ENV='production' && ts-node src/index.ts",
         "lint": "npx eslint src/ test/ --format compact",
         "tsc": "tsc",

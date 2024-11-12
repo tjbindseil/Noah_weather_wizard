@@ -38,3 +38,28 @@ idk about all this thinking, whats next?
 this database test issue is tough, maybe only test it in dev?
 
 or maybe, I just run a small postrges db
+
+I concluded this with creating a psql docker container,
+starting it, testing db code, stopping it
+
+## Staging in addition to prod
+Ok, I actually have an awesome prod env going!
+but, I would like to do things pointing to the env outside my
+laptop, and that could disrupt the production envitornment. So,
+we need a staging env.
+
+so here are the three environements
+### Dev
+frontend url: localhost:3000
+backend urls: spot => localhost:8080 , forecast => localhost:8081 , user => localhost:8082 
+docker unit testing: see `app_config`, currently just used to test the db and s3 adapter and noaa
+
+### Staging
+frontend url: `$PROD_IP_OR_HOST:4443` (TODO ssl, get domain name and do DNS stuff)
+backend urls: all go to `$PROD_IP_OR_HOST:8888` , then are reverse proxied to: spot => localhost:8880 , forecast => localhost:8881 , user => localhost:8882 
+docker unit testing: see `app_config`, currently just used to test the db and s3 adapter and noaa
+
+### Prod
+frontend url: `$PROD_IP_OR_HOST:443` (TODO ssl, get domain name and do DNS stuff)
+backend urls: all go to `$PROD_IP_OR_HOST:80` , then are reverse proxied to: spot => localhost:8080 , forecast => localhost:8081 , user => localhost:8082 
+docker unit testing: see `app_config`, currently just used to test the db and s3 adapter and noaa
