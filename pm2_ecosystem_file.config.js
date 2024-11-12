@@ -1,9 +1,18 @@
+// continue here
+// set up env_production, env_staging `pm2 start process.json --env production`
+// run pm2 start pm2_ecosystem_file_config in BOTH ww_prod and ww_staging
+// then maybe scriptify this
+// then start working on hourly forecast fetcher
+
 module.exports = {
   apps: [
     {
       name: "spot_service",
       script: "spot_service/build/src/index.js",
-      env: {
+      env_staging: {
+        WW_ENV: "staging",
+      },
+      env_production: {
         WW_ENV: "prod",
       },
       time: true,
@@ -11,6 +20,9 @@ module.exports = {
     {
       name: "forecast_service",
       script: "forecast_service/build/src/index.js",
+      env_staging: {
+        WW_ENV: "staging",
+      },
       env: {
         WW_ENV: "prod",
       },
@@ -19,6 +31,9 @@ module.exports = {
     {
       name: "user_service",
       script: "user_service/build/src/index.js",
+      env_staging: {
+        WW_ENV: "staging",
+      },
       env: {
         WW_ENV: "prod",
       },
@@ -26,17 +41,17 @@ module.exports = {
     },
   ],
 
-  deploy: {
-    production: {
-      user: "SSH_USERNAME",
-      host: "SSH_HOSTMACHINE",
-      ref: "origin/master",
-      repo: "GIT_REPOSITORY",
-      path: "DESTINATION_PATH",
-      "pre-deploy-local": "",
-      "post-deploy":
-        "npm install && pm2 reload ecosystem.config.js --env production",
-      "pre-setup": "",
-    },
-  },
+  //   deploy: {
+  //     production: {
+  //       user: "SSH_USERNAME",
+  //       host: "SSH_HOSTMACHINE",
+  //       ref: "origin/master",
+  //       repo: "GIT_REPOSITORY",
+  //       path: "DESTINATION_PATH",
+  //       "pre-deploy-local": "",
+  //       "post-deploy":
+  //         "npm install && pm2 reload ecosystem.config.js --env production",
+  //       "pre-setup": "",
+  //     },
+  //   },
 };

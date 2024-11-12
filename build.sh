@@ -44,6 +44,8 @@
 # curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash # TODO verify
 # nvm install 16
 
+# TODO build.sh and install.sh?
+
 declare -a to_build=("models" "app_config" "api" "utilities" "user_facade" "forecast_service" "spot_service" "user_service")
 for dir in "${to_build[@]}"
 do
