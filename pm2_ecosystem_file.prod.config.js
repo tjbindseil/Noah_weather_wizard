@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: "spot_service",
+      name: "spot_service_prod",
       script: "spot_service/build/src/index.js",
       env: {
         WW_ENV: "prod",
@@ -9,7 +9,7 @@ module.exports = {
       time: true,
     },
     {
-      name: "forecast_service",
+      name: "forecast_service_prod",
       script: "forecast_service/build/src/index.js",
       env: {
         WW_ENV: "prod",
@@ -17,7 +17,7 @@ module.exports = {
       time: true,
     },
     {
-      name: "user_service",
+      name: "user_service_prod",
       script: "user_service/build/src/index.js",
       env: {
         WW_ENV: "prod",
