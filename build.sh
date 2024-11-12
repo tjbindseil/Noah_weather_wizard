@@ -41,8 +41,8 @@
 
 
 # node stuff
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash # TODO verify
-nvm install 16
+# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash # TODO verify
+# nvm install 16
 
 declare -a to_build=("models" "app_config" "api" "utilities" "user_facade" "forecast_service" "spot_service" "user_service")
 for dir in "${to_build[@]}"
@@ -55,15 +55,15 @@ done
 
 
 # postgresql
-sudo yum install postgresql15
-set WW_ENV='prod' && node -e 'require("./build/src/index.js").initializeTables()'
-export WW_ENV='unit_test' && node -e 'require("./build/src/index.js").initializeTables()'
-export WW_ENV='docker_unit_test' && node -e 'require("./build/src/index.js").initializeTables()'
+# sudo yum install postgresql15
+# set WW_ENV='prod' && node -e 'require("./build/src/index.js").initializeTables()'
+# export WW_ENV='unit_test' && node -e 'require("./build/src/index.js").initializeTables()'
+# export WW_ENV='docker_unit_test' && node -e 'require("./build/src/index.js").initializeTables()'
 
 # set up reverse proxy
-sudo dnf install nginx
-sudo systemctl enable nginx
-sudo systemctl start nginx
+# sudo dnf install nginx
+# sudo systemctl enable nginx
+# sudo systemctl start nginx
 
 
 
