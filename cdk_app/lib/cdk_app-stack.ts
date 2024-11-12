@@ -47,6 +47,12 @@ export class CdkAppStack extends cdk.Stack {
 
         webserverSG.addIngressRule(
             ec2.Peer.anyIpv4(),
+            ec2.Port.tcp(8888),
+            'allow staging HTTP traffic from anywhere'
+        );
+
+        webserverSG.addIngressRule(
+            ec2.Peer.anyIpv4(),
             ec2.Port.tcp(443),
             'allow HTTPS traffic from anywhere'
         );
