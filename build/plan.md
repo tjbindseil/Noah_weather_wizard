@@ -119,6 +119,8 @@ Note: I need two different files to run the environments twice
 
 ## TODO
 * how to limit the cpu usage of node?
+  * `npm set maxsockets 1`
+  * `export NODE_OPTIONS="--max-old-space-size=512"`
 * users specific for building and running staging and prod
 * firewall
 * local secrets manager

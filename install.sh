@@ -2,7 +2,7 @@ declare -a to_build=("models" "app_config" "api" "utilities" "user_facade" "fore
 for dir in "${to_build[@]}"
 do
   cd $dir
-  rm -rf package-lock.json && npm install
+  rm -rf package-lock.json && npm install --ci
   cd ../
 done
 
