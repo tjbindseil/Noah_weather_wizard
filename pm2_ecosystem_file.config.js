@@ -6,6 +6,7 @@ module.exports = {
       env: {
         WW_ENV: "prod",
       },
+      time: true,
     },
     {
       name: "forecast_service",
@@ -13,6 +14,7 @@ module.exports = {
       env: {
         WW_ENV: "prod",
       },
+      time: true,
     },
     {
       name: "user_service",
@@ -20,6 +22,7 @@ module.exports = {
       env: {
         WW_ENV: "prod",
       },
+      time: true,
     },
   ],
 
