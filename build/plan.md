@@ -85,6 +85,11 @@ gonna take stuff from the legendary `build.sh` file and make it a little better
 * install postgres
   * `sudo yum install postgresql15`
 * install docker
+  * `sudo dnf install docker`
+  * `sudo systemctl start docker`
+  * `sudo systemctl enable docker`
+  * `sudo usermod -aG docker $USER`
+  * `newgrp docker`
 * create postgres docker container
   * `docker pull postgres`
   * `docker run --name my-postgres -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_DB=ww-docker-unit-test -d -p 5432:5432 postgres`
@@ -92,8 +97,12 @@ gonna take stuff from the legendary `build.sh` file and make it a little better
   * `export WW_ENV='docker_unit_test' && node -e 'require("./build/src/index.js").initializeTables()'`
   * `docker stop my-postgres`
 * install nginx
+  * `sudo dnf install nginx`
 * update nginx
+  * see nginx additions section below
 * start and enable nginx
+  * `sudo systemctl start nginx`
+  * `sudo systemctl enable nginx`
 
 
 ### build the code
@@ -113,3 +122,56 @@ Note: I need two different files to run the environments twice
 * users specific for building and running staging and prod
 * firewall
 * local secrets manager
+* use sites enabled / available to make nginx work
+* automate docker installation on new machine
+
+## Nginx additions
+
+```
+       location /spot {
+           proxy_buffering off;
+           proxy_pass http://localhost:8080;
+       }
+       location /spots {
+           proxy_buffering off;
+           proxy_pass http://localhost:8080;
+       }
+       location /favorite {
+           proxy_buffering off;
+           proxy_pass http://localhost:8080;
+       }
+       location /favorites {
+           proxy_buffering off;
+           proxy_pass http://localhost:8080;
+       }
+
+       location /forecast {
+           proxy_buffering off;
+           proxy_pass http://localhost:8081;
+       }
+       location /forecasts {
+           proxy_buffering off;
+           proxy_pass http://localhost:8081;
+       }
+
+       location /user {
+           proxy_buffering off;
+           proxy_pass http://localhost:8082;
+       }
+       location /auth {
+           proxy_buffering off;
+           proxy_pass http://localhost:8082;
+       }
+       location /confirmation {
+           proxy_buffering off;
+           proxy_pass http://localhost:8082;
+       }
+       location /refresh {
+           proxy_buffering off;
+           proxy_pass http://localhost:8082;
+       }
+       location /new-confirmation-code {
+           proxy_buffering off;
+           proxy_pass http://localhost:8082;
+       }
+```
