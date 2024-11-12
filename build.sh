@@ -62,6 +62,9 @@ export WW_ENV='docker_unit_test' && node -e 'require("./build/src/index.js").ini
 
 # set up reverse proxy
 sudo dnf install nginx
+sudo systemctl enable nginx
+sudo systemctl start nginx
+
 
 
 # actually, utilities module should do this as a package.json script
