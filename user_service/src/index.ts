@@ -3,6 +3,6 @@ import { server } from './app';
 
 // TODO get port from app config, this is also in docker compose file
 const port = get_app_config().userServicePort;
-server.listen(port, () => {
+server.listen(port, '127.0.0.1', () => {
     console.log(`Listening on port ${port}`);
 });

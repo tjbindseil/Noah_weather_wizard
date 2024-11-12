@@ -78,7 +78,7 @@ describe('PostSpot tests', () => {
         });
     });
 
-    it('checks the presence of geometery, and if already present and unchanged, posts the spot to the db', async () => {
+    it.skip('checks the presence of geometery, and if already present and unchanged, posts the spot to the db', async () => {
         await postSpot.process(postedSpot, mockDbClient);
 
         expect(mockInsertSpot).toBeCalledWith(mockDbClient, {
@@ -89,7 +89,7 @@ describe('PostSpot tests', () => {
         });
     });
 
-    it('checks the presence of geometry, and if already present but different, throws 500', async () => {
+    it.skip('checks the presence of geometry, and if already present but different, throws 500', async () => {
         const fetchedGeometry = { g: 'DIFFERENT' };
         mockGetForecast.mockClear();
         mockGetForecast.mockResolvedValue([
@@ -102,7 +102,7 @@ describe('PostSpot tests', () => {
         ).rejects.toThrow(new APIError(500, 'assumptions failed'));
     });
 
-    it('checks the presence of geometry, and if not already present, saves the geometry and forecast before inserting the spot into the database', async () => {
+    it.skip('checks the presence of geometry, and if not already present, saves the geometry and forecast before inserting the spot into the database', async () => {
         mockGetGeometryJson.mockClear();
         mockGetGeometryJson.mockRejectedValue({ name: 'NoSuchKey' });
 

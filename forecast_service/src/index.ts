@@ -3,7 +3,7 @@ import { createServer } from './app';
 
 const port = get_app_config().forecastServicePort;
 createServer().then((server) => {
-    server.listen(port, () => {
+    server.listen(port, '127.0.0.1', () => {
         console.log(`Listening on port ${port}`);
     });
 });

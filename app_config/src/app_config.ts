@@ -142,7 +142,7 @@ const prodHost = '98.80.69.4'; // heads up, services still come up serving to lo
 const prodAppConfig: AppConfig = {
     forecastBucketName: 'ww-prod-forecast',
     spotServiceHost: prodHost,
-    spotServicePort: 80,
+    spotServicePort: 8080,
     spotDbConnectionConfig: {
         secret: 'arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7',
         database: '',
@@ -153,9 +153,9 @@ const prodAppConfig: AppConfig = {
         ssl: SSLMode.Disable,
     },
     forecastServiceHost: prodHost,
-    forecastServicePort: 80,
+    forecastServicePort: 8081,
     userServiceHost: prodHost,
-    userServicePort: 80,
+    userServicePort: 8082,
 };
 
 let appConfigSet = false;
