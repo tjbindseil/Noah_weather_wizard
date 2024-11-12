@@ -63,3 +63,53 @@ docker unit testing: see `app_config`, currently just used to test the db and s3
 frontend url: `$PROD_IP_OR_HOST:443` (TODO ssl, get domain name and do DNS stuff)
 backend urls: all go to `$PROD_IP_OR_HOST:80` , then are reverse proxied to: spot => localhost:8080 , forecast => localhost:8081 , user => localhost:8082 
 docker unit testing: see `app_config`, currently just used to test the db and s3 adapter and noaa
+
+## automation
+gonna take stuff from the legendary `build.sh` file and make it a little better
+
+### initialize up the ec2 instance
+
+#### just off the top of my head
+`sudo dnf update`
+`sudo dnf upgrade`
+* install git
+  * `sudo dnf install git`
+* clone into `ww_staging`
+  * `git clone https://github.com/tjbindseil/Noah_weather_wizard.git ww_staging`
+* clone into `ww_prod`
+  * `git clone https://github.com/tjbindseil/Noah_weather_wizard.git ww_prod`
+* install nvm
+  * `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash`
+* use node 18
+  * `nvm install 18`
+* install postgres
+  * `sudo yum install postgresql15`
+* install docker
+* create postgres docker container
+  * `docker pull postgres`
+  * `docker run --name my-postgres -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_DB=ww-docker-unit-test -d -p 5432:5432 postgres`
+* add tables to this container's db
+  * `export WW_ENV='docker_unit_test' && node -e 'require("./build/src/index.js").initializeTables()'`
+  * `docker stop my-postgres`
+* install nginx
+* update nginx
+* start and enable nginx
+
+
+### build the code
+
+#### just off the top of my head
+* install.sh
+* build.sh
+
+### start the service
+Note: I need two different files to run the environments twice
+* `pm2 start pm2_ecosystem_file.prod.config.js`
+* `pm2 start pm2_ecosystem_file.staging.config.js`
+
+
+## TODO
+* how to limit the cpu usage of node?
+* users specific for building and running staging and prod
+* firewall
+* local secrets manager

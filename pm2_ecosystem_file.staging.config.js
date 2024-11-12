@@ -1,48 +1,33 @@
-// continue here
-// set up env_production, env_staging `pm2 start process.json --env production`
-// run pm2 start pm2_ecosystem_file_config in BOTH ww_prod and ww_staging
-// then maybe scriptify this
-// then start working on hourly forecast fetcher
-
 module.exports = {
   apps: [
     {
       name: "spot_service",
       script: "spot_service/build/src/index.js",
-      env_staging: {
+      env: {
         WW_ENV: "staging",
-      },
-      env_production: {
-        WW_ENV: "prod",
       },
       time: true,
     },
     {
       name: "forecast_service",
       script: "forecast_service/build/src/index.js",
-      env_staging: {
-        WW_ENV: "staging",
-      },
       env: {
-        WW_ENV: "prod",
+        WW_ENV: "staging",
       },
       time: true,
     },
     {
       name: "user_service",
       script: "user_service/build/src/index.js",
-      env_staging: {
-        WW_ENV: "staging",
-      },
       env: {
-        WW_ENV: "prod",
+        WW_ENV: "staging",
       },
       time: true,
     },
   ],
 
   //   deploy: {
-  //     production: {
+  //     prod: {
   //       user: "SSH_USERNAME",
   //       host: "SSH_HOSTMACHINE",
   //       ref: "origin/master",
