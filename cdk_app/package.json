@@ -15,6 +15,7 @@
         "@types/node": "22.7.9",
         "jest": "^29.7.0",
         "ts-jest": "^29.2.5",
+        "ww-3-app-config-tjb": "file:../app_config",
         "aws-cdk": "2.166.0",
         "ts-node": "^10.9.2",
         "eslint-config-prettier": "^8.8.0",

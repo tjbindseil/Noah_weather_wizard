@@ -2,8 +2,10 @@ import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as rds from 'aws-cdk-lib/aws-rds';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 import { DatabaseSecret } from 'aws-cdk-lib/aws-rds';
 import { Construct } from 'constructs';
+import { Environment } from 'ww-3-app-config-tjb';
 
 export class CdkAppStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -57,20 +59,28 @@ export class CdkAppStack extends cdk.Stack {
             'allow HTTPS traffic from anywhere'
         );
 
-        // TODO add access to socket port(s?) here
+        // TODO create s3 adapter test bucket in cdk
+        // Create an S3 bucket for forecasts in each env
+        const buckets = Object.keys(Environment).map(
+            (env) =>
+                new s3.Bucket(this, `ww-${env}-forecast-bucket`, {
+                    bucketName: `ww-${env}-forecast`,
+                    versioned: false,
+                    removalPolicy: cdk.RemovalPolicy.DESTROY,
+                    publicReadAccess: false,
+                })
+        );
 
         // create a Role for the EC2 Instance
         const webserverRole = new iam.Role(this, 'webserver-role', {
             assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
             managedPolicies: [
                 iam.ManagedPolicy.fromAwsManagedPolicyName(
-                    'AmazonS3FullAccess' // TODO create s3 bucket here (in cdk) and be more precise when granting permision
-                ),
-                iam.ManagedPolicy.fromAwsManagedPolicyName(
                     'AmazonCognitoPowerUser' // TODO absorb cognito identity pool here and be more specific
                 ),
             ],
         });
+        buckets.forEach((bucket) => bucket.grantReadWrite(webserverRole));
 
         // Cost: $.40/month
         const dbSecret = new DatabaseSecret(this, 'PictureDatabaseSecret', {

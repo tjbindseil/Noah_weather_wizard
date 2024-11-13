@@ -1,7 +1,7 @@
 import { SSL, SSLMode } from 'ts-postgres';
 
-enum Environment {
-    'docker_unit_test',
+export enum Environment {
+    'docker-unit-test',
     'laptop',
     'staging',
     'prod',
@@ -39,12 +39,12 @@ const laptopAppConfig: AppConfig = {
     },
     forecastServiceListenPort: 8081,
     userServiceListenPort: 8082,
-    frontendHost: 'localhost',
+    frontendHost: '127.0.0.1',
     frontendServicePort: 8888,
 };
 
 const dockerUnitTestAppConfig: AppConfig = {
-    forecastBucketName: 'ww-dockerunitTest-forecast',
+    forecastBucketName: 'ww-docker-unit-test-forecast',
     spotDbConnectionConfig: {
         database: 'ww-docker-unit-test',
         host: 'localhost',
@@ -105,7 +105,7 @@ const set_app_config = () => {
         app_config = laptopAppConfig;
     } else if (env_var === Environment[Environment.staging]) {
         app_config = stagingAppConfig;
-    } else if (env_var === Environment[Environment.docker_unit_test]) {
+    } else if (env_var === Environment[Environment['docker-unit-test']]) {
         app_config = dockerUnitTestAppConfig;
     } else if (env_var === Environment[Environment.prod]) {
         app_config = prodAppConfig;
