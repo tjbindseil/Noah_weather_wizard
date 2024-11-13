@@ -7,8 +7,10 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import 'leaflet-defaulticon-compatibility';
 import 'react-tooltip/dist/react-tooltip.css';
 import { GlobalServices } from './services/global_services';
+import { get_app_config as getAppConfig } from 'ww-3-app-config-tjb';
 
 function App() {
+  console.log(`app config is: ${JSON.stringify(getAppConfig())}`);
   return (
     <GlobalServices>
       <div className='App'>

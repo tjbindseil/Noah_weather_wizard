@@ -1,5 +1,3 @@
-import { SSL, SSLMode } from 'ts-postgres';
-
 export enum Environment {
     'docker-unit-test',
     'laptop',
@@ -17,7 +15,6 @@ export interface AppConfig {
         port: number;
         user: string;
         password: string;
-        ssl: SSLMode.Disable | SSL | undefined;
     };
     spotServiceListenPort: number;
     forecastServiceListenPort: number;
@@ -35,7 +32,6 @@ const laptopAppConfig: AppConfig = {
         port: 5469,
         user: '',
         password: '',
-        ssl: SSLMode.Disable,
     },
     forecastServiceListenPort: 8081,
     userServiceListenPort: 8082,
@@ -51,7 +47,6 @@ const dockerUnitTestAppConfig: AppConfig = {
         port: 5432,
         user: 'postgres',
         password: 'mysecretpassword',
-        ssl: SSLMode.Disable,
     },
     spotServiceListenPort: 8080,
     forecastServiceListenPort: 8081,
@@ -69,7 +64,6 @@ const stagingAppConfig: AppConfig = {
         port: 0,
         user: '',
         password: '',
-        ssl: SSLMode.Disable,
     },
     spotServiceListenPort: 8880,
     forecastServiceListenPort: 8881,
@@ -87,7 +81,6 @@ const prodAppConfig: AppConfig = {
         port: 0,
         user: '',
         password: '',
-        ssl: SSLMode.Disable,
     },
     spotServiceListenPort: 8080,
     forecastServiceListenPort: 8081,

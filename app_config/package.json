@@ -16,8 +16,7 @@
     "author": "TJB",
     "license": "ISC",
     "dependencies": {
-        "@types/node": "^20.11.16",
-        "ts-postgres": "1.8.0"
+        "@types/node": "^20.11.16"
     },
     "devDependencies": {
         "typescript": "^5.2.2",

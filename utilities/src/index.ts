@@ -89,7 +89,3 @@ export const initializeTables = async () => {
 
     await makeTables(pgClient);
 };
-
-// getSecretValue(
-//     'arn:aws:secretsmanager:us-east-1:261071831482:secret:PictureDatabaseSecretEC4117-3I44o6dfTbXR-WcTdv7'
-// );
