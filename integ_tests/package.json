@@ -4,10 +4,8 @@
     "description": "Suite of end to end tests designed to exercise functionality indepenedent of the browser",
     "main": "index.js",
     "scripts": {
-        "integ-test-laptopIT": "export WW_ENV='laptopIT' && jest integ --config jest.integ.config.js",
         "integ-test-host": "echo 'THIS ONE WORKS' && export WW_ENV='host' && jest integ --config jest.integ.config.js",
-        "integ-test-dev": "export WW_ENV='dev' && jest integ --config jest.integ.config.js",
-        "integ-test-prod": "export WW_ENV='prod' && jest integ --config jest.integ.config.js",
+        "integ-test-staging": "export WW_ENV='prod' && jest integ --config jest.integ.config.js",
         "lint": "npx eslint test/ --format compact",
         "tsc": "tsc",
         "ww-clean": "rm -rf node_modules package-lock.json build",

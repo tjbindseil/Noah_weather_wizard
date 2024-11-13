@@ -1,4 +1,3 @@
-import { get_app_config } from 'ww-3-app-config-tjb';
 import {
     DeleteUserInput,
     PostAuthInput,
@@ -11,15 +10,12 @@ import {
     PostUserOutput,
 } from 'ww-3-models-tjb';
 import { fetchWithError } from './fetch_with_error';
-
-const userServiceBaseUrl = `http://${get_app_config().userServiceHost}:${
-    get_app_config().userServicePort
-}`;
+import { baseUrl } from '.';
 
 export const postUser = async (input: PostUserInput) => {
     return await fetchWithError<PostUserOutput>(
         'posting user',
-        `${userServiceBaseUrl}/user`,
+        `${baseUrl}/user`,
         {
             method: 'POST',
             headers: {
@@ -33,7 +29,7 @@ export const postUser = async (input: PostUserInput) => {
 export const postAuth = async (input: PostAuthInput) => {
     return await fetchWithError<PostAuthOutput>(
         'posting Auth',
-        `${userServiceBaseUrl}/auth`,
+        `${baseUrl}/auth`,
         {
             method: 'POST',
             headers: {
@@ -47,7 +43,7 @@ export const postAuth = async (input: PostAuthInput) => {
 export const postConfirmation = async (input: PostConfirmationInput) => {
     return await fetchWithError<PostConfirmationOutput>(
         'posting Confirmation',
-        `${userServiceBaseUrl}/confirmation`,
+        `${baseUrl}/confirmation`,
         {
             method: 'POST',
             headers: {
@@ -61,7 +57,7 @@ export const postConfirmation = async (input: PostConfirmationInput) => {
 export const postRefresh = async (input: PostRefreshInput) => {
     return await fetchWithError<PostRefreshOutput>(
         'posting Refresh',
-        `${userServiceBaseUrl}/refresh`,
+        `${baseUrl}/refresh`,
         {
             method: 'POST',
             headers: {
@@ -75,7 +71,7 @@ export const postRefresh = async (input: PostRefreshInput) => {
 export const deleteUser = async (input: DeleteUserInput) => {
     return await fetchWithError<DeleteUserInput>(
         'deleting user',
-        `${userServiceBaseUrl}/user`,
+        `${baseUrl}/user`,
         {
             method: 'DELETE',
             headers: {

@@ -10,13 +10,9 @@ import {
     PostSpotInput,
     PostSpotOutput,
 } from 'ww-3-models-tjb';
-import { get_app_config } from 'ww-3-app-config-tjb';
 import { fetchWithError } from './fetch_with_error';
 import { UserWithTokens } from '../setup/seedUsers';
-
-const spotServiceBaseUrl = `http://${get_app_config().spotServiceHost}:${
-    get_app_config().spotServicePort
-}`;
+import { baseUrl } from '.';
 
 export const getSpots = async (getSpotsInput: GetSpotsInput) => {
     const minLatAsStr = getSpotsInput.minLat.toString();
@@ -26,7 +22,7 @@ export const getSpots = async (getSpotsInput: GetSpotsInput) => {
 
     return await fetchWithError<GetSpotsOutput>(
         'getting uts',
-        `${spotServiceBaseUrl}/spots?` +
+        `${baseUrl}/spots?` +
             new URLSearchParams({
                 minLat: minLatAsStr,
                 maxLat: maxLatAsStr,
@@ -37,23 +33,19 @@ export const getSpots = async (getSpotsInput: GetSpotsInput) => {
 };
 
 export const postSpot = async (input: PostSpotInput, creator: UserWithTokens) =>
-    await fetchWithError<PostSpotOutput>(
-        'posting spot',
-        `${spotServiceBaseUrl}/spot`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer: ${creator.accessToken}`,
-            },
-            body: JSON.stringify(input),
-        }
-    );
+    await fetchWithError<PostSpotOutput>('posting spot', `${baseUrl}/spot`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer: ${creator.accessToken}`,
+        },
+        body: JSON.stringify(input),
+    });
 
 export const deleteSpot = async (id: number, deletor: UserWithTokens) =>
     await fetchWithError<DeleteSpotOutput>(
         `deleting spot (id: ${id} and creator: ${deletor.username})`,
-        `${spotServiceBaseUrl}/spot`,
+        `${baseUrl}/spot`,
         {
             method: 'DELETE',
             headers: {
@@ -70,7 +62,7 @@ export const getFavorites = async (
 ) => {
     return await fetchWithError<GetFavoritesOutput>(
         'getting favorites',
-        `${spotServiceBaseUrl}/favorites`,
+        `${baseUrl}/favorites`,
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -86,7 +78,7 @@ export const postFavorite = async (
 ) =>
     await fetchWithError<PostFavoriteOutput>(
         'posting favorite',
-        `${spotServiceBaseUrl}/favorite`,
+        `${baseUrl}/favorite`,
         {
             method: 'POST',
             headers: {
@@ -100,7 +92,7 @@ export const postFavorite = async (
 export const deleteFavorite = async (spotId: number, deletor: UserWithTokens) =>
     await fetchWithError<DeleteFavoriteOutput>(
         'deleting favorite',
-        `${spotServiceBaseUrl}/favorite`,
+        `${baseUrl}/favorite`,
         {
             method: 'DELETE',
             headers: {

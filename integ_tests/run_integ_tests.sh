@@ -1,5 +1,8 @@
 # set -x
 
+# TODO check presence of services
+# run them and kill them if they are not present
+
 # first, make sure we are authenticated
 caller_identity=$(aws sts get-caller-identity)
 if [[ ! $caller_identity == *"cli_user"* ]]; then
@@ -9,9 +12,9 @@ if [[ ! $caller_identity == *"cli_user"* ]]; then
 fi
 
 
-# start all services in laptopIT mode
-cd ../forecast_service && npm run start-laptopIT &
-cd ../spot_service && npm run start-laptopIT &
+# start all services in host mode
+cd ../forecast_service && npm run start-host &
+cd ../spot_service && npm run start-host &
 
 # ping each addres to ensure that things are working good
 # or just wait
@@ -19,8 +22,8 @@ echo 'sleeping for 15 seconds'
 sleep 15
 echo 'done sleeping for 15 seconds'
 
-# run laptopIT integ tests
-npm run integ-test-laptopIT
+# run host integ tests
+npm run integ-test-host
 
 
 # TODO get ports from app_config
