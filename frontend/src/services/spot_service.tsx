@@ -17,6 +17,7 @@ import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
 import { useUserService } from './user_service';
 import { fetchWithError, getWithError, HTTPMethod } from './fetch_wrapper';
+import { baseUrl } from '.';
 
 export interface ISpotService {
   createSpot(input: PostSpotInput): Promise<PostSpotOutput>;
@@ -35,8 +36,6 @@ export const useSpotService = (): ISpotService =>
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const SpotService = ({ children }: any) => {
   const userService = useUserService();
-
-  const baseUrl = 'http://localhost:8080';
 
   const spotService = {
     async createSpot(postSpotInput: PostSpotInput): Promise<PostSpotOutput> {

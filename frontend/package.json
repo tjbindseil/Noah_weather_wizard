@@ -30,8 +30,8 @@
     "ww-3-user-facade-tjb": "file:../user_facade"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "export REACT_APP_WW_ENV='laptop' && react-scripts start",
+    "build": "export REACT_APP_WW_ENV='laptop' && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

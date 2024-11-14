@@ -19,7 +19,7 @@ export interface AppConfig {
     spotServiceListenPort: number;
     forecastServiceListenPort: number;
     userServiceListenPort: number;
-    frontendHost: string;
+    frontendServiceHost: string;
     frontendServicePort: number;
 }
 
@@ -35,7 +35,7 @@ const laptopAppConfig: AppConfig = {
     },
     forecastServiceListenPort: 8081,
     userServiceListenPort: 8082,
-    frontendHost: '127.0.0.1',
+    frontendServiceHost: '127.0.0.1',
     frontendServicePort: 8888,
 };
 
@@ -51,7 +51,7 @@ const dockerUnitTestAppConfig: AppConfig = {
     spotServiceListenPort: 8080,
     forecastServiceListenPort: 8081,
     userServiceListenPort: 8082,
-    frontendHost: '98.80.69.4',
+    frontendServiceHost: '98.80.69.4',
     frontendServicePort: 8888,
 };
 
@@ -68,7 +68,7 @@ const stagingAppConfig: AppConfig = {
     spotServiceListenPort: 8880,
     forecastServiceListenPort: 8881,
     userServiceListenPort: 8882,
-    frontendHost: '98.80.69.4',
+    frontendServiceHost: '98.80.69.4',
     frontendServicePort: 8888,
 };
 
@@ -85,33 +85,33 @@ const prodAppConfig: AppConfig = {
     spotServiceListenPort: 8080,
     forecastServiceListenPort: 8081,
     userServiceListenPort: 8082,
-    frontendHost: '98.80.69.4',
+    frontendServiceHost: '98.80.69.4',
     frontendServicePort: 80,
 };
 
 let appConfigSet = false;
 let app_config: AppConfig;
-const set_app_config = () => {
-    const env_var = process.env.WW_ENV; // TODO should probably use NODE_ENV
+const set_app_config = (env_var?: string) => {
+    const env = env_var ?? process.env.WW_ENV;
 
-    if (env_var === Environment[Environment.laptop]) {
+    if (env === Environment[Environment.laptop]) {
         app_config = laptopAppConfig;
-    } else if (env_var === Environment[Environment.staging]) {
+    } else if (env === Environment[Environment.staging]) {
         app_config = stagingAppConfig;
-    } else if (env_var === Environment[Environment['docker-unit-test']]) {
+    } else if (env === Environment[Environment['docker-unit-test']]) {
         app_config = dockerUnitTestAppConfig;
-    } else if (env_var === Environment[Environment.prod]) {
+    } else if (env === Environment[Environment.prod]) {
         app_config = prodAppConfig;
     } else {
-        throw Error(`issue getting app config, env_var is: ${env_var}`);
+        throw Error(`issue getting app config, env_var is: ${env}`);
     }
 
     appConfigSet = true;
 };
 
-export const get_app_config = () => {
+export const get_app_config = (env_var?: string) => {
     if (!appConfigSet) {
-        set_app_config();
+        set_app_config(env_var);
     }
 
     return app_config;

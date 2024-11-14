@@ -10,7 +10,10 @@ import { GlobalServices } from './services/global_services';
 import { get_app_config as getAppConfig } from 'ww-3-app-config-tjb';
 
 function App() {
-  console.log(`app config is: ${JSON.stringify(getAppConfig())}`);
+  // grab this one to set it, this is kind of a hack because we
+  // can't access the below env var in app_config module
+  getAppConfig(process.env.REACT_APP_WW_ENV);
+
   return (
     <GlobalServices>
       <div className='App'>

@@ -19,6 +19,7 @@ import { defaultVerifier } from 'ww-3-api-tjb';
 import { TokenStorageObject } from './utils/token_storage_obj';
 import { useEffect } from 'react';
 import { fetchWithError, HTTPMethod } from './fetch_wrapper';
+import { baseUrl } from '.';
 
 export enum UserSignInStatus {
   LOGGED_IN,
@@ -54,8 +55,6 @@ interface UserServiceImpl extends IUserService {
 
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const UserService = ({ children }: any) => {
-  const baseUrl = 'http://localhost:8082';
-
   const tokenStorageObject = new TokenStorageObject();
 
   const userService = {

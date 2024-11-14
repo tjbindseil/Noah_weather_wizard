@@ -2,6 +2,7 @@ import { _schema, GetForecastsInput, GetForecastsOutput } from 'ww-3-models-tjb'
 import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
 import { getWithError } from './fetch_wrapper';
+import { baseUrl } from '.';
 
 export interface IForecastService {
   getForecasts(input: GetForecastsInput): Promise<GetForecastsOutput>;
@@ -14,8 +15,6 @@ export const useForecastService = (): IForecastService =>
   Contextualizer.use<IForecastService>(ProvidedServices.ForecastService);
 
 const ForecastService = ({ children }: any) => {
-  const baseUrl = 'http://localhost:8081';
-
   const forecastService = {
     async getForecasts(input: GetForecastsInput): Promise<GetForecastsOutput> {
       return await getWithError<GetForecastsOutput>(
