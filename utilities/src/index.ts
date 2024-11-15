@@ -1,5 +1,5 @@
 export { S3Adapter } from './s3_adapter';
-export { makeInitialCall, getForecast } from './noaa_api';
+export { getForecastKey, getForecast } from './noaa_api';
 export { ForecastKey } from './forecast_key';
 export {
     insertSpot,
@@ -31,7 +31,6 @@ const getSecretValue = async (secretName: string) => {
             SecretId: secretName,
         })
     );
-    // console.log(response);
 
     if (response.SecretString) {
         return response.SecretString;

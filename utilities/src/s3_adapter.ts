@@ -5,12 +5,11 @@ import {
     S3Client,
 } from '@aws-sdk/client-s3';
 import Ajv from 'ajv';
-import { APIError } from 'ww-3-api-tjb';
+import { APIError, validate } from 'ww-3-api-tjb';
 import { _schema, Forecast } from 'ww-3-models-tjb';
 import { ForecastKey } from './forecast_key';
 
 export class S3Adapter {
-    private readonly GEOMETRY_FILE_NAME = 'geometry.json';
     private readonly FORECAST_FILE_NAME = 'forecast.json';
 
     protected readonly ajv: Ajv;
@@ -22,30 +21,13 @@ export class S3Adapter {
         this.ajv = new Ajv({ strict: false });
     }
 
-    public async getGeometryJson(forecastKey: ForecastKey): Promise<string> {
-        // I think this is just to make sure the polygons are consistent
-        return await this.getObject(
-            `${forecastKey.getKeyStr()}/${this.GEOMETRY_FILE_NAME}`
-        );
-    }
-
     public async getForecastJson(forecastKey: ForecastKey): Promise<Forecast> {
         const raw = await this.getObject(
             `${forecastKey.getKeyStr()}/${this.FORECAST_FILE_NAME}`
         );
         const asObj = JSON.parse(raw);
-        const validator = this.ajv.compile(_schema.Forecast);
-        if (!validator(asObj)) {
-            console.log(
-                `forecastKey is: ${JSON.stringify(
-                    forecastKey
-                )} validator.errors is: ${JSON.stringify(validator.errors)}`
-            );
-            console.error(`invalid forecast object: ${JSON.stringify(asObj)}`);
-            throw new APIError(500, 'issue with NOAA');
-        }
 
-        return asObj as Forecast;
+        return validate<Forecast>(_schema.Forecast, asObj);
     }
 
     private async getObject(key: string): Promise<string> {
@@ -64,15 +46,6 @@ export class S3Adapter {
         return jsonStr;
     }
 
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    public async putGeometryJson(forecastKey: ForecastKey, geometry: any) {
-        await this.putObject(
-            `${forecastKey.getKeyStr()}/${this.GEOMETRY_FILE_NAME}`,
-            geometry
-        );
-    }
-
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
     public async putForecastJson(forecastKey: ForecastKey, forecast: Forecast) {
         await this.putObject(
             `${forecastKey.getKeyStr()}/${this.FORECAST_FILE_NAME}`,

@@ -777,6 +777,15 @@ const schema = {
             required: ['username'],
         },
         PostNewConfirmationCodeOutput: { type: 'object' },
+        GridInfo: {
+            type: 'object',
+            properties: {
+                gridX: { type: 'number' },
+                gridY: { type: 'number' },
+                gridId: { type: 'string' },
+            },
+            required: ['gridId', 'gridX', 'gridY'],
+        },
     },
 } as const;
 export default schema.definitions;

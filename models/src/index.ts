@@ -66,5 +66,6 @@ export {
     PostNewConfirmationCodeInput,
     PostNewConfirmationCodeOutput,
 } from './user_service/post_new_confirmation_code';
+export { GridInfo } from './forecast_service_models/grid_info';
 import _schema from './schema_validation/_schema';
 export { _schema };

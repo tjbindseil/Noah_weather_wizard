@@ -1,4 +1,3 @@
-import geometry from '../resources/geometry.json';
 import forecast from '../resources/forecast.json';
 import {
     DeleteObjectsCommand,
@@ -18,7 +17,6 @@ describe('s3_adapter tests', () => {
         testGridX,
         testGridY
     );
-    const geometryKey = `${testForecastKey.getKeyStr()}/geometry.json`;
     const forecastKey = `${testForecastKey.getKeyStr()}/forecast.json`;
     const s3Client = new S3Client();
     const s3Adapter = new S3Adapter(s3Client, bucketName);
@@ -41,26 +39,11 @@ describe('s3_adapter tests', () => {
         await s3Client.send(
             new PutObjectCommand({
                 Bucket: bucketName,
-                Key: geometryKey,
-                Body: JSON.stringify(geometry),
-                ContentType: 'application/json; charset=utf-8',
-            })
-        );
-        await s3Client.send(
-            new PutObjectCommand({
-                Bucket: bucketName,
                 Key: forecastKey,
                 Body: JSON.stringify(forecast),
                 ContentType: 'application/json; charset=utf-8',
             })
         );
-    });
-
-    it('gets geometry', async () => {
-        const _geometryRetrieved = await s3Adapter.getGeometryJson(
-            testForecastKey
-        );
-        // console.log(`geometryRetrieved = ${_geometryRetrieved}`);
     });
 
     it('gets forecast', async () => {
@@ -71,10 +54,6 @@ describe('s3_adapter tests', () => {
     });
 
     it('throws when forecast json isnt valid', async () => {
-        console.log('todo');
-    });
-
-    it('puts geometry', async () => {
         console.log('todo');
     });
 

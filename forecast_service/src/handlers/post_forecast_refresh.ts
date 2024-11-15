@@ -26,7 +26,6 @@ export class PostForecastRefresh extends LooselyAuthenticatedAPI<
         super();
     }
 
-    // TODO I think failures here stop the service
     public async process(
         input: PostForecastRefreshInput,
         pgClient: Client
