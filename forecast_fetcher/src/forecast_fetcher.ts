@@ -5,18 +5,20 @@ export const make_fetch_forcast = (s3Adapter: S3Adapter) => {
 };
 
 const fetch_forecast = async (s3Adapter: S3Adapter) => {
-    // fetch all polygons
     const forecastKeys = await s3Adapter.getAllPolygons();
-
-    // for each polygon, fetch the forecast and post it up
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    const promises: Promise<any>[] = [];
+    const promises: Promise<void>[] = [];
 
     forecastKeys.forEach((forecastKey) =>
         promises.push(
-            getForecast(forecastKey).then(([forecast, _geometry]) => {
-                s3Adapter.putForecastJson(forecastKey, forecast);
-            })
+            getForecast(forecastKey)
+                .then((forecast) => {
+                    s3Adapter.putForecastJson(forecastKey, forecast);
+                })
+                .catch((e) => {
+                    console.error(
+                        `fetch_forecast: error getting forecast, e is: ${e}`
+                    );
+                })
         )
     );
 

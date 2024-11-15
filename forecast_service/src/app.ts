@@ -16,7 +16,6 @@ import {
     ForecastHourlyProcessor,
     ForecastProcessor,
 } from './processors/processor';
-import { make_fetch_forcast } from './forecast_fetcher';
 import { S3Client } from '@aws-sdk/client-s3';
 import { getPgClientPool, S3Adapter } from 'ww-3-utilities-tjb';
 

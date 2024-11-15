@@ -1,16 +1,11 @@
-import {
-    Forecast,
-    PostSpotInput,
-    PostSpotOutput,
-    _schema,
-} from 'ww-3-models-tjb';
-import { APIError, StrictlyAuthenticatedAPI, validate } from 'ww-3-api-tjb';
+import { PostSpotInput, PostSpotOutput, _schema } from 'ww-3-models-tjb';
+import { StrictlyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 import {
     S3Adapter,
     getForecast,
-    makeInitialCall,
+    getForecastKey,
     insertSpot,
 } from 'ww-3-utilities-tjb';
 
@@ -37,42 +32,17 @@ export class PostSpot extends StrictlyAuthenticatedAPI<
     ): Promise<PostSpotOutput> {
         const trimmedLat = this.trimLatLong(input.latitude);
         const trimmedLong = this.trimLatLong(input.longitude);
-        const forecastKey = await makeInitialCall(trimmedLat, trimmedLong);
+        const forecastKey = await getForecastKey(trimmedLat, trimmedLong);
 
         try {
-            const existingGeometry = await this.s3Adapter.getGeometryJson(
-                forecastKey
-            );
+            await this.s3Adapter.getForecastJson(forecastKey);
 
-            // for now, we are checking existing geometry to make sure it doesn't change
-            // this will ultimately be removed once it is clear that they don't change (fingers crossed)
-            const [_forecastJson, geometryJson] = await getForecast(
-                forecastKey
-            );
-
-            if (JSON.stringify(geometryJson) !== existingGeometry) {
-                console.error(
-                    `HEADS UP! geometry for this polygon has changed. existing: ${existingGeometry} and fetched: ${JSON.stringify(
-                        geometryJson
-                    )}`
-                );
-                throw new APIError(500, 'assumptions failed');
-            }
             /* eslint-disable  @typescript-eslint/no-explicit-any */
         } catch (error: any) {
             if (error.name === 'NoSuchKey') {
-                // TODO hmm, this is done twice, maybe move?
-                const [forecastJson, geometryJson] = await getForecast(
-                    forecastKey
-                );
-
-                const forecast = validate<Forecast>(
-                    _schema.Forecast,
-                    forecastJson
-                );
+                const forecast = await getForecast(forecastKey);
 
                 await this.s3Adapter.putForecastJson(forecastKey, forecast);
-                await this.s3Adapter.putGeometryJson(forecastKey, geometryJson);
             } else {
                 throw error;
             }

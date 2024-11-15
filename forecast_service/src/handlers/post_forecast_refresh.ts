@@ -32,7 +32,7 @@ export class PostForecastRefresh extends LooselyAuthenticatedAPI<
     ): Promise<PostForecastRefreshOutput> {
         const spot = await getSpot(pgClient, input.spotId);
         const fk = new ForecastKey(spot.polygonID, spot.gridX, spot.gridY);
-        const [forecast, _unused] = await getForecast(fk);
+        const forecast = await getForecast(fk);
         await this.s3Adapter.putForecastJson(fk, forecast);
 
         return {};
