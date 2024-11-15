@@ -177,3 +177,6 @@ Note: I need two different files to run the environments twice
            proxy_pass http://localhost:8082;
        }
 ```
+
+
+-r api.ts context_controllers.ts loosely_authenticated_api.ts strictly_authenticated_api.ts api_error.ts middleware/ validate.ts auth.ts job.ts queue.ts wait.ts
