@@ -29,4 +29,6 @@ export interface Forecast {
         value: number;
     };
     periods: Period[];
+    generatedAt: string;
+    updateTime: string;
 }

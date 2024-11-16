@@ -11,6 +11,7 @@ git clone https://github.com/tjbindseil/Noah_weather_wizard.git ww_prod
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 source ~/.bashrc
 nvm install 18
+nvm use 18
 sudo dnf install postgresql15 -y
 sudo dnf install docker -y
 sudo systemctl start docker
@@ -25,3 +26,8 @@ sudo dnf install nginx -y
 sudo systemctl start nginx
 sudo systemctl enable nginx
 # TODO copy over .conf changes
+
+
+# bash stuff
+echo "alias gs='git status'" >> ~/.bashrc
+echo "set -o vi" >> ~/.bashrc
