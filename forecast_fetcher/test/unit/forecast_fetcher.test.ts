@@ -1,6 +1,6 @@
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { S3Client } from '@aws-sdk/client-s3';
-import { ForecastKey, S3Adapter } from 'ww-3-utilities-tjb';
+import { ForecastKey, getForecast, S3Adapter } from 'ww-3-utilities-tjb';
 import { make_fetch_forcast } from '../../src/forecast_fetcher';
 import { Forecast } from '../../../models/build';
 import * as fs from 'fs';
@@ -75,35 +75,37 @@ describe('forecast_fetcher tests', () => {
         await Promise.all(promises);
     });
 
-    const getLastUpdatedMap = async (forecastKeys: ForecastKey[]) => {
-        const lastUpdateMap = new Map<ForecastKey, number>();
-        const promises = forecastKeys.map((fk) =>
+    it('updates all forecasts', async () => {
+        const forecastKeys = Array.from(seedForecasts.keys());
+
+        const initialLastUpdateMap = new Map<ForecastKey, number>();
+        const initialPromises = forecastKeys.map((fk) =>
             s3Adapter
                 .getForecastJson(fk)
                 .then((forecast) =>
-                    lastUpdateMap.set(fk, Date.parse(forecast.generatedAt))
+                    initialLastUpdateMap.set(
+                        fk,
+                        Date.parse(forecast.generatedAt)
+                    )
                 )
         );
-        await Promise.all(promises);
-        return lastUpdateMap;
-    };
-
-    it('updates all forecasts', async () => {
-        const forecastKeys = Array.from(seedForecasts.keys());
-        const initialLastUpdateMap = await getLastUpdatedMap(forecastKeys);
+        await Promise.all(initialPromises);
 
         forecastFetchFunc();
 
-        const finalLastUpdateMap = await getLastUpdatedMap(forecastKeys);
+        const finalLastUpdateMap = new Map<ForecastKey, number>();
+        const finalPromises = forecastKeys.map((fk) =>
+            getForecast(fk).then((forecast) =>
+                finalLastUpdateMap.set(fk, Date.parse(forecast.generatedAt))
+            )
+        );
+        await Promise.all(finalPromises);
 
         forecastKeys.forEach((fk) => {
             const initialLastUpdateTime = initialLastUpdateMap.get(fk);
             const finalLastUpdateTime = finalLastUpdateMap.get(fk);
 
             if (initialLastUpdateTime && finalLastUpdateTime) {
-                console.log(
-                    `initialLastUpdateTime is: ${initialLastUpdateTime} and finalLastUpdateTime is ${finalLastUpdateTime}`
-                );
                 expect(initialLastUpdateTime).toBeLessThan(finalLastUpdateTime);
             } else {
                 throw Error(
