@@ -12,3 +12,4 @@ export { waitUntil, waitForMS } from './wait';
 export { Job, JobState } from './job';
 export { makeCognitoJWTAuthenticator, defaultVerifier } from './auth';
 export { validate } from './validate';
+export { publishMetric } from './publish_metric';

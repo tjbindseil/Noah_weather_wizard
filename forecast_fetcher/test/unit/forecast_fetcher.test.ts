@@ -1,162 +1,82 @@
-import { get_app_config } from 'ww-3-app-config-tjb';
-import { S3Client } from '@aws-sdk/client-s3';
-import { ForecastKey, getForecast, S3Adapter } from 'ww-3-utilities-tjb';
+import { ForecastKey, S3Adapter, getForecast } from 'ww-3-utilities-tjb';
 import { make_fetch_forcast } from '../../src/forecast_fetcher';
-import { Forecast } from '../../../models/build';
-import * as fs from 'fs';
-import path from 'path';
+import { publishMetric } from 'ww-3-api-tjb';
+
+jest.mock('ww-3-utilities-tjb', () => ({
+    ...jest.requireActual('ww-3-utilities-tjb'),
+    getForecast: jest.fn(),
+}));
+const mockGetForecast = jest.mocked(getForecast);
+jest.mock('ww-3-api-tjb');
+const mockPublishMetric = jest.mocked(publishMetric);
 
 describe('forecast_fetcher tests', () => {
-    const SEED_DIRECTORY =
-        '/Users/tj/Projects/weather_wizard/forecast_fetcher/test/unit/resources/';
-    const seedForecasts = new Map<ForecastKey, Forecast>();
+    const mockGetAllPolygons = jest.fn();
+    const mockS3Adapter = {
+        getAllPolygons: mockGetAllPolygons,
+    } as unknown as S3Adapter;
+    const forecastFetchFunc = make_fetch_forcast(mockS3Adapter);
 
-    const bucketName = get_app_config().forecastBucketName;
-    const s3Client = new S3Client({
-        region: 'us-east-1',
-    });
-    const s3Adapter = new S3Adapter(s3Client, bucketName);
-
-    //     it('not quite a test, but some code that pulls da da da', async () => {
-    //         const forecastKeys = await s3Adapter.getAllPolygons();
-    //
-    //         const saveForecast = async (forecastKey: ForecastKey) => {
-    //             const keyStr = forecastKey.getKeyStr();
-    //             const forecast = await s3Adapter.getForecastJson(forecastKey);
-    //
-    //             const pathToWrite = path.join(
-    //                 '/Users/tj/Projects/weather_wizard/forecast_fetcher/test/unit/resources/',
-    //                 keyStr
-    //             );
-    //             console.log(`writing forecast: ${JSON.stringify(forecast)}`);
-    //             console.log(`to path: ${pathToWrite}`);
-    //             try {
-    //                 fs.writeFileSync(pathToWrite, JSON.stringify(forecast), {
-    //                     flag: 'w',
-    //                 });
-    //             } catch (e: unknown) {
-    //                 console.error(`issue writing: ${pathToWrite}`);
-    //                 console.error(e);
-    //             }
-    //         };
-    //
-    //         const promises: Promise<void>[] = [];
-    //         forecastKeys.forEach((fk) => {
-    //             console.log(`saving forecastkey: ${fk}`);
-    //             promises.push(saveForecast(fk));
-    //         });
-    //
-    //         await Promise.all(promises);
-    //     });
-
-    const forecastFetchFunc = make_fetch_forcast(s3Adapter);
-
-    beforeAll(async () => {
-        fs.readdirSync(SEED_DIRECTORY).forEach((fileName) => {
-            const contents = fs
-                .readFileSync(path.join(SEED_DIRECTORY, fileName))
-                .toString();
-            const forecast = JSON.parse(contents) as Forecast;
-            const filenameTokens = fileName.split('_');
-            const forecastKey = new ForecastKey(
-                filenameTokens[0],
-                Number(filenameTokens[1]),
-                Number(filenameTokens[2])
-            );
-            seedForecasts.set(forecastKey, forecast);
-        });
-
-        // this thing just uses the s3 buckets, so no need to seed a bunch of db rows, just bucket data
-        const promises: Promise<void>[] = [];
-        seedForecasts.forEach((forecast, forecastKey) => {
-            promises.push(s3Adapter.putForecastJson(forecastKey, forecast));
-        });
-
-        await Promise.all(promises);
+    beforeEach(() => {
+        mockGetForecast.mockClear();
+        mockPublishMetric.mockClear();
+        mockGetAllPolygons.mockClear();
     });
 
-    it('updates all forecasts', async () => {
-        const forecastKeys = Array.from(seedForecasts.keys());
+    it('adds a counter when forecast fails to fetch', async () => {
+        mockGetForecast.mockRejectedValue(new Error('error'));
+        mockGetAllPolygons.mockResolvedValue([new ForecastKey('PID', 4, 20)]);
 
-        const initialLastUpdateMap = new Map<ForecastKey, number>();
-        const initialPromises = forecastKeys.map((fk) =>
-            s3Adapter
-                .getForecastJson(fk)
-                .then((forecast) =>
-                    initialLastUpdateMap.set(
-                        fk,
-                        Date.parse(forecast.generatedAt)
-                    )
-                )
+        await forecastFetchFunc();
+
+        expect(mockPublishMetric).toHaveBeenCalledWith(
+            'FORECAST_FETCHER_FAILED_FETCH',
+            1
         );
-        await Promise.all(initialPromises);
-
-        forecastFetchFunc();
-
-        const finalLastUpdateMap = new Map<ForecastKey, number>();
-        const finalPromises = forecastKeys.map((fk) =>
-            getForecast(fk).then((forecast) =>
-                finalLastUpdateMap.set(fk, Date.parse(forecast.generatedAt))
-            )
-        );
-        await Promise.all(finalPromises);
-
-        forecastKeys.forEach((fk) => {
-            const initialLastUpdateTime = initialLastUpdateMap.get(fk);
-            const finalLastUpdateTime = finalLastUpdateMap.get(fk);
-
-            if (initialLastUpdateTime && finalLastUpdateTime) {
-                expect(initialLastUpdateTime).toBeLessThan(finalLastUpdateTime);
-            } else {
-                throw Error(
-                    `fk: ${fk.getKeyStr} is missing initial or final last update time. initial is: ${initialLastUpdateTime} and final is: ${finalLastUpdateTime}`
-                );
-            }
-        });
     });
-
-    // it adds a metric when a bucket isn't updated
-
-    //          afterAll(async () => {
-    //              // this thing just uses the s3 buckets, so no need to seed a bunch of db rows, just bucket data
-    //
-    //          const listParams = {
-    //              Bucket: bucketName,
-    //              Prefix: dir
-    //          ;
-    //
-    //          const listedObjects = await s3.listObjectsV2(listParams).promise();
-    //
-    //          if (listedObjects.Contents.length === 0) return;
-    //
-    //          const deleteParams = {
-    //              Bucket: bucket,
-    //              Delete: { Objects: [] }
-    //          };
-    //
-    //          listedObjects.Contents.forEach(({ Key }) => {
-    //              deleteParams.Delete.Objects.push({ Key });
-    //          });
-    //
-    //          await s3.deleteObjects(deleteParams).promise();
-    //
-    //          if (listedObjects.IsTruncated) await emptyS3Directory(bucket, dir);
-    //
-    //              const promises: Promise<void>[] = [];
-    //              seedForecasts.forEach((forecastKey, forecast) => {
-    //                  promises.push(s3Client.send(new DeleteObje);
-    //              });
-    //
-    //              await Promise.all(promises);
-    //          });
 });
 
-// async function emptyS3Directory(bucket, dir) {}
-
 // TODO here:
-// * why are we getting two buckets per env from cdk? - done
 // * sites enabled nginx
 // * PM2 on ec2 init
-// * pull down some data from laptop bucket (do i need to refresh all those spot ids since i deleted buckets?)
-// * delete stuff in the docker bucket at end of test
-// * write tests - can we expose the issue from noaa and use it as a way to fix the issue and know its fixed?
+// * add metric on cdk
+// import * as cdk from 'aws-cdk-lib';
+// import { Stack, StackProps } from 'aws-cdk-lib';
+// import * as cw from 'aws-cdk-lib/aws-cloudwatch';
+//
+// export class MonitoringStack extends Stack {
+//   constructor(scope: cdk.App, id: string, props?: StackProps) {
+//     super(scope, id, props);
+//
+//     // Define a custom metric
+//     const requestCountMetric = new cw.Metric({
+//       namespace: 'MyApp/Metrics',
+//       metricName: 'RequestCount',
+//       statistic: 'Sum',
+//       period: cdk.Duration.minutes(1),
+//     });
+//
+//     // Create an alarm for the metric
+//     new cw.Alarm(this, 'HighRequestCountAlarm', {
+//       metric: requestCountMetric,
+//       threshold: 100,
+//       evaluationPeriods: 2,
+//     });
+//   }
+// }
+//
+// * crete dashboard on cdk
+// import * as cw from 'aws-cdk-lib/aws-cloudwatch';
+//
+// const dashboard = new cw.Dashboard(this, 'AppDashboard', {
+//   dashboardName: 'MyAppDashboard',
+// });
+//
+// // Add the metric to the dashboard
+// dashboard.addWidgets(
+//   new cw.GraphWidget({
+//     title: 'Request Count',
+//     left: [requestCountMetric],
+//   })
+// );
+//
