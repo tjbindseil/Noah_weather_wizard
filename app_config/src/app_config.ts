@@ -23,6 +23,8 @@ export interface AppConfig {
     frontendServicePort: number;
 }
 
+const prodHost = '3.208.25.58';
+
 const laptopAppConfig: AppConfig = {
     forecastBucketName: 'ww-laptop-forecast',
     spotServiceListenPort: 8080,
@@ -51,7 +53,7 @@ const dockerUnitTestAppConfig: AppConfig = {
     spotServiceListenPort: 8080,
     forecastServiceListenPort: 8081,
     userServiceListenPort: 8082,
-    frontendServiceHost: '98.80.69.4',
+    frontendServiceHost: prodHost,
     frontendServicePort: 8888,
 };
 
@@ -68,7 +70,7 @@ const stagingAppConfig: AppConfig = {
     spotServiceListenPort: 8880,
     forecastServiceListenPort: 8881,
     userServiceListenPort: 8882,
-    frontendServiceHost: '98.80.69.4',
+    frontendServiceHost: prodHost,
     frontendServicePort: 8888,
 };
 
@@ -85,7 +87,7 @@ const prodAppConfig: AppConfig = {
     spotServiceListenPort: 8080,
     forecastServiceListenPort: 8081,
     userServiceListenPort: 8082,
-    frontendServiceHost: '98.80.69.4',
+    frontendServiceHost: prodHost,
     frontendServicePort: 80,
 };
 

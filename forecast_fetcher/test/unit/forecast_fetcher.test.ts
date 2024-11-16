@@ -76,7 +76,7 @@ async function emptyS3Directory(bucket, dir) {
 
 
 // TODO here:
-// * why are we getting two buckets per env from cdk?
+// * why are we getting two buckets per env from cdk? - done
 // * pull down some data from laptop bucket (do i need to refresh all those spot ids since i deleted buckets?)
 // * delete stuff in the docker bucket at end of test
 // * write tests - can we expose the issue from noaa and use it as a way to fix the issue and know its fixed?

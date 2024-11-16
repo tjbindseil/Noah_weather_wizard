@@ -61,15 +61,16 @@ export class CdkAppStack extends cdk.Stack {
 
         // TODO create s3 adapter test bucket in cdk
         // Create an S3 bucket for forecasts in each env
-        const buckets = Object.keys(Environment).map(
-            (env) =>
-                new s3.Bucket(this, `ww-${env}-forecast-bucket`, {
+        const buckets = Object.keys(Environment)
+            .filter((env) => isNaN(Number(env)))
+            .map((env) => {
+                return new s3.Bucket(this, `ww-${env}-forecast-bucket`, {
                     bucketName: `ww-${env}-forecast`,
                     versioned: false,
                     removalPolicy: cdk.RemovalPolicy.DESTROY,
                     publicReadAccess: false,
-                })
-        );
+                });
+            });
 
         // create a Role for the EC2 Instance
         const webserverRole = new iam.Role(this, 'webserver-role', {
