@@ -92,4 +92,13 @@ export class S3Adapter {
         });
         return forecastKeys;
     }
+
+    public async deleteForecast(forecastKey: ForecastKey) {
+        const raw = await this.getObject(
+            `${forecastKey.getKeyStr()}/${this.FORECAST_FILE_NAME}`
+        );
+        const asObj = JSON.parse(raw);
+
+        return validate<Forecast>(_schema.Forecast, asObj);
+    }
 }
