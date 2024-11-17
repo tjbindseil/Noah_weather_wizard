@@ -1,0 +1,58 @@
+server {
+    listen 8888;
+    # server_name example.com www.example.com;
+
+    # root /var/www/example.com/html;
+    # index index.html index.htm;
+
+    location / {
+        proxy_buffering off;
+        proxy_pass http://localhost:8880;
+    }
+    location /spot {
+        proxy_buffering off;
+        proxy_pass http://localhost:8880;
+    }
+    location /spots {
+        proxy_buffering off;
+        proxy_pass http://localhost:8880;
+    }
+    location /favorite {
+        proxy_buffering off;
+        proxy_pass http://localhost:8880;
+    }
+    location /favorites {
+        proxy_buffering off;
+        proxy_pass http://localhost:8880;
+    }
+
+    location /forecast {
+        proxy_buffering off;
+        proxy_pass http://localhost:8881;
+    }
+    location /forecasts {
+        proxy_buffering off;
+        proxy_pass http://localhost:8881;
+    }
+
+    location /user {
+        proxy_buffering off;
+        proxy_pass http://localhost:8882;
+    }
+    location /auth {
+        proxy_buffering off;
+        proxy_pass http://localhost:8882;
+    }
+    location /confirmation {
+        proxy_buffering off;
+        proxy_pass http://localhost:8882;
+    }
+    location /refresh {
+        proxy_buffering off;
+        proxy_pass http://localhost:8882;
+    }
+    location /new-confirmation-code {
+        proxy_buffering off;
+        proxy_pass http://localhost:8882;
+    }
+}

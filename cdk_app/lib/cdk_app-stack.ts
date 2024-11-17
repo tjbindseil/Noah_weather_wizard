@@ -1,4 +1,5 @@
 import * as cdk from 'aws-cdk-lib';
+import * as cw from 'aws-cdk-lib/aws-cloudwatch';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as rds from 'aws-cdk-lib/aws-rds';
@@ -140,6 +141,28 @@ export class CdkAppStack extends cdk.Stack {
                 'Allow ping from anywhere'
             );
         });
+
+        // TODO staging and prod envs
+
+        // metric to track issues refresh data on the back end
+        const forecastFetcherFailedCountMetric = new cw.Metric({
+            namespace: 'WW/Metrics',
+            metricName: 'FORECAST_FETCHER_FAILED_FETCH',
+            statistic: 'Sum',
+            period: cdk.Duration.minutes(1),
+        });
+
+        const dashboard = new cw.Dashboard(this, 'WW_Dashboard', {
+            dashboardName: 'WW_Dashboard',
+        });
+
+        // Add the metric to the dashboard
+        dashboard.addWidgets(
+            new cw.GraphWidget({
+                title: 'forecast fetcher failures',
+                left: [forecastFetcherFailedCountMetric],
+            })
+        );
 
         new cdk.CfnOutput(this, 'dbEndpoint', {
             value: dbInstance.instanceEndpoint.hostname,

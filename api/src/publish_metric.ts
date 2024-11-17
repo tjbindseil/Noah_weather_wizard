@@ -34,12 +34,3 @@ export async function publishMetric(
         // throw err; // Optionally re-throw to handle upstream.
     }
 }
-
-// Example usage
-// (async () => {
-//     try {
-//         await publishMetric('RequestCount', 1, 'MyApp/Metrics');
-//     } catch (error) {
-//         console.error('Error publishing metric:', error);
-//     }
-// })();

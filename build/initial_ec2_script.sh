@@ -25,8 +25,14 @@ docker stop my-postgres
 sudo dnf install nginx -y
 sudo systemctl start nginx
 sudo systemctl enable nginx
-# TODO copy over .conf changes
-
+# this needs to happen after pull
+# so gotta get a little more creative
+# or maybe just...
+# USE DOCKER
+# TODO
+# scp prod-nginx-site-conf staging-nginx-site-conf ec2-user@dev:/etc/nginx/conf.d/
+# pm2 start pm2_ecosystem_file.prod.config.js
+# pm2 start pm2_ecosystem_file.staging.config.js
 
 # bash stuff
 echo "alias gs='git status'" >> ~/.bashrc
