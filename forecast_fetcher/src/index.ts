@@ -1,7 +1,7 @@
 import { S3Client } from '@aws-sdk/client-s3';
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { S3Adapter } from 'ww-3-utilities-tjb';
-import { make_fetch_forcast } from './forecast_fetcher';
+import { ForecastFetcher } from './forecast_fetcher';
 
 // TODO delete is actually a bit more complicated,
 // if there is no more spots looking at it, we should delete the s3 folder and its contents
@@ -18,6 +18,8 @@ const s3Client = new S3Client({
 });
 const s3Adapter = new S3Adapter(s3Client, bucketName);
 
+const oneHourInMilliseconds = 1000 * 60 * 60;
 const fourHoursInMilliseconds = 1000 * 60 * 60 * 4;
-const fetchForecastFunc = make_fetch_forcast(s3Adapter);
-setInterval(fetchForecastFunc, fourHoursInMilliseconds);
+const forecastFetcher = new ForecastFetcher(s3Adapter);
+setInterval(forecastFetcher.fetchForecast, fourHoursInMilliseconds);
+setInterval(forecastFetcher.fetchForecastHourly, oneHourInMilliseconds);

@@ -1,6 +1,6 @@
 import { ForecastKey, S3Adapter, getForecast } from 'ww-3-utilities-tjb';
-import { make_fetch_forcast } from '../../src/forecast_fetcher';
 import { publishMetric } from 'ww-3-api-tjb';
+import { ForecastFetcher } from '../../src/forecast_fetcher';
 
 jest.mock('ww-3-utilities-tjb', () => ({
     ...jest.requireActual('ww-3-utilities-tjb'),
@@ -15,7 +15,7 @@ describe('forecast_fetcher tests', () => {
     const mockS3Adapter = {
         getAllPolygons: mockGetAllPolygons,
     } as unknown as S3Adapter;
-    const forecastFetchFunc = make_fetch_forcast(mockS3Adapter);
+    const forecastFetcher = new ForecastFetcher(mockS3Adapter);
 
     beforeEach(() => {
         mockGetForecast.mockClear();
@@ -27,7 +27,7 @@ describe('forecast_fetcher tests', () => {
         mockGetForecast.mockRejectedValue(new Error('error'));
         mockGetAllPolygons.mockResolvedValue([new ForecastKey('PID', 4, 20)]);
 
-        await forecastFetchFunc();
+        await forecastFetcher.fetchForecast();
 
         expect(mockPublishMetric).toHaveBeenCalledWith(
             'FORECAST_FETCHER_FAILED_FETCH',

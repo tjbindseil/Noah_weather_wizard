@@ -1,10 +1,10 @@
 import { get_app_config } from 'ww-3-app-config-tjb';
 import { S3Client } from '@aws-sdk/client-s3';
 import { ForecastKey, S3Adapter } from 'ww-3-utilities-tjb';
-import { make_fetch_forcast } from '../../src/forecast_fetcher';
-import { Forecast } from '../../../models/build';
+import { Forecast } from 'ww-3-models-tjb';
 import * as fs from 'fs';
 import path from 'path';
+import { ForecastFetcher } from '../../src/forecast_fetcher';
 
 describe('forecast_fetcher LIVE tests', () => {
     // TODO this test is spotty because once in a while the NOAA endpoint returns an empty obj
@@ -17,7 +17,7 @@ describe('forecast_fetcher LIVE tests', () => {
         region: 'us-east-1',
     });
     const s3Adapter = new S3Adapter(s3Client, bucketName);
-    const forecastFetchFunc = make_fetch_forcast(s3Adapter);
+    const forecastFetcher = new ForecastFetcher(s3Adapter);
 
     beforeAll(async () => {
         fs.readdirSync(SEED_DIRECTORY).forEach((fileName) => {
@@ -37,7 +37,7 @@ describe('forecast_fetcher LIVE tests', () => {
         // this thing just uses the s3 buckets, so no need to seed a bunch of db rows, just bucket data
         const promises: Promise<void>[] = [];
         seedForecasts.forEach((forecast, forecastKey) => {
-            promises.push(s3Adapter.putForecastJson(forecastKey, forecast));
+            promises.push(s3Adapter.putForecast(forecastKey, forecast));
         });
 
         await Promise.all(promises);
@@ -47,7 +47,7 @@ describe('forecast_fetcher LIVE tests', () => {
         const lastUpdatedForecastMap = new Map<ForecastKey, number>();
         const initialPromises = fks.map((fk) =>
             s3Adapter
-                .getForecastJson(fk)
+                .getForecast(fk)
                 .then((forecast) =>
                     lastUpdatedForecastMap.set(
                         fk,
@@ -66,7 +66,7 @@ describe('forecast_fetcher LIVE tests', () => {
             forecastKeys
         );
 
-        await forecastFetchFunc();
+        await forecastFetcher.fetchForecast();
 
         const finalLastUpdateMap = await getLastForecastUpdatedTimes(
             forecastKeys

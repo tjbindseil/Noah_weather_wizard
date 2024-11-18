@@ -8,10 +8,9 @@
 * deal with multiplicity of spots
 
 ## forecast service
-* write up a forecast hourly model
-* on a four hour interval, fetch forecast hourly for each polygon
-* wire up forecast hourly provider (just the one that gets them all, not filter or sort)
-* forecast hourly comparison page
+* write up a forecast hourly model - done
+* on an hourly interval, fetch forecast hourly for each polygon
+* wire up forecast hourly provider (just the one that gets them all, not filter or sort) - done
 * remove or implement possible / ranked forecast
 
 ## tests
@@ -20,6 +19,7 @@
 * integ test script can check if the services are running on machine (check the port), if not present, start and stop as part of the script
 
 ## frontend
+* forecast hourly comparison page
 * consider utilizing the permanence of spot service in coordination with the map to solve
   the repeated `fetch\_existing\_spot` calls returning out of order (see user\_stuff abvoe)
 * implement show (select?) favorites button in spot selection page (small)
