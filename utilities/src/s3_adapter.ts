@@ -94,7 +94,7 @@ export class S3Adapter {
             })
         );
 
-        const forecastKeys = new Set<ForecastKey>();
+        const forecastKeys: ForecastKey[] = [];
 
         result.Contents?.forEach((object) => {
             if (!object.Key) {
@@ -104,7 +104,7 @@ export class S3Adapter {
 
             const folderName = object.Key.split('/')[0];
             const folderNameTokens = folderName.split('_');
-            forecastKeys.add(
+            forecastKeys.push(
                 new ForecastKey(
                     folderNameTokens[0],
                     Number(folderNameTokens[1]),
@@ -112,7 +112,13 @@ export class S3Adapter {
                 )
             );
         });
-        return forecastKeys;
+
+        // sets can contain duplicate objects, even if the objects them selves are identical
+        const uniqueFKs = new Set(forecastKeys.map((fk) => JSON.stringify(fk)));
+        return Array.from(uniqueFKs).map((fk) => {
+            const asObj = JSON.parse(fk);
+            return new ForecastKey(asObj.polygonID, asObj.gridX, asObj.gridY);
+        });
     }
 
     public async deleteForecast(forecastKey: ForecastKey) {

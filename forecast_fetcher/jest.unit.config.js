@@ -5,7 +5,6 @@ module.exports = {
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     coverageProvider: 'v8',
     collectCoverageFrom: ['src/**/*.ts'],
-    coveragePathIgnorePatterns: [
-        'node_modules',
-    ],
+    testTimeout: 10000,
+    coveragePathIgnorePatterns: ['node_modules'],
 };

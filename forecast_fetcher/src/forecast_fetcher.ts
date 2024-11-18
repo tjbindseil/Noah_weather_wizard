@@ -12,11 +12,6 @@ export class ForecastFetcher {
             promises.push(
                 getForecast(forecastKey)
                     .then((forecast) => {
-                        console.log(
-                            `fk is: ${forecastKey.getKeyStr()} and forecast is: ${JSON.stringify(
-                                forecast
-                            )}`
-                        );
                         this.s3Adapter.putForecast(forecastKey, forecast);
                     })
                     .catch((e) => {
@@ -39,12 +34,10 @@ export class ForecastFetcher {
             promises.push(
                 getForecastHourly(forecastKey)
                     .then((forecastHourly) => {
-                        console.log(
-                            `fk is: ${forecastKey.getKeyStr()} and forecast is: ${JSON.stringify(
-                                forecastHourly
-                            )}`
+                        this.s3Adapter.putForecastHourly(
+                            forecastKey,
+                            forecastHourly
                         );
-                        this.s3Adapter.putForecast(forecastKey, forecastHourly);
                     })
                     .catch((e) => {
                         console.error(
