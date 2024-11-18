@@ -25,8 +25,6 @@ how do i want to work on things?
 * always have a dev env on ec2
 * always have a prod env on ec2
 * can run a host env on my machine
-  * integ test script can check if the services are running on machine (check the port)
-    * if not present, start and stop as part of the script
 
   &&&& DO I WANNA USE DOCKER?? &&&&
   first lets not

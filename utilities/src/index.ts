@@ -1,5 +1,5 @@
 export { S3Adapter } from './s3_adapter';
-export { getForecastKey, getForecast } from './noaa_api';
+export { getForecastKey, getForecast, getForecastHourly } from './noaa_api';
 export { ForecastKey } from './forecast_key';
 export {
     insertSpot,

@@ -6,11 +6,12 @@ import {
 } from '@aws-sdk/client-s3';
 import Ajv from 'ajv';
 import { APIError, validate } from 'ww-3-api-tjb';
-import { _schema, Forecast } from 'ww-3-models-tjb';
+import { _schema, Forecast, ForecastHourly } from 'ww-3-models-tjb';
 import { ForecastKey } from './forecast_key';
 
 export class S3Adapter {
     private readonly FORECAST_FILE_NAME = 'forecast.json';
+    private readonly FORECAST_HOURLY_FILE_NAME = 'forecast_houly.json';
 
     protected readonly ajv: Ajv;
 
@@ -28,6 +29,17 @@ export class S3Adapter {
         const asObj = JSON.parse(raw);
 
         return validate<Forecast>(_schema.Forecast, asObj);
+    }
+
+    public async getForecastHourlyJson(
+        forecastKey: ForecastKey
+    ): Promise<ForecastHourly> {
+        const raw = await this.getObject(
+            `${forecastKey.getKeyStr()}/${this.FORECAST_HOURLY_FILE_NAME}`
+        );
+        const asObj = JSON.parse(raw);
+
+        return validate<ForecastHourly>(_schema.ForecastHourly, asObj);
     }
 
     private async getObject(key: string): Promise<string> {
@@ -50,6 +62,16 @@ export class S3Adapter {
         await this.putObject(
             `${forecastKey.getKeyStr()}/${this.FORECAST_FILE_NAME}`,
             forecast
+        );
+    }
+
+    public async putForecastHourly(
+        forecastKey: ForecastKey,
+        forecastHourly: ForecastHourly
+    ) {
+        await this.putObject(
+            `${forecastKey.getKeyStr()}/${this.FORECAST_HOURLY_FILE_NAME}`,
+            forecastHourly
         );
     }
 

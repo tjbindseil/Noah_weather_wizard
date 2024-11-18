@@ -1,6 +1,6 @@
 // TODO handle 5 second wait and retry when issues arise
 
-import { _schema, Forecast, GridInfo } from 'ww-3-models-tjb';
+import { _schema, Forecast, ForecastHourly, GridInfo } from 'ww-3-models-tjb';
 import { ForecastKey } from './forecast_key';
 import { validate } from 'ww-3-api-tjb';
 
@@ -39,4 +39,21 @@ export const getForecast = async (
     );
 
     return validatedForecast;
+};
+
+export const getForecastHourly = async (
+    forecastKey: ForecastKey
+): Promise<Forecast> => {
+    const fetchResult = await (
+        await fetch(forecastKey.getForecastHourlyUrl(), {
+            method: 'GET',
+        })
+    ).json();
+
+    const validatedForecastHourly = validate<ForecastHourly>(
+        _schema.ForecastHourly,
+        fetchResult.properties
+    );
+
+    return validatedForecastHourly;
 };

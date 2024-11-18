@@ -33,6 +33,7 @@ export {
     Period,
     Forecast,
     ForecastHourly,
+    HourlyPeriod,
 } from './forecast_service_models/forecast';
 export { User } from './user_service/user';
 export { PostUserInput, PostUserOutput } from './user_service/post_user';

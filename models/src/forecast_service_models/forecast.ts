@@ -1,5 +1,36 @@
 export interface ForecastHourly {
-    sunny_hourly: boolean;
+    units: string;
+    elevation: {
+        unitCode: string;
+        value: number;
+    };
+    periods: Period[];
+    generatedAt: string;
+    updateTime: string;
+}
+
+export interface HourlyPeriod {
+    number: number;
+    name: string;
+    startTime: string;
+    endTime: string;
+    isDaytime: boolean;
+    temperature: number;
+    temperatureUnit: string;
+    temperatureTrend: string;
+    probabilityOfPrecipitation: {
+        unitCode: string;
+        value: number | null;
+    };
+    relativeHumidity: {
+        unitCode: string;
+        value: number | null;
+    };
+    windSpeed: string;
+    windDirection: string;
+    icon: string;
+    shortForecast: string;
+    detailedForecast: string;
 }
 
 export interface Period {

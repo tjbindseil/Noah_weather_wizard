@@ -41,8 +41,13 @@ export class PostSpot extends StrictlyAuthenticatedAPI<
         } catch (error: any) {
             if (error.name === 'NoSuchKey') {
                 const forecast = await getForecast(forecastKey);
+                const forecastHourly = await getForecastHourly(forecastKey);
 
                 await this.s3Adapter.putForecastJson(forecastKey, forecast);
+                await this.s3Adapter.putForecastHourly(
+                    forecastKey,
+                    forecastHourly
+                );
             } else {
                 throw error;
             }

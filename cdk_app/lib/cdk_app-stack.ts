@@ -60,7 +60,6 @@ export class CdkAppStack extends cdk.Stack {
             'allow HTTPS traffic from anywhere'
         );
 
-        // TODO create s3 adapter test bucket in cdk
         // Create an S3 bucket for forecasts in each env
         const buckets = Object.keys(Environment)
             .filter((env) => isNaN(Number(env)))
@@ -73,6 +72,14 @@ export class CdkAppStack extends cdk.Stack {
                 });
             });
 
+        // create s3 adapter test bucket
+        const s3AdapterTestBucket = new s3.Bucket(this, 'ww-s3-adapter-test', {
+            bucketName: 'ww-s3-adapter-test',
+            versioned: false,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+            publicReadAccess: false,
+        });
+
         // create a Role for the EC2 Instance
         const webserverRole = new iam.Role(this, 'webserver-role', {
             assumedBy: new iam.ServicePrincipal('ec2.amazonaws.com'),
@@ -83,6 +90,7 @@ export class CdkAppStack extends cdk.Stack {
             ],
         });
         buckets.forEach((bucket) => bucket.grantReadWrite(webserverRole));
+        s3AdapterTestBucket.grantReadWrite(webserverRole);
 
         // Cost: $.40/month
         const dbSecret = new DatabaseSecret(this, 'PictureDatabaseSecret', {

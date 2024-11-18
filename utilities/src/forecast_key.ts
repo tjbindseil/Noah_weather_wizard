@@ -12,4 +12,8 @@ export class ForecastKey {
     public getForecastUrl() {
         return `https://api.weather.gov/gridpoints/${this.polygonID}/${this.gridX},${this.gridY}/forecast`;
     }
+
+    public getForecastHourlyUrl() {
+        return `https://api.weather.gov/gridpoints/${this.polygonID}/${this.gridX},${this.gridY}/forecast/hourly`;
+    }
 }
