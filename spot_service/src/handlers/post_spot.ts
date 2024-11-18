@@ -5,6 +5,7 @@ import { Client } from 'ts-postgres';
 import {
     S3Adapter,
     getForecast,
+    getForecastHourly,
     getForecastKey,
     insertSpot,
 } from 'ww-3-utilities-tjb';
@@ -35,7 +36,7 @@ export class PostSpot extends StrictlyAuthenticatedAPI<
         const forecastKey = await getForecastKey(trimmedLat, trimmedLong);
 
         try {
-            await this.s3Adapter.getForecastJson(forecastKey);
+            await this.s3Adapter.getForecast(forecastKey);
 
             /* eslint-disable  @typescript-eslint/no-explicit-any */
         } catch (error: any) {
@@ -43,7 +44,7 @@ export class PostSpot extends StrictlyAuthenticatedAPI<
                 const forecast = await getForecast(forecastKey);
                 const forecastHourly = await getForecastHourly(forecastKey);
 
-                await this.s3Adapter.putForecastJson(forecastKey, forecast);
+                await this.s3Adapter.putForecast(forecastKey, forecast);
                 await this.s3Adapter.putForecastHourly(
                     forecastKey,
                     forecastHourly

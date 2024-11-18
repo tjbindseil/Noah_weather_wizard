@@ -21,7 +21,7 @@ import { Pool } from 'generic-pool';
 
 type PostedSpot = Omit<Spot, 'id'>;
 
-describe.skip('dbo tests', () => {
+describe('dbo tests', () => {
     let pgClient: Client;
     let pool: Pool<Client>;
 

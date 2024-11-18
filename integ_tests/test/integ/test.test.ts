@@ -5,7 +5,10 @@ import {
     testUser4,
     UserWithTokens,
 } from './setup/seedUsers';
-import { getForecasts } from './api_helpers/forecast_service_api';
+import {
+    getForecasts,
+    getForecastsHourly,
+} from './api_helpers/forecast_service_api';
 import {
     deleteFavorite,
     deleteSpot,
@@ -163,11 +166,11 @@ describe('General integ tests', () => {
         spotsToDelete.push({ spotId: longsPeak.spot.id, user: testUser1 });
         spotsToDelete.push({ spotId: mtWhitney.spot.id, user: testUser1 });
 
-        const _forecasts = await getForecasts([
-            longsPeak.spot.id,
-            mtWhitney.spot.id,
-        ]);
-        // console.log(`forecasts is: ${JSON.stringify(forecasts)}`);
+        const spotIds = [longsPeak.spot.id, mtWhitney.spot.id];
+        const _forecasts = await getForecasts(spotIds);
+        const _forecastsHourly = await getForecastsHourly(spotIds);
+        // console.log(`forecasts is: ${JSON.stringify(_forecasts)}`);
+        console.log(`forecastsHourly is: ${JSON.stringify(_forecastsHourly)}`);
     });
 
     it('creates (and gets) favorites', async () => {

@@ -8,7 +8,8 @@ import {
 import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
-import { ForecastKey, getSpot, S3Adapter } from 'ww-3-utilities-tjb';
+import { ForecastKey, S3Adapter } from 'ww-3-utilities-tjb';
+import { getSpotToForecastKeyMap } from './utils';
 
 export class GetForecasts extends LooselyAuthenticatedAPI<
     GetForecastsInput,
@@ -23,25 +24,13 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
         super();
     }
 
-    // TODO I think failures here stop the service
     public async process(
         input: GetForecastsInput,
         pgClient: Client
     ): Promise<GetForecastsOutput> {
-        const spotIds: number[] = input.spotIDs
-            .split(',')
-            .map((str) => parseFloat(str));
-
-        const spotPromises: Promise<Spot>[] = [];
-        for (let i = 0; i < spotIds.length; ++i) {
-            spotPromises.push(getSpot(pgClient, spotIds[i]));
-        }
-        const spotToForecastKeyMap = new Map<Spot, ForecastKey>();
-        (await Promise.all(spotPromises)).forEach((spot) =>
-            spotToForecastKeyMap.set(
-                spot,
-                new ForecastKey(spot.polygonID, spot.gridX, spot.gridY)
-            )
+        const spotToForecastKeyMap = await getSpotToForecastKeyMap(
+            pgClient,
+            input.spotIDs
         );
 
         const spotToForecastMap = new Map<Spot, Forecast>();
@@ -49,7 +38,7 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
         const getForecastPromises: Promise<void>[] = [];
 
         const setForecast = async (spot: Spot, forecastKey: ForecastKey) => {
-            const forecast = await this.s3Adapter.getForecastJson(forecastKey);
+            const forecast = await this.s3Adapter.getForecast(forecastKey);
             spotToForecastMap.set(spot, forecast);
         };
 

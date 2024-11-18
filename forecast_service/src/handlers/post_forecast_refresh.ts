@@ -9,6 +9,7 @@ import { Client } from 'ts-postgres';
 import {
     ForecastKey,
     getForecast,
+    getForecastHourly,
     getSpot,
     S3Adapter,
 } from 'ww-3-utilities-tjb';
@@ -33,7 +34,9 @@ export class PostForecastRefresh extends LooselyAuthenticatedAPI<
         const spot = await getSpot(pgClient, input.spotId);
         const fk = new ForecastKey(spot.polygonID, spot.gridX, spot.gridY);
         const forecast = await getForecast(fk);
-        await this.s3Adapter.putForecastJson(fk, forecast);
+        const forecastHourly = await getForecastHourly(fk);
+        await this.s3Adapter.putForecast(fk, forecast);
+        await this.s3Adapter.putForecastHourly(fk, forecastHourly);
 
         return {};
     }

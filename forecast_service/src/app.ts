@@ -72,7 +72,12 @@ export const createServer = async (): Promise<http.Server> => {
     app.get(
         '/forecasts_hourly',
         (req: Request, res: Response, next: NextFunction) => {
-            new GetForecastsHourly().call(req, res, next, pgContextController);
+            new GetForecastsHourly(s3Adapter).call(
+                req,
+                res,
+                next,
+                pgContextController
+            );
         }
     );
     app.get(

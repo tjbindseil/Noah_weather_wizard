@@ -11,7 +11,7 @@ import { ForecastKey } from './forecast_key';
 
 export class S3Adapter {
     private readonly FORECAST_FILE_NAME = 'forecast.json';
-    private readonly FORECAST_HOURLY_FILE_NAME = 'forecast_houly.json';
+    private readonly FORECAST_HOURLY_FILE_NAME = 'forecast_hourly.json';
 
     protected readonly ajv: Ajv;
 
@@ -22,7 +22,7 @@ export class S3Adapter {
         this.ajv = new Ajv({ strict: false });
     }
 
-    public async getForecastJson(forecastKey: ForecastKey): Promise<Forecast> {
+    public async getForecast(forecastKey: ForecastKey): Promise<Forecast> {
         const raw = await this.getObject(
             `${forecastKey.getKeyStr()}/${this.FORECAST_FILE_NAME}`
         );
@@ -31,7 +31,7 @@ export class S3Adapter {
         return validate<Forecast>(_schema.Forecast, asObj);
     }
 
-    public async getForecastHourlyJson(
+    public async getForecastHourly(
         forecastKey: ForecastKey
     ): Promise<ForecastHourly> {
         const raw = await this.getObject(
@@ -58,7 +58,7 @@ export class S3Adapter {
         return jsonStr;
     }
 
-    public async putForecastJson(forecastKey: ForecastKey, forecast: Forecast) {
+    public async putForecast(forecastKey: ForecastKey, forecast: Forecast) {
         await this.putObject(
             `${forecastKey.getKeyStr()}/${this.FORECAST_FILE_NAME}`,
             forecast

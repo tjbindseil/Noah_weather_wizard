@@ -7,7 +7,7 @@ export interface GetForecastsHourlyInput {
 
 interface SpotToForecastHourly {
     spot: Spot;
-    forecast: ForecastHourly;
+    forecastHourly: ForecastHourly;
 }
 
 export interface GetForecastsHourlyOutput {

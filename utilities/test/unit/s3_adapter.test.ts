@@ -36,11 +36,11 @@ describe('s3_adapter and noaa_api tests', () => {
         const forecast = await getForecast(fk);
         const forecastHourly = await getForecastHourly(fk);
 
-        await s3Adapter.putForecastJson(fk, forecast);
+        await s3Adapter.putForecast(fk, forecast);
         await s3Adapter.putForecastHourly(fk, forecastHourly);
 
-        const _forecast = await s3Adapter.getForecastJson(fk);
-        const _forecastHourly = await s3Adapter.getForecastHourlyJson(fk);
+        const _forecast = await s3Adapter.getForecast(fk);
+        const _forecastHourly = await s3Adapter.getForecastHourly(fk);
     });
 
     afterAll(async () => {

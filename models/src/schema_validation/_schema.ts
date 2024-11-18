@@ -772,7 +772,7 @@ const schema = {
                         'polygonID',
                     ],
                 },
-                forecast: {
+                forecastHourly: {
                     type: 'object',
                     properties: {
                         units: { type: 'string' },
@@ -841,7 +841,7 @@ const schema = {
                     ],
                 },
             },
-            required: ['forecast', 'spot'],
+            required: ['forecastHourly', 'spot'],
         },
         GetForecastsHourlyOutput: {
             type: 'object',
@@ -874,7 +874,7 @@ const schema = {
                                     'polygonID',
                                 ],
                             },
-                            forecast: {
+                            forecastHourly: {
                                 type: 'object',
                                 properties: {
                                     units: { type: 'string' },
@@ -963,7 +963,7 @@ const schema = {
                                 ],
                             },
                         },
-                        required: ['forecast', 'spot'],
+                        required: ['forecastHourly', 'spot'],
                     },
                 },
             },
