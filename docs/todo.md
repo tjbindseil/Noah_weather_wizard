@@ -9,7 +9,7 @@
 
 ## forecast service
 * write up a forecast hourly model - done
-* on an hourly interval, fetch forecast hourly for each polygon
+* on an hourly interval, fetch forecast hourly for each polygon - done
 * wire up forecast hourly provider (just the one that gets them all, not filter or sort) - done
 * remove or implement possible / ranked forecast
 

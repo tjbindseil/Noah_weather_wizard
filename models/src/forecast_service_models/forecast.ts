@@ -32,7 +32,7 @@ export interface HourlyPeriod {
     shortForecast: string;
     detailedForecast: string;
 }
-
+// TODO these two are the same
 export interface Period {
     number: number;
     name: string;
