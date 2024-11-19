@@ -23,6 +23,7 @@ export function SelectedSpot(props: SelectedSpotProps) {
     <Marker
       eventHandlers={{
         mouseover: () => {
+          // TODO maybe delay a split second before scrolling table
           props.setHoveredSpot({ spotId: props.spotId, fromMap: true });
         },
         mouseout: () => {

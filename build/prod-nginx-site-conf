@@ -34,6 +34,10 @@ server {
         proxy_buffering off;
         proxy_pass http://localhost:8881;
     }
+    location /forecasts_hourly {
+        proxy_buffering off;
+        proxy_pass http://localhost:8881;
+    }
 
     location /user {
         proxy_buffering off;

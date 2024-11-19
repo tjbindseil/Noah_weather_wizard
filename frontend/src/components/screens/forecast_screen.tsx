@@ -6,6 +6,7 @@ import { ImageForecast } from '../forecast_stuff/image_forecast';
 import { ShortForecast } from '../forecast_stuff/short_forecast';
 import { LongForecast } from '../forecast_stuff/long_forecast';
 import { NavBar } from '../nav_bar';
+import { HourlyForecast } from '../forecast_stuff/hourly_forecast';
 
 export function ForecastScreen() {
   const forecastService = useForecastService();
@@ -27,9 +28,12 @@ export function ForecastScreen() {
     forecastService.getForecasts({ spotIDs: selectedSpots }).then((result) => {
       setForecasts(result.forecasts);
     });
-    forecastService.getForecastsHourly({ spotIDs: selectedSpots }).then((result) => {
-      setForecastsHourly(result.forecastsHourly);
-    });
+    forecastService
+      .getForecastsHourly({ spotIDs: selectedSpots })
+      .then((result) => {
+        setForecastsHourly(result.forecastsHourly);
+      })
+      .catch((e) => console.error(`@@ @@ get hourly and e is: ${e}`));
   }, [forecastService, setForecasts, setForecastsHourly]);
 
   return (
@@ -38,12 +42,12 @@ export function ForecastScreen() {
       <p>See the forecast here!</p>
       {forecasts.length > 0 ? (
         <>
-          <ImageForecast forecasts={forecasts} />
-          <ShortForecast forecasts={forecasts} />
-          <LongForecast forecasts={forecasts} />
           {
-            // <HourlyForecast forecastHourly={forecastsHourly} />
+            //           <ImageForecast forecasts={forecasts} />
+            //           <ShortForecast forecasts={forecasts} />
+            //           <LongForecast forecasts={forecasts} />
           }
+          <HourlyForecast forecastsHourly={forecastsHourly} />
         </>
       ) : (
         <p>
