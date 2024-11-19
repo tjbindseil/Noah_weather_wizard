@@ -6,7 +6,10 @@ import { ImageForecast } from '../forecast_stuff/image_forecast';
 import { ShortForecast } from '../forecast_stuff/short_forecast';
 import { LongForecast } from '../forecast_stuff/long_forecast';
 import { NavBar } from '../nav_bar';
-import { HourlyForecast } from '../forecast_stuff/hourly_forecast';
+import { HourlyTemperatureForecast } from '../forecast_stuff/temperature_hourly_forecast';
+import { HourlyHumidityForecast } from '../forecast_stuff/humidity_hourly_forecast';
+import { HourlyWindSpeedForecast } from '../forecast_stuff/wind_speed_hourly_forecast';
+import { HourlyPrecipPercentForecast } from '../forecast_stuff/precip_hourly_forecast';
 
 export function ForecastScreen() {
   const forecastService = useForecastService();
@@ -43,13 +46,17 @@ export function ForecastScreen() {
       {forecasts.length > 0 ? (
         <>
           {
+            //           TODO - bound the charts and keep headers in place while the charts scroll
             //           its like a nav bar
             //           a few options, selected is highlighted to indicated its selected
             //           <ImageForecast forecasts={forecasts} />
             //           <ShortForecast forecasts={forecasts} />
             //           <LongForecast forecasts={forecasts} />
           }
-          <HourlyForecast forecastsHourly={forecastsHourly} />
+          <HourlyTemperatureForecast forecastsHourly={forecastsHourly} />
+          <HourlyHumidityForecast forecastsHourly={forecastsHourly} />
+          <HourlyWindSpeedForecast forecastsHourly={forecastsHourly} />
+          <HourlyPrecipPercentForecast forecastsHourly={forecastsHourly} />
         </>
       ) : (
         <p>

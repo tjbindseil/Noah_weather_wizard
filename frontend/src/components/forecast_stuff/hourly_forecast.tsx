@@ -1,49 +1,34 @@
 import { useMemo } from 'react';
 import { AxisOptions, Chart } from 'react-charts';
-import { ForecastHourly, Period, Spot } from 'ww-3-models-tjb';
 
-type TempPoint = {
+type Point = {
   date: Date;
-  temp: number;
+  value: number;
 };
 
-type TempSeries = {
+export type HourlySeries = {
   label: string;
-  data: TempPoint[];
+  data: Point[];
 };
 
 interface HourlyForecastProps {
-  forecastsHourly: {
-    forecastHourly: ForecastHourly;
-    spot: Spot;
-  }[];
+  series: HourlySeries[];
 }
 
-export const HourlyForecast = ({ forecastsHourly }: HourlyForecastProps) => {
-  const tempSeries: TempSeries[] = [];
-  const tempMap = new Map<Spot, Period[]>();
-  forecastsHourly.forEach((data: { spot: Spot; forecastHourly: ForecastHourly }) => {
-    tempMap.set(data.spot, data.forecastHourly.periods);
-    tempSeries.push({
-      label: data.spot.name,
-      data: data.forecastHourly.periods.map((p) => ({
-        temp: p.temperature,
-        date: new Date(p.startTime),
-      })),
-    });
-  });
-
+export const HourlyForecast = ({ series }: HourlyForecastProps) => {
   const primaryAxis = useMemo(
-    (): AxisOptions<TempPoint> => ({
+    (): AxisOptions<Point> => ({
       getValue: (datum) => datum.date,
+      scaleType: 'time',
     }),
     [],
   );
 
   const secondaryAxes = useMemo(
-    (): AxisOptions<TempPoint>[] => [
+    (): AxisOptions<Point>[] => [
       {
-        getValue: (datum) => datum.temp,
+        getValue: (datum) => datum.value,
+        scaleType: 'linear',
       },
     ],
     [],
@@ -53,7 +38,7 @@ export const HourlyForecast = ({ forecastsHourly }: HourlyForecastProps) => {
     <div>
       <Chart
         options={{
-          data: tempSeries,
+          data: series,
           primaryAxis,
           secondaryAxes,
         }}
