@@ -43,6 +43,7 @@ export class S3Adapter {
     }
 
     private async getObject(key: string): Promise<string> {
+        console.log(`@@ @@ start of getObject, key is: ${key}`);
         const response = await this.s3Client.send(
             new GetObjectCommand({
                 Bucket: this.bucketName,
@@ -55,6 +56,7 @@ export class S3Adapter {
             throw new APIError(500, `object at key: ${key} is empty`);
         }
 
+        console.log(`@@ @@ end of getObject, key is: ${key}`);
         return jsonStr;
     }
 

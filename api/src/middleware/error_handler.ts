@@ -7,6 +7,7 @@ export const myErrorHandler = (
     res: Response,
     _next: NextFunction
 ) => {
+    console.log('@@ @@ TJTAG HERE IN MIDDLEWARE');
     res.set('Content-Type', 'application/json');
     if (err instanceof APIError) {
         const apiError = err as APIError;

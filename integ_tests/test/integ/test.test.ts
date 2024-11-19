@@ -170,7 +170,7 @@ describe('General integ tests', () => {
         const _forecasts = await getForecasts(spotIds);
         const _forecastsHourly = await getForecastsHourly(spotIds);
         // console.log(`forecasts is: ${JSON.stringify(_forecasts)}`);
-        console.log(`forecastsHourly is: ${JSON.stringify(_forecastsHourly)}`);
+        // console.log(`forecastsHourly is: ${JSON.stringify(_forecastsHourly)}`);
     });
 
     it('creates (and gets) favorites', async () => {
