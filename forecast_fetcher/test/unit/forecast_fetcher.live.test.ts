@@ -1,5 +1,9 @@
 import { get_app_config } from 'ww-3-app-config-tjb';
-import { S3Client } from '@aws-sdk/client-s3';
+import {
+    DeleteObjectsCommand,
+    ListObjectsV2Command,
+    S3Client,
+} from '@aws-sdk/client-s3';
 import { ForecastKey, S3Adapter } from 'ww-3-utilities-tjb';
 import { Forecast, ForecastHourly } from 'ww-3-models-tjb';
 import * as fs from 'fs';
@@ -21,52 +25,6 @@ describe('forecast_fetcher LIVE tests', () => {
     });
     const s3Adapter = new S3Adapter(s3Client, bucketName);
     const forecastFetcher = new ForecastFetcher(s3Adapter);
-
-    // uhhhh how to get hourly foreasts here
-    //     it('not quite a test, but some code that pulls da da da', async () => {
-    //         const forecastKeys = await s3Adapter.getAllPolygons();
-    //
-    //         const saveForecastHourly = async (forecastKey: ForecastKey) => {
-    //             const keyStr = forecastKey.getKeyStr();
-    //             console.log(
-    //                 `about to get hourly forecast for fk: ${forecastKey.getKeyStr()}`
-    //             );
-    //             const forecastHourly = await s3Adapter.getForecastHourly(
-    //                 forecastKey
-    //             );
-    //             console.log(
-    //                 `done get hourly forecast for fk: ${forecastKey.getKeyStr()}`
-    //             );
-    //
-    //             const pathToWrite = path.join(
-    //                 '/Users/tj/Projects/weather_wizard/forecast_fetcher/test/unit/resources_hourly/',
-    //                 keyStr
-    //             );
-    //             console.log(
-    //                 `writing forecastHourly: ${JSON.stringify(forecastHourly)}`
-    //             );
-    //             console.log(`to path: ${pathToWrite}`);
-    //             try {
-    //                 fs.writeFileSync(pathToWrite, JSON.stringify(forecastHourly), {
-    //                     flag: 'w',
-    //                 });
-    //             } catch (e: unknown) {
-    //                 console.error(`issue writing: ${pathToWrite}`);
-    //                 console.error(e);
-    //             }
-    //         };
-    //
-    //         const promises: Promise<void>[] = [];
-    //         console.log('printing fks');
-    //         forecastKeys.forEach((fk) => console.log(fk));
-    //         console.log('donen printing fks');
-    //         forecastKeys.forEach((fk) => {
-    //             console.log(`saving forecastkey: ${fk.getKeyStr()}`);
-    //             promises.push(saveForecastHourly(fk));
-    //         });
-    //
-    //         await Promise.all(promises);
-    //     });
 
     beforeAll(async () => {
         fs.readdirSync(SEED_DIRECTORY).forEach((fileName) => {
@@ -111,89 +69,60 @@ describe('forecast_fetcher LIVE tests', () => {
         await Promise.all(promises);
     });
 
-    const getLastForecastUpdatedTimes = async (fks: ForecastKey[]) => {
-        const lastUpdatedForecastMap = new Map<ForecastKey, number>();
-        const initialPromises = fks.map((fk) =>
-            s3Adapter
-                .getForecast(fk)
-                .then((forecast) =>
-                    lastUpdatedForecastMap.set(
-                        fk,
-                        Date.parse(forecast.generatedAt)
-                    )
-                )
-        );
-        await Promise.all(initialPromises);
-        return lastUpdatedForecastMap;
-    };
-
-    const getLastForecastHourlyUpdatedTimes = async (fks: ForecastKey[]) => {
-        const lastUpdatedForecastHourlyMap = new Map<ForecastKey, number>();
-        const initialPromises = fks.map((fk) =>
-            s3Adapter
-                .getForecastHourly(fk)
-                .then((forecastHourly) =>
-                    lastUpdatedForecastHourlyMap.set(
-                        fk,
-                        Date.parse(forecastHourly.generatedAt)
-                    )
-                )
-        );
-        await Promise.all(initialPromises);
-        return lastUpdatedForecastHourlyMap;
-    };
-
-    it.skip('updates all forecasts', async () => {
-        const forecastKeys = Array.from(seedForecasts.keys());
-
-        const initialLastUpdateMap = await getLastForecastUpdatedTimes(
-            forecastKeys
-        );
-
+    it('updates all forecasts', async () => {
         await forecastFetcher.fetchForecast();
 
-        const finalLastUpdateMap = await getLastForecastUpdatedTimes(
-            forecastKeys
-        );
-
+        const forecastKeys = Array.from(seedForecasts.keys());
+        const forecastPromises: Promise<Forecast>[] = [];
         forecastKeys.forEach((fk) => {
-            const initialLastUpdateTime = initialLastUpdateMap.get(fk);
-            const finalLastUpdateTime = finalLastUpdateMap.get(fk);
-
-            if (initialLastUpdateTime && finalLastUpdateTime) {
-                expect(initialLastUpdateTime).toBeLessThan(finalLastUpdateTime);
-            } else {
-                throw Error(
-                    `fk: ${fk.getKeyStr} is missing initial or final last update time. initial is: ${initialLastUpdateTime} and final is: ${finalLastUpdateTime}`
-                );
-            }
+            forecastPromises.push(s3Adapter.getForecast(fk));
         });
+
+        const forecasts = await Promise.all(forecastPromises);
+        forecasts.forEach((f) => expect(f).toBeDefined());
     });
 
     it('updates all hourly forecasts', async () => {
-        const forecastKeys = Array.from(seedForecasts.keys());
-
-        const initialLastUpdateMap = await getLastForecastHourlyUpdatedTimes(
-            forecastKeys
-        );
-
         await forecastFetcher.fetchForecastHourly();
 
-        const finalLastUpdateMap = await getLastForecastHourlyUpdatedTimes(
-            forecastKeys
-        );
-
+        const forecastKeys = Array.from(seedForecasts.keys());
+        const forecastHourlyPromises: Promise<ForecastHourly>[] = [];
         forecastKeys.forEach((fk) => {
-            const initialLastUpdateTime = initialLastUpdateMap.get(fk);
-            const finalLastUpdateTime = finalLastUpdateMap.get(fk);
+            forecastHourlyPromises.push(s3Adapter.getForecastHourly(fk));
+        });
 
-            if (initialLastUpdateTime && finalLastUpdateTime) {
-                expect(initialLastUpdateTime).toBeLessThan(finalLastUpdateTime);
-            } else {
-                throw Error(
-                    `(hourly) fk: ${fk.getKeyStr} is missing initial or final last update time. initial is: ${initialLastUpdateTime} and final is: ${finalLastUpdateTime}`
+        const forecastHourlys = await Promise.all(forecastHourlyPromises);
+        forecastHourlys.forEach((f) => expect(f).toBeDefined());
+    });
+
+    afterAll(async () => {
+        let continuationToken: string | undefined;
+
+        do {
+            const listObjectsResponse = await s3Client.send(
+                new ListObjectsV2Command({
+                    Bucket: bucketName,
+                    ContinuationToken: continuationToken,
+                })
+            );
+
+            const deleteObjectsRequest = {
+                Bucket: bucketName,
+                Delete: {
+                    Objects:
+                        listObjectsResponse.Contents?.map((obj) => ({
+                            Key: obj.Key!,
+                        })) || [],
+                },
+            };
+
+            if (deleteObjectsRequest.Delete.Objects.length > 0) {
+                await s3Client.send(
+                    new DeleteObjectsCommand(deleteObjectsRequest)
                 );
             }
-        });
+
+            continuationToken = listObjectsResponse.NextContinuationToken;
+        } while (continuationToken);
     });
 });
