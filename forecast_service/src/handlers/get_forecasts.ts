@@ -8,8 +8,7 @@ import {
 import { LooselyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
-import { ForecastKey, S3Adapter } from 'ww-3-utilities-tjb';
-import { getSpotToForecastKeyMap } from './utils';
+import { ForecastKey, getSpot, S3Adapter } from 'ww-3-utilities-tjb';
 
 export class GetForecasts extends LooselyAuthenticatedAPI<
     GetForecastsInput,
@@ -28,38 +27,35 @@ export class GetForecasts extends LooselyAuthenticatedAPI<
         input: GetForecastsInput,
         pgClient: Client
     ): Promise<GetForecastsOutput> {
-        const spotToForecastKeyMap = await getSpotToForecastKeyMap(
-            pgClient,
-            input.spotIDs
-        );
+        const spotIds: number[] = input.spotIDs
+            .split(',')
+            .map((str) => parseFloat(str));
 
-        const spotToForecastMap = new Map<Spot, Forecast>();
+        const promises: Promise<{
+            spot: Spot;
+            forecast: Forecast;
+        }>[] = [];
+        for (let i = 0; i < spotIds.length; ++i) {
+            promises.push(
+                getSpot(pgClient, spotIds[i]).then(async (spot) => {
+                    const fk = new ForecastKey(
+                        spot.polygonID,
+                        spot.gridX,
+                        spot.gridY
+                    );
 
-        const getForecastPromises: Promise<void>[] = [];
+                    const forecast = await this.s3Adapter.getForecast(fk);
 
-        const setForecast = async (spot: Spot, forecastKey: ForecastKey) => {
-            const forecast = await this.s3Adapter.getForecast(forecastKey);
-            spotToForecastMap.set(spot, forecast);
-        };
-
-        spotToForecastKeyMap.forEach((forecastKey, spot) => {
-            getForecastPromises.push(setForecast(spot, forecastKey));
-        });
-
-        for (let i = 0; i < getForecastPromises.length; ++i) {
-            await getForecastPromises[i];
+                    return {
+                        spot,
+                        forecast,
+                    };
+                })
+            );
         }
 
-        const ret: GetForecastsOutput = {
-            forecasts: [],
+        return {
+            forecasts: await Promise.all(promises),
         };
-        spotToForecastMap.forEach((forecast, spot) =>
-            ret.forecasts.push({
-                spot,
-                forecast,
-            })
-        );
-
-        return ret;
     }
 }
