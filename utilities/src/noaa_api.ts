@@ -68,7 +68,7 @@ export const getForecast = async (
 
 export const getForecastHourly = async (
     forecastKey: ForecastKey
-): Promise<Forecast> => {
+): Promise<ForecastHourly> => {
     return await fetchWithRetry<ForecastHourly>(async () => {
         const fetchResult = await (
             await fetch(forecastKey.getForecastHourlyUrl(), {

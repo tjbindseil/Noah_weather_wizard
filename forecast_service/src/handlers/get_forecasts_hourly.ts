@@ -28,7 +28,6 @@ export class GetForecastsHourly extends LooselyAuthenticatedAPI<
         input: GetForecastsHourlyInput,
         pgClient: Client
     ): Promise<GetForecastsHourlyOutput> {
-        console.log('@@ @@ GetForecastsHourly');
         const spotToForecastKeyMap = await getSpotToForecastKeyMap(
             pgClient,
             input.spotIDs

@@ -254,7 +254,6 @@ describe('General integ tests', () => {
         );
         const initialFavorites = await getFavorites({}, testUser4);
         expect(initialFavorites.favoriteSpots.length).toEqual(0);
-        console.log('longs peak posted and 0 initial favorites verified');
 
         await postFavorite(
             {
@@ -265,14 +264,11 @@ describe('General integ tests', () => {
 
         const intermediateFavorites = await getFavorites({}, testUser4);
         expect(intermediateFavorites.favoriteSpots.length).toEqual(1);
-        console.log('favorite posted');
 
         await deleteSpot(longsPeak.spot.id, testUser4);
-        console.log('spot deleted');
 
         const finalFavorites = await getFavorites({}, testUser4);
         expect(finalFavorites.favoriteSpots.length).toEqual(0);
-        console.log('final favs verified');
     });
 
     afterAll(async () => {

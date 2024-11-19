@@ -43,6 +43,8 @@ export function ForecastScreen() {
       {forecasts.length > 0 ? (
         <>
           {
+            //           its like a nav bar
+            //           a few options, selected is highlighted to indicated its selected
             //           <ImageForecast forecasts={forecasts} />
             //           <ShortForecast forecasts={forecasts} />
             //           <LongForecast forecasts={forecasts} />

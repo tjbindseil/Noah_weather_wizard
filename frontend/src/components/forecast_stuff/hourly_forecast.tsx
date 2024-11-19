@@ -20,16 +20,13 @@ interface HourlyForecastProps {
 }
 
 export const HourlyForecast = ({ forecastsHourly }: HourlyForecastProps) => {
+  const tempSeries: TempSeries[] = [];
   const tempMap = new Map<Spot, Period[]>();
   forecastsHourly.forEach((data: { spot: Spot; forecastHourly: ForecastHourly }) => {
     tempMap.set(data.spot, data.forecastHourly.periods);
-  });
-
-  const tempSeries: TempSeries[] = [];
-  tempMap.forEach((periods, spot) => {
     tempSeries.push({
-      label: spot.name,
-      data: periods.map((p) => ({
+      label: data.spot.name,
+      data: data.forecastHourly.periods.map((p) => ({
         temp: p.temperature,
         date: new Date(p.startTime),
       })),
@@ -53,12 +50,14 @@ export const HourlyForecast = ({ forecastsHourly }: HourlyForecastProps) => {
   );
 
   return (
-    <Chart
-      options={{
-        data: tempSeries,
-        primaryAxis,
-        secondaryAxes,
-      }}
-    />
+    <div>
+      <Chart
+        options={{
+          data: tempSeries,
+          primaryAxis,
+          secondaryAxes,
+        }}
+      />
+    </div>
   );
 };

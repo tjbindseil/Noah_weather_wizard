@@ -4,7 +4,7 @@ export interface ForecastHourly {
         unitCode: string;
         value: number;
     };
-    periods: Period[];
+    periods: HourlyPeriod[];
     generatedAt: string;
     updateTime: string;
 }
@@ -25,8 +25,8 @@ export interface HourlyPeriod {
     relativeHumidity: {
         unitCode: string;
         value: number | null;
-    };
-    windSpeed: string;
+    } | null;
+    windSpeed: string | null;
     windDirection: string;
     icon: string;
     shortForecast: string;
@@ -46,7 +46,7 @@ export interface Period {
         unitCode: string;
         value: number | null; // TODO wtf does null mean here?
     };
-    windSpeed: string;
+    windSpeed: string | null;
     windDirection: string;
     icon: string;
     shortForecast: string;

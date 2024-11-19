@@ -143,7 +143,20 @@ const schema = {
                                 },
                                 required: ['unitCode', 'value'],
                             },
-                            windSpeed: { type: 'string' },
+                            relativeHumidity: {
+                                anyOf: [
+                                    {
+                                        type: 'object',
+                                        properties: {
+                                            unitCode: { type: 'string' },
+                                            value: { type: ['null', 'number'] },
+                                        },
+                                        required: ['unitCode', 'value'],
+                                    },
+                                    { type: 'null' },
+                                ],
+                            },
+                            windSpeed: { type: ['null', 'string'] },
                             windDirection: { type: 'string' },
                             icon: { type: 'string' },
                             shortForecast: { type: 'string' },
@@ -157,6 +170,7 @@ const schema = {
                             'name',
                             'number',
                             'probabilityOfPrecipitation',
+                            'relativeHumidity',
                             'shortForecast',
                             'startTime',
                             'temperature',
@@ -198,14 +212,19 @@ const schema = {
                     required: ['unitCode', 'value'],
                 },
                 relativeHumidity: {
-                    type: 'object',
-                    properties: {
-                        unitCode: { type: 'string' },
-                        value: { type: ['null', 'number'] },
-                    },
-                    required: ['unitCode', 'value'],
+                    anyOf: [
+                        {
+                            type: 'object',
+                            properties: {
+                                unitCode: { type: 'string' },
+                                value: { type: ['null', 'number'] },
+                            },
+                            required: ['unitCode', 'value'],
+                        },
+                        { type: 'null' },
+                    ],
                 },
-                windSpeed: { type: 'string' },
+                windSpeed: { type: ['null', 'string'] },
                 windDirection: { type: 'string' },
                 icon: { type: 'string' },
                 shortForecast: { type: 'string' },
@@ -248,7 +267,7 @@ const schema = {
                     },
                     required: ['unitCode', 'value'],
                 },
-                windSpeed: { type: 'string' },
+                windSpeed: { type: ['null', 'string'] },
                 windDirection: { type: 'string' },
                 icon: { type: 'string' },
                 shortForecast: { type: 'string' },
@@ -304,7 +323,7 @@ const schema = {
                                 },
                                 required: ['unitCode', 'value'],
                             },
-                            windSpeed: { type: 'string' },
+                            windSpeed: { type: ['null', 'string'] },
                             windDirection: { type: 'string' },
                             icon: { type: 'string' },
                             shortForecast: { type: 'string' },
@@ -403,7 +422,7 @@ const schema = {
                                         },
                                         required: ['unitCode', 'value'],
                                     },
-                                    windSpeed: { type: 'string' },
+                                    windSpeed: { type: ['null', 'string'] },
                                     windDirection: { type: 'string' },
                                     icon: { type: 'string' },
                                     shortForecast: { type: 'string' },
@@ -519,7 +538,9 @@ const schema = {
                                                         'value',
                                                     ],
                                                 },
-                                                windSpeed: { type: 'string' },
+                                                windSpeed: {
+                                                    type: ['null', 'string'],
+                                                },
                                                 windDirection: {
                                                     type: 'string',
                                                 },
@@ -615,7 +636,7 @@ const schema = {
                                             },
                                             required: ['unitCode', 'value'],
                                         },
-                                        windSpeed: { type: 'string' },
+                                        windSpeed: { type: ['null', 'string'] },
                                         windDirection: { type: 'string' },
                                         icon: { type: 'string' },
                                         shortForecast: { type: 'string' },
@@ -702,7 +723,7 @@ const schema = {
                                             },
                                             required: ['unitCode', 'value'],
                                         },
-                                        windSpeed: { type: 'string' },
+                                        windSpeed: { type: ['null', 'string'] },
                                         windDirection: { type: 'string' },
                                         icon: { type: 'string' },
                                         shortForecast: { type: 'string' },
@@ -805,7 +826,27 @@ const schema = {
                                         },
                                         required: ['unitCode', 'value'],
                                     },
-                                    windSpeed: { type: 'string' },
+                                    relativeHumidity: {
+                                        anyOf: [
+                                            {
+                                                type: 'object',
+                                                properties: {
+                                                    unitCode: {
+                                                        type: 'string',
+                                                    },
+                                                    value: {
+                                                        type: [
+                                                            'null',
+                                                            'number',
+                                                        ],
+                                                    },
+                                                },
+                                                required: ['unitCode', 'value'],
+                                            },
+                                            { type: 'null' },
+                                        ],
+                                    },
+                                    windSpeed: { type: ['null', 'string'] },
                                     windDirection: { type: 'string' },
                                     icon: { type: 'string' },
                                     shortForecast: { type: 'string' },
@@ -819,6 +860,7 @@ const schema = {
                                     'name',
                                     'number',
                                     'probabilityOfPrecipitation',
+                                    'relativeHumidity',
                                     'shortForecast',
                                     'startTime',
                                     'temperature',
@@ -921,7 +963,32 @@ const schema = {
                                                         'value',
                                                     ],
                                                 },
-                                                windSpeed: { type: 'string' },
+                                                relativeHumidity: {
+                                                    anyOf: [
+                                                        {
+                                                            type: 'object',
+                                                            properties: {
+                                                                unitCode: {
+                                                                    type: 'string',
+                                                                },
+                                                                value: {
+                                                                    type: [
+                                                                        'null',
+                                                                        'number',
+                                                                    ],
+                                                                },
+                                                            },
+                                                            required: [
+                                                                'unitCode',
+                                                                'value',
+                                                            ],
+                                                        },
+                                                        { type: 'null' },
+                                                    ],
+                                                },
+                                                windSpeed: {
+                                                    type: ['null', 'string'],
+                                                },
                                                 windDirection: {
                                                     type: 'string',
                                                 },
@@ -941,6 +1008,7 @@ const schema = {
                                                 'name',
                                                 'number',
                                                 'probabilityOfPrecipitation',
+                                                'relativeHumidity',
                                                 'shortForecast',
                                                 'startTime',
                                                 'temperature',
@@ -1017,7 +1085,30 @@ const schema = {
                                             },
                                             required: ['unitCode', 'value'],
                                         },
-                                        windSpeed: { type: 'string' },
+                                        relativeHumidity: {
+                                            anyOf: [
+                                                {
+                                                    type: 'object',
+                                                    properties: {
+                                                        unitCode: {
+                                                            type: 'string',
+                                                        },
+                                                        value: {
+                                                            type: [
+                                                                'null',
+                                                                'number',
+                                                            ],
+                                                        },
+                                                    },
+                                                    required: [
+                                                        'unitCode',
+                                                        'value',
+                                                    ],
+                                                },
+                                                { type: 'null' },
+                                            ],
+                                        },
+                                        windSpeed: { type: ['null', 'string'] },
                                         windDirection: { type: 'string' },
                                         icon: { type: 'string' },
                                         shortForecast: { type: 'string' },
@@ -1031,6 +1122,7 @@ const schema = {
                                         'name',
                                         'number',
                                         'probabilityOfPrecipitation',
+                                        'relativeHumidity',
                                         'shortForecast',
                                         'startTime',
                                         'temperature',
@@ -1104,7 +1196,30 @@ const schema = {
                                             },
                                             required: ['unitCode', 'value'],
                                         },
-                                        windSpeed: { type: 'string' },
+                                        relativeHumidity: {
+                                            anyOf: [
+                                                {
+                                                    type: 'object',
+                                                    properties: {
+                                                        unitCode: {
+                                                            type: 'string',
+                                                        },
+                                                        value: {
+                                                            type: [
+                                                                'null',
+                                                                'number',
+                                                            ],
+                                                        },
+                                                    },
+                                                    required: [
+                                                        'unitCode',
+                                                        'value',
+                                                    ],
+                                                },
+                                                { type: 'null' },
+                                            ],
+                                        },
+                                        windSpeed: { type: ['null', 'string'] },
                                         windDirection: { type: 'string' },
                                         icon: { type: 'string' },
                                         shortForecast: { type: 'string' },
@@ -1118,6 +1233,7 @@ const schema = {
                                         'name',
                                         'number',
                                         'probabilityOfPrecipitation',
+                                        'relativeHumidity',
                                         'shortForecast',
                                         'startTime',
                                         'temperature',
