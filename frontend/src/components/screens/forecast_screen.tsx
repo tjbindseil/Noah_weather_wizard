@@ -42,7 +42,7 @@ export function ForecastScreen() {
   return (
     <div className='ForecastWrapper'>
       <NavBar />
-      <p>See the forecast here!</p>
+      <h2>Compare Forecasts!</h2>
       {forecasts.length > 0 ? (
         <>
           {
@@ -53,10 +53,12 @@ export function ForecastScreen() {
             //           <ShortForecast forecasts={forecasts} />
             //           <LongForecast forecasts={forecasts} />
           }
-          <HourlyTemperatureForecast forecastsHourly={forecastsHourly} />
-          <HourlyHumidityForecast forecastsHourly={forecastsHourly} />
-          <HourlyWindSpeedForecast forecastsHourly={forecastsHourly} />
-          <HourlyPrecipPercentForecast forecastsHourly={forecastsHourly} />
+          <div className={'HourlyForecast'}>
+            <HourlyTemperatureForecast forecastsHourly={forecastsHourly} />
+            <HourlyHumidityForecast forecastsHourly={forecastsHourly} />
+            <HourlyWindSpeedForecast forecastsHourly={forecastsHourly} />
+            <HourlyPrecipPercentForecast forecastsHourly={forecastsHourly} />
+          </div>
         </>
       ) : (
         <p>

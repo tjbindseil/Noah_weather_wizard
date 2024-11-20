@@ -15,7 +15,8 @@
 .ForecastWrapper {
   display: grid;
   grid-template-columns: 1fr; 
-  grid-template-rows: 50px 1fr 12fr 8fr;
+  grid-template-rows: 50px 1fr 20fr;
+  height: 100vh;
 }
 
 .MapWrapper h2 {

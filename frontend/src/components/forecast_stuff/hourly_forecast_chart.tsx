@@ -37,14 +37,16 @@ export const HourlyForecastChart = ({ series, title }: HourlyForecastChartProps)
 
   return (
     <div>
-      <h4>{title}</h4>
-      <Chart
-        options={{
-          data: series,
-          primaryAxis,
-          secondaryAxes,
-        }}
-      />
+      <h4 style={{ height: 40 }}>{title}</h4>
+      <div style={{ height: 320 }}>
+        <Chart
+          options={{
+            data: series,
+            primaryAxis,
+            secondaryAxes,
+          }}
+        />
+      </div>
     </div>
   );
 };

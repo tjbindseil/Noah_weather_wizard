@@ -27,5 +27,5 @@ export const HourlyHumidityForecast = ({ forecastsHourly }: HourlyHumidityForeca
     });
   });
 
-  return <HourlyForecastChart series={humiditySeries} title={'Humidity'} />;
+  return <HourlyForecastChart series={humiditySeries} title={'Humidity (percentage)'} />;
 };

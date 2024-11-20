@@ -28,7 +28,5 @@ export const HourlyWindSpeedForecast = ({ forecastsHourly }: HourlyWindSpeedFore
     });
   });
 
-  windSpeedSeries.forEach((hs) => console.log(`hs is: ${JSON.stringify(hs)}`));
-
   return <HourlyForecastChart series={windSpeedSeries} title={'Wind Speed (mph)'} />;
 };
