@@ -12,6 +12,16 @@
   height: 100vh;
 }
 
+.ForecastWrapper {
+  display: grid;
+  grid-template-columns: 1fr; 
+  grid-template-rows: 50px 1fr 12fr 8fr;
+}
+
+.MapWrapper h2 {
+  margin: 6px;
+}
+
 .MapWrapper h2 {
   margin: 6px;
 }

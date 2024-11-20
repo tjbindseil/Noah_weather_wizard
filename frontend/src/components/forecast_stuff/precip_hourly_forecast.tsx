@@ -1,5 +1,5 @@
 import { ForecastHourly, Spot } from 'ww-3-models-tjb';
-import { HourlyForecast, HourlySeries } from './hourly_forecast';
+import { HourlyForecastChart, HourlySeries } from './hourly_forecast_chart';
 
 interface HourlyPrecipPercentForecastProps {
   forecastsHourly: {
@@ -29,5 +29,7 @@ export const HourlyPrecipPercentForecast = ({
     });
   });
 
-  return <HourlyForecast series={precipPercentSeries} />;
+  return (
+    <HourlyForecastChart series={precipPercentSeries} title={'Probability of Precipitation'} />
+  );
 };

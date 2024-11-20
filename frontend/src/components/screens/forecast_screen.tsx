@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Forecast, ForecastHourly, Spot } from 'ww-3-models-tjb';
 import { useForecastService } from '../../services/forecast_service';
-import { ImageForecast } from '../forecast_stuff/image_forecast';
-import { ShortForecast } from '../forecast_stuff/short_forecast';
-import { LongForecast } from '../forecast_stuff/long_forecast';
+// import { ImageForecast } from '../forecast_stuff/image_forecast';
+// import { ShortForecast } from '../forecast_stuff/short_forecast';
+// import { LongForecast } from '../forecast_stuff/long_forecast';
 import { NavBar } from '../nav_bar';
 import { HourlyTemperatureForecast } from '../forecast_stuff/temperature_hourly_forecast';
 import { HourlyHumidityForecast } from '../forecast_stuff/humidity_hourly_forecast';
@@ -40,7 +40,7 @@ export function ForecastScreen() {
   }, [forecastService, setForecasts, setForecastsHourly]);
 
   return (
-    <div className='MapWrapper'>
+    <div className='ForecastWrapper'>
       <NavBar />
       <p>See the forecast here!</p>
       {forecasts.length > 0 ? (

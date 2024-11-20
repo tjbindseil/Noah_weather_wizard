@@ -1,5 +1,5 @@
 import { ForecastHourly, Spot } from 'ww-3-models-tjb';
-import { HourlyForecast, HourlySeries } from './hourly_forecast';
+import { HourlyForecastChart, HourlySeries } from './hourly_forecast_chart';
 
 interface HourlyTemperatureForecastProps {
   forecastsHourly: {
@@ -20,5 +20,5 @@ export const HourlyTemperatureForecast = ({ forecastsHourly }: HourlyTemperature
     });
   });
 
-  return <HourlyForecast series={tempSeries} />;
+  return <HourlyForecastChart series={tempSeries} title={'Temperature (F)'} />;
 };

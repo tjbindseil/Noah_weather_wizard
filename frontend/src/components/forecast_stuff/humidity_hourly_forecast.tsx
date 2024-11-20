@@ -1,5 +1,5 @@
 import { ForecastHourly, Spot } from 'ww-3-models-tjb';
-import { HourlyForecast, HourlySeries } from './hourly_forecast';
+import { HourlyForecastChart, HourlySeries } from './hourly_forecast_chart';
 
 interface HourlyHumidityForecastProps {
   forecastsHourly: {
@@ -27,5 +27,5 @@ export const HourlyHumidityForecast = ({ forecastsHourly }: HourlyHumidityForeca
     });
   });
 
-  return <HourlyForecast series={humiditySeries} />;
+  return <HourlyForecastChart series={humiditySeries} title={'Humidity'} />;
 };

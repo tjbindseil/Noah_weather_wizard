@@ -1,5 +1,5 @@
 import { ForecastHourly, Spot } from 'ww-3-models-tjb';
-import { HourlyForecast, HourlySeries } from './hourly_forecast';
+import { HourlyForecastChart, HourlySeries } from './hourly_forecast_chart';
 
 interface HourlyWindSpeedForecastProps {
   forecastsHourly: {
@@ -17,7 +17,8 @@ export const HourlyWindSpeedForecast = ({ forecastsHourly }: HourlyWindSpeedFore
         .filter((p) => p.windSpeed)
         .map((p) => {
           // this is ok because we filter above
-          const windSpeedValue = Number(p.windSpeed as string);
+          const windSpeedString = p.windSpeed as string;
+          const windSpeedValue = Number(windSpeedString.split(' ')[0]);
 
           return {
             value: windSpeedValue,
@@ -27,5 +28,7 @@ export const HourlyWindSpeedForecast = ({ forecastsHourly }: HourlyWindSpeedFore
     });
   });
 
-  return <HourlyForecast series={windSpeedSeries} />;
+  windSpeedSeries.forEach((hs) => console.log(`hs is: ${JSON.stringify(hs)}`));
+
+  return <HourlyForecastChart series={windSpeedSeries} title={'Wind Speed (mph)'} />;
 };

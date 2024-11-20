@@ -1,48 +1,23 @@
-import { useMemo } from 'react';
-import { AxisOptions, Chart } from 'react-charts';
-
-type Point = {
-  date: Date;
-  value: number;
-};
-
-export type HourlySeries = {
-  label: string;
-  data: Point[];
-};
+import { ForecastHourly, Spot } from 'ww-3-models-tjb';
+import { HourlyTemperatureForecast } from './temperature_hourly_forecast';
+import { HourlyHumidityForecast } from './humidity_hourly_forecast';
+import { HourlyWindSpeedForecast } from './wind_speed_hourly_forecast';
+import { HourlyPrecipPercentForecast } from './precip_hourly_forecast';
 
 interface HourlyForecastProps {
-  series: HourlySeries[];
+  forecastsHourly: {
+    spot: Spot;
+    forecastHourly: ForecastHourly;
+  }[];
 }
 
-export const HourlyForecast = ({ series }: HourlyForecastProps) => {
-  const primaryAxis = useMemo(
-    (): AxisOptions<Point> => ({
-      getValue: (datum) => datum.date,
-      scaleType: 'time',
-    }),
-    [],
-  );
-
-  const secondaryAxes = useMemo(
-    (): AxisOptions<Point>[] => [
-      {
-        getValue: (datum) => datum.value,
-        scaleType: 'linear',
-      },
-    ],
-    [],
-  );
-
+export const HourlyForecast = ({ forecastsHourly }: HourlyForecastProps) => {
   return (
-    <div>
-      <Chart
-        options={{
-          data: series,
-          primaryAxis,
-          secondaryAxes,
-        }}
-      />
-    </div>
+    <>
+      <HourlyTemperatureForecast forecastsHourly={forecastsHourly} />
+      <HourlyHumidityForecast forecastsHourly={forecastsHourly} />
+      <HourlyWindSpeedForecast forecastsHourly={forecastsHourly} />
+      <HourlyPrecipPercentForecast forecastsHourly={forecastsHourly} />
+    </>
   );
 };
