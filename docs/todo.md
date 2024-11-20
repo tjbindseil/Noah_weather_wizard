@@ -21,7 +21,7 @@
 ## frontend
 * forecast hourly comparison page
 * consider utilizing the permanence of spot service in coordination with the map to solve
-  the repeated `fetch\_existing\_spot` calls returning out of order (see user\_stuff abvoe)
+  the repeated `fetch\_existing\_spot` calls returning out of order (see user\_stuff abvoe) <===== this
 * implement show (select?) favorites button in spot selection page (small)
 * display waiting until successful or unsuccessful
 * spot selection page search by name

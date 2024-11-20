@@ -8,6 +8,7 @@ interface ImageForecastProps {
 }
 
 // TODO spot names and column headers remain sticky while scrolling
+// width is too much, should only be 100%
 export const ImageForecast = ({ forecasts }: ImageForecastProps) => {
   return (
     <table>

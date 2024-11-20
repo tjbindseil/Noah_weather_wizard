@@ -2,20 +2,20 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Forecast, ForecastHourly, Spot } from 'ww-3-models-tjb';
 import { useForecastService } from '../../services/forecast_service';
-// import { ImageForecast } from '../forecast_stuff/image_forecast';
-// import { ShortForecast } from '../forecast_stuff/short_forecast';
-// import { LongForecast } from '../forecast_stuff/long_forecast';
+import { ImageForecast } from '../forecast_stuff/image_forecast';
+import { ShortForecast } from '../forecast_stuff/short_forecast';
+import { LongForecast } from '../forecast_stuff/long_forecast';
 import { NavBar } from '../nav_bar';
-import { HourlyTemperatureForecast } from '../forecast_stuff/temperature_hourly_forecast';
-import { HourlyHumidityForecast } from '../forecast_stuff/humidity_hourly_forecast';
-import { HourlyWindSpeedForecast } from '../forecast_stuff/wind_speed_hourly_forecast';
-import { HourlyPrecipPercentForecast } from '../forecast_stuff/precip_hourly_forecast';
+import { AllHourlyForecastCharts } from '../forecast_stuff/all_hourly_forecasts';
+import { ForecastTypeSelector, ForecastType } from '../forecast_stuff/forecast_type_selector';
 
 export function ForecastScreen() {
   const forecastService = useForecastService();
   const location = useLocation();
 
   const selectedSpots = location.state?.selectedSpots;
+
+  const [forecastType, setForecastType] = useState(ForecastType.Image);
 
   const [forecasts, setForecasts] = useState<{ spot: Spot; forecast: Forecast }[]>([]);
   const [forecastsHourly, setForecastsHourly] = useState<
@@ -42,23 +42,22 @@ export function ForecastScreen() {
   return (
     <div className='ForecastWrapper'>
       <NavBar />
-      <h2>Compare Forecasts!</h2>
+      <h2>
+        Compare Forecasts!{' '}
+        <ForecastTypeSelector forecastType={forecastType} setForecastType={setForecastType} />
+      </h2>
       {forecasts.length > 0 ? (
         <>
-          {
-            //           TODO - bound the charts and keep headers in place while the charts scroll
-            //           its like a nav bar
-            //           a few options, selected is highlighted to indicated its selected
-            //           <ImageForecast forecasts={forecasts} />
-            //           <ShortForecast forecasts={forecasts} />
-            //           <LongForecast forecasts={forecasts} />
-          }
-          <div className={'HourlyForecast'}>
-            <HourlyTemperatureForecast forecastsHourly={forecastsHourly} />
-            <HourlyHumidityForecast forecastsHourly={forecastsHourly} />
-            <HourlyWindSpeedForecast forecastsHourly={forecastsHourly} />
-            <HourlyPrecipPercentForecast forecastsHourly={forecastsHourly} />
-          </div>
+          {forecastType === ForecastType.Image ? (
+            <ImageForecast forecasts={forecasts} />
+          ) : undefined}
+          {forecastType === ForecastType.Short ? (
+            <ShortForecast forecasts={forecasts} />
+          ) : undefined}
+          {forecastType === ForecastType.Long ? <LongForecast forecasts={forecasts} /> : undefined}
+          {forecastType === ForecastType.Hourly ? (
+            <AllHourlyForecastCharts forecastsHourly={forecastsHourly} />
+          ) : undefined}
         </>
       ) : (
         <p>
