@@ -19,12 +19,13 @@
 * integ test script can check if the services are running on machine (check the port), if not present, start and stop as part of the script
 
 ## frontend
-* forecast hourly comparison page
+* forecast hourly comparison page - done
 * consider utilizing the permanence of spot service in coordination with the map to solve
   the repeated `fetch\_existing\_spot` calls returning out of order (see user\_stuff abvoe) <===== this
 * implement show (select?) favorites button in spot selection page (small)
 * display waiting until successful or unsuccessful
 * spot selection page search by name
+* ensure houly graphs all have the same x axis stuff
 
 ## Going live...
 * free secrets manager

@@ -14,13 +14,17 @@ export type HourlySeries = {
 interface HourlyForecastChartProps {
   series: HourlySeries[];
   title: string;
+  minX: Date;
+  maxX: Date;
 }
 
-export const HourlyForecastChart = ({ series, title }: HourlyForecastChartProps) => {
+export const HourlyForecastChart = ({ series, title, minX, maxX }: HourlyForecastChartProps) => {
   const primaryAxis = useMemo(
     (): AxisOptions<Point> => ({
       getValue: (datum) => datum.date,
       scaleType: 'time',
+      min: minX,
+      max: maxX,
     }),
     [],
   );

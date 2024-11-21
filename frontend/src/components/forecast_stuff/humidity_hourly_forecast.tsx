@@ -6,9 +6,15 @@ interface HourlyHumidityForecastProps {
     forecastHourly: ForecastHourly;
     spot: Spot;
   }[];
+  minX: Date;
+  maxX: Date;
 }
 
-export const HourlyHumidityForecast = ({ forecastsHourly }: HourlyHumidityForecastProps) => {
+export const HourlyHumidityForecast = ({
+  forecastsHourly,
+  minX,
+  maxX,
+}: HourlyHumidityForecastProps) => {
   const humiditySeries: HourlySeries[] = [];
   forecastsHourly.forEach((data: { spot: Spot; forecastHourly: ForecastHourly }) => {
     humiditySeries.push({
@@ -27,5 +33,12 @@ export const HourlyHumidityForecast = ({ forecastsHourly }: HourlyHumidityForeca
     });
   });
 
-  return <HourlyForecastChart series={humiditySeries} title={'Humidity (percentage)'} />;
+  return (
+    <HourlyForecastChart
+      series={humiditySeries}
+      title={'Humidity (percentage)'}
+      minX={minX}
+      maxX={maxX}
+    />
+  );
 };

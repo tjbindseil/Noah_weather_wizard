@@ -12,12 +12,27 @@ interface AllHourlyForecastChartsProps {
 }
 
 export const AllHourlyForecastCharts = ({ forecastsHourly }: AllHourlyForecastChartsProps) => {
+  const allDates: Date[] = [];
+  forecastsHourly.forEach((d) =>
+    d.forecastHourly.periods.forEach((p) => allDates.push(new Date(p.startTime))),
+  );
+
+  const today = new Date();
+  const yesterday = new Date(today.setDate(today.getDate() - 1));
+  const tomorrow = new Date(today.setDate(today.getDate() + 1));
+  const minDate = allDates.reduce((p, v) => (p < v ? p : v), tomorrow);
+  const maxDate = allDates.reduce((p, v) => (p > v ? p : v), yesterday);
+
   return (
     <div className={'HourlyForecast'}>
-      <HourlyTemperatureForecast forecastsHourly={forecastsHourly} />
-      <HourlyHumidityForecast forecastsHourly={forecastsHourly} />
-      <HourlyWindSpeedForecast forecastsHourly={forecastsHourly} />
-      <HourlyPrecipPercentForecast forecastsHourly={forecastsHourly} />
+      <HourlyTemperatureForecast forecastsHourly={forecastsHourly} minX={minDate} maxX={maxDate} />
+      <HourlyHumidityForecast forecastsHourly={forecastsHourly} minX={minDate} maxX={maxDate} />
+      <HourlyWindSpeedForecast forecastsHourly={forecastsHourly} minX={minDate} maxX={maxDate} />
+      <HourlyPrecipPercentForecast
+        forecastsHourly={forecastsHourly}
+        minX={minDate}
+        maxX={maxDate}
+      />
     </div>
   );
 };

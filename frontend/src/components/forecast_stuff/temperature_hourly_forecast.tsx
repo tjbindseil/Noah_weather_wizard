@@ -6,9 +6,15 @@ interface HourlyTemperatureForecastProps {
     forecastHourly: ForecastHourly;
     spot: Spot;
   }[];
+  minX: Date;
+  maxX: Date;
 }
 
-export const HourlyTemperatureForecast = ({ forecastsHourly }: HourlyTemperatureForecastProps) => {
+export const HourlyTemperatureForecast = ({
+  forecastsHourly,
+  minX,
+  maxX,
+}: HourlyTemperatureForecastProps) => {
   const tempSeries: HourlySeries[] = [];
   forecastsHourly.forEach((data: { spot: Spot; forecastHourly: ForecastHourly }) => {
     tempSeries.push({
@@ -20,5 +26,7 @@ export const HourlyTemperatureForecast = ({ forecastsHourly }: HourlyTemperature
     });
   });
 
-  return <HourlyForecastChart series={tempSeries} title={'Temperature (F)'} />;
+  return (
+    <HourlyForecastChart series={tempSeries} title={'Temperature (F)'} minX={minX} maxX={maxX} />
+  );
 };

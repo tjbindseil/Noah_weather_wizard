@@ -6,9 +6,15 @@ interface HourlyWindSpeedForecastProps {
     forecastHourly: ForecastHourly;
     spot: Spot;
   }[];
+  minX: Date;
+  maxX: Date;
 }
 
-export const HourlyWindSpeedForecast = ({ forecastsHourly }: HourlyWindSpeedForecastProps) => {
+export const HourlyWindSpeedForecast = ({
+  forecastsHourly,
+  minX,
+  maxX,
+}: HourlyWindSpeedForecastProps) => {
   const windSpeedSeries: HourlySeries[] = [];
   forecastsHourly.forEach((data: { spot: Spot; forecastHourly: ForecastHourly }) => {
     windSpeedSeries.push({
@@ -28,5 +34,12 @@ export const HourlyWindSpeedForecast = ({ forecastsHourly }: HourlyWindSpeedFore
     });
   });
 
-  return <HourlyForecastChart series={windSpeedSeries} title={'Wind Speed (mph)'} />;
+  return (
+    <HourlyForecastChart
+      series={windSpeedSeries}
+      title={'Wind Speed (mph)'}
+      minX={minX}
+      maxX={maxX}
+    />
+  );
 };

@@ -6,10 +6,14 @@ interface HourlyPrecipPercentForecastProps {
     forecastHourly: ForecastHourly;
     spot: Spot;
   }[];
+  minX: Date;
+  maxX: Date;
 }
 
 export const HourlyPrecipPercentForecast = ({
   forecastsHourly,
+  minX,
+  maxX,
 }: HourlyPrecipPercentForecastProps) => {
   const precipPercentSeries: HourlySeries[] = [];
   forecastsHourly.forEach((data: { spot: Spot; forecastHourly: ForecastHourly }) => {
@@ -30,6 +34,11 @@ export const HourlyPrecipPercentForecast = ({
   });
 
   return (
-    <HourlyForecastChart series={precipPercentSeries} title={'Probability of Precipitation'} />
+    <HourlyForecastChart
+      series={precipPercentSeries}
+      title={'Probability of Precipitation'}
+      minX={minX}
+      maxX={maxX}
+    />
   );
 };

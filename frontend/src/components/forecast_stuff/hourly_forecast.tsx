@@ -9,15 +9,17 @@ interface HourlyForecastProps {
     spot: Spot;
     forecastHourly: ForecastHourly;
   }[];
+  minX: Date;
+  maxX: Date;
 }
 
-export const HourlyForecast = ({ forecastsHourly }: HourlyForecastProps) => {
+export const HourlyForecast = ({ forecastsHourly, minX, maxX }: HourlyForecastProps) => {
   return (
     <>
-      <HourlyTemperatureForecast forecastsHourly={forecastsHourly} />
-      <HourlyHumidityForecast forecastsHourly={forecastsHourly} />
-      <HourlyWindSpeedForecast forecastsHourly={forecastsHourly} />
-      <HourlyPrecipPercentForecast forecastsHourly={forecastsHourly} />
+      <HourlyTemperatureForecast forecastsHourly={forecastsHourly} minX={minX} maxX={maxX} />
+      <HourlyHumidityForecast forecastsHourly={forecastsHourly} minX={minX} maxX={maxX} />
+      <HourlyWindSpeedForecast forecastsHourly={forecastsHourly} minX={minX} maxX={maxX} />
+      <HourlyPrecipPercentForecast forecastsHourly={forecastsHourly} minX={minX} maxX={maxX} />
     </>
   );
 };
