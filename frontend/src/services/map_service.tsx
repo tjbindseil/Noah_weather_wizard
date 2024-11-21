@@ -27,9 +27,13 @@ export const useMapService = (): IMapService =>
 /* eslint-disable  @typescript-eslint/no-explicit-any */
 const MapService = ({ children }: any) => {
   const mapService = {
-    zoom: Number(Cookies.get(ZOOM_KEY)) ?? defaultZoom,
-    centerLat: Number(Cookies.get(CENTER_LAT_KEY)) ?? longsPeakLatLng.lat,
-    centerLng: Number(Cookies.get(CENTER_LNG_KEY)) ?? longsPeakLatLng.lng,
+    zoom: isNaN(Number(Cookies.get(ZOOM_KEY))) ? defaultZoom : Number(Cookies.get(ZOOM_KEY)),
+    centerLat: isNaN(Number(Cookies.get(CENTER_LAT_KEY)))
+      ? longsPeakLatLng.lat
+      : Number(Cookies.get(CENTER_LAT_KEY)),
+    centerLng: isNaN(Number(Cookies.get(CENTER_LNG_KEY)))
+      ? longsPeakLatLng.lng
+      : Number(Cookies.get(CENTER_LNG_KEY)),
 
     saveZoom(zoom: number) {
       this.zoom = zoom;

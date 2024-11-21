@@ -13,10 +13,9 @@ export function CreateUserScreen() {
     navigate(url);
   };
 
-  // TODO clear defaults
-  const [username, setUsername] = useState('first_frontend_user');
-  const [email, setEmail] = useState('tjbindseil@gmail.com');
-  const [password, setPassword] = useState('Badpassword1&');
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const createFunc = useCallback(() => {
     // TODO go to the page the user was previous on

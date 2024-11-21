@@ -13,15 +13,14 @@ export function LoginScreen() {
     navigate(url);
   };
 
-  const [username, setUsername] = useState('first_frontend_user');
-  const [password, setPassword] = useState('Badpassword1&');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const loginFunc = useCallback(() => {
     userService.authorizeUser({ username, password }).then(() => go('/'));
     // TODO show loading
   }, [username, password]);
 
-  // TODO UserStatus on these pages???
   return (
     <div className='LoginWrapper'>
       <NavBar />
