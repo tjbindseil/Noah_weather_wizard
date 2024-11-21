@@ -47,7 +47,7 @@ export function ForecastScreen() {
         <ForecastTypeSelector forecastType={forecastType} setForecastType={setForecastType} />
       </h2>
       {forecasts.length > 0 ? (
-        <>
+        <div className={'HourlyForecast'}>
           {forecastType === ForecastType.Image ? (
             <ImageForecast forecasts={forecasts} />
           ) : undefined}
@@ -58,7 +58,7 @@ export function ForecastScreen() {
           {forecastType === ForecastType.Hourly ? (
             <AllHourlyForecastCharts forecastsHourly={forecastsHourly} />
           ) : undefined}
-        </>
+        </div>
       ) : (
         <p>
           Visit the <Link to={'/spot-selection'}>Spot Selection Page</Link> to choose some spots and

@@ -48,14 +48,12 @@ export function SpotSelectionScreen() {
     <FavoritedExistingSpotExtension existingSpot={existingSpot} />
   ));
 
-  const title =
-    'To create new spots, use the <Link to={/spot-creation}> Spot Creation Page</Link>' +
-    'Once all desired spots are selected, click the compare button to compare their forecasts. Blue spots are' +
-    'existing spots which are not selected for comparison, while green spots are selected for comparison.';
+  // TODO check / uncheck all
+
   return (
     <div className='MapWrapper'>
       <NavBar />
-      <h2 title={title}>Select Spots</h2>
+      <h2>Select Spots</h2>
 
       <MapContainerWrapper
         setExistingSpots={setExistingSpots}

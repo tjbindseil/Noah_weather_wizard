@@ -24,7 +24,7 @@ export const AllHourlyForecastCharts = ({ forecastsHourly }: AllHourlyForecastCh
   const maxDate = allDates.reduce((p, v) => (p > v ? p : v), yesterday);
 
   return (
-    <div className={'HourlyForecast'}>
+    <>
       <HourlyTemperatureForecast forecastsHourly={forecastsHourly} minX={minDate} maxX={maxDate} />
       <HourlyHumidityForecast forecastsHourly={forecastsHourly} minX={minDate} maxX={maxDate} />
       <HourlyWindSpeedForecast forecastsHourly={forecastsHourly} minX={minDate} maxX={maxDate} />
@@ -33,6 +33,6 @@ export const AllHourlyForecastCharts = ({ forecastsHourly }: AllHourlyForecastCh
         minX={minDate}
         maxX={maxDate}
       />
-    </div>
+    </>
   );
 };

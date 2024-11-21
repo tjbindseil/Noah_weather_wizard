@@ -74,7 +74,7 @@ const SpotService = ({ children }: any) => {
     async postFavorite(input: PostFavoriteInput): Promise<PostFavoriteOutput> {
       return await fetchWithError<PostFavoriteInput, PostFavoriteOutput>(
         input,
-        `${baseUrl}/spot`,
+        `${baseUrl}/favorite`,
         HTTPMethod.POST,
         _schema.PostFavoriteOutput,
         userService,
