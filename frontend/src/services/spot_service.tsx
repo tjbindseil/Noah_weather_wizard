@@ -26,6 +26,8 @@ export interface ISpotService {
   getFavorites(input: GetFavoritesInput): Promise<GetFavoritesOutput>;
   postFavorite(input: PostFavoriteInput): Promise<PostFavoriteOutput>;
   deleteFavorite(input: DeleteFavoriteInput): Promise<DeleteFavoriteOutput>;
+  getCheckedSpots(): number[];
+  setCheckedSpots(checkedSpots: number[]): void;
 }
 
 // so,
@@ -53,6 +55,14 @@ export interface ISpotService {
 //
 // so, the event registration and broadcast change is quite the overhaul. Lets keep to what we have and just get
 // the selected spots to be saved
+//
+// now, lets get selected/checked spots to save during "session", ie not worry about saving them in cookies
+//
+// so, it wasn't so hard until....
+// I realized that existing spots (an input into recaluculatin the checked spots) is being reset upon revising the
+// spot selection page
+//
+// lets see how to deal with that
 
 export const SpotServiceContext = Contextualizer.createContext(ProvidedServices.SpotService);
 export const useSpotService = (): ISpotService =>
@@ -64,6 +74,8 @@ const SpotService = ({ children }: any) => {
   const userService = useUserService();
 
   const spotService = {
+    checkedSpots: [] as number[],
+
     async createSpot(postSpotInput: PostSpotInput): Promise<PostSpotOutput> {
       return await fetchWithError<PostSpotInput, PostSpotOutput>(
         postSpotInput,
@@ -115,6 +127,14 @@ const SpotService = ({ children }: any) => {
         _schema.DeleteSpotOutput,
         userService,
       );
+    },
+
+    getCheckedSpots(): number[] {
+      return this.checkedSpots;
+    },
+
+    setCheckedSpots(checkedSpots: number[]): void {
+      this.checkedSpots = checkedSpots;
     },
   };
 

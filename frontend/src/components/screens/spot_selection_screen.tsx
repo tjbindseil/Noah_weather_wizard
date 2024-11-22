@@ -13,7 +13,14 @@ export function SpotSelectionScreen() {
   const navigate = useNavigate();
   const spotService = useSpotService();
 
-  const [checkedSpots, setCheckedSpots] = useState<number[]>([]);
+  const [checkedSpots, setCheckedSpots] = useState<number[]>(spotService.getCheckedSpots());
+  const setAndSaveCheckedSpots = useCallback(
+    (newCheckedSpots: number[]) => {
+      spotService.setCheckedSpots(newCheckedSpots);
+      setCheckedSpots(newCheckedSpots);
+    },
+    [spotService, setCheckedSpots],
+  );
 
   // so, when the row is hovered, the spot on the map is hovered
   // and vice versa (when spot is hovered, row is hovered)
@@ -27,24 +34,27 @@ export function SpotSelectionScreen() {
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
 
   useEffect(() => {
+    console.log('@@ @@ determining if checked spots should be trimmed');
     const existingSpotIds = existingSpots.map((s) => s.id);
     let recalculateCheckedSpots = false;
     checkedSpots.forEach(
       (checkedSpot) =>
         (recalculateCheckedSpots =
-          recalculateCheckedSpots || existingSpotIds.includes(checkedSpot)),
+          recalculateCheckedSpots || !existingSpotIds.includes(checkedSpot)),
     );
 
     if (recalculateCheckedSpots) {
+      console.log('@@ @@ checked spots should be trimmed');
       const newCheckedSpots: number[] = [];
       checkedSpots.forEach((checkedSpotId) => {
         if (existingSpotIds.includes(checkedSpotId)) {
           newCheckedSpots.push(checkedSpotId);
         }
       });
-      setCheckedSpots(newCheckedSpots);
+      setAndSaveCheckedSpots(newCheckedSpots);
     }
-  }, [existingSpots, checkedSpots, setCheckedSpots]);
+  }, [existingSpots, checkedSpots, setAndSaveCheckedSpots]);
+  // }, []);
 
   const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
   const saveSpotFunc = useCallback(
@@ -61,7 +71,7 @@ export function SpotSelectionScreen() {
     <CheckedExistingSpotExtension
       existingSpot={existingSpot}
       checkedSpots={checkedSpots}
-      setCheckedSpots={setCheckedSpots}
+      setCheckedSpots={setAndSaveCheckedSpots}
     />
   ));
 
