@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { NavBar } from '../nav_bar';
 import { PostSpotInput, Spot } from 'ww-3-models-tjb';
 import { useNavigate } from 'react-router-dom';
@@ -23,7 +23,28 @@ export function SpotSelectionScreen() {
     navigate('/forecast', { state: { selectedSpots: [checkedSpots] } });
   }, [checkedSpots, navigate]);
 
+  // really these are existing spots in view
   const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
+
+  useEffect(() => {
+    const existingSpotIds = existingSpots.map((s) => s.id);
+    let recalculateCheckedSpots = false;
+    checkedSpots.forEach(
+      (checkedSpot) =>
+        (recalculateCheckedSpots =
+          recalculateCheckedSpots || existingSpotIds.includes(checkedSpot)),
+    );
+
+    if (recalculateCheckedSpots) {
+      const newCheckedSpots: number[] = [];
+      checkedSpots.forEach((checkedSpotId) => {
+        if (existingSpotIds.includes(checkedSpotId)) {
+          newCheckedSpots.push(checkedSpotId);
+        }
+      });
+      setCheckedSpots(newCheckedSpots);
+    }
+  }, [existingSpots, checkedSpots, setCheckedSpots]);
 
   const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
   const saveSpotFunc = useCallback(

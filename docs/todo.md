@@ -25,7 +25,8 @@
 * implement show (select?) favorites button in spot selection page (small)
 * display waiting until successful or unsuccessful
 * spot selection page search by name
-* ensure houly graphs all have the same x axis stuff
+* ensure houly graphs all have the same x axis stuff - done
+* keep spots selected when navigating website
 
 ## Going live...
 * free secrets manager
