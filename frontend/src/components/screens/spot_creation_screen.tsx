@@ -20,7 +20,15 @@ export interface HoveredSpot {
 export function SpotCreationScreen() {
   const spotService = useSpotService();
 
-  const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
+  const [existingSpots, setExistingSpots] = useState<Spot[]>(spotService.getExistingSpots());
+  const setAndSaveExistingSpots = useCallback(
+    (newExistingSpots: Spot[]) => {
+      spotService.setExistingSpots(newExistingSpots);
+      setExistingSpots(newExistingSpots);
+    },
+    [spotService, setExistingSpots],
+  );
+
   const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
 
   const [hoveredSpotId, setHoveredSpotId] = useState<HoveredSpot | undefined>(undefined);
@@ -66,7 +74,7 @@ export function SpotCreationScreen() {
       </div>
 
       <MapContainerWrapper
-        setExistingSpots={setExistingSpots}
+        setExistingSpots={setAndSaveExistingSpots}
         saveSpotFunc={saveSpotFunc}
         toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
       >

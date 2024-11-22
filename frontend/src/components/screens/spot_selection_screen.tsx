@@ -31,7 +31,14 @@ export function SpotSelectionScreen() {
   }, [checkedSpots, navigate]);
 
   // really these are existing spots in view
-  const [existingSpots, setExistingSpots] = useState<Spot[]>([]);
+  const [existingSpots, setExistingSpots] = useState<Spot[]>(spotService.getExistingSpots());
+  const setAndSaveExistingSpots = useCallback(
+    (newExistingSpots: Spot[]) => {
+      spotService.setExistingSpots(newExistingSpots);
+      setExistingSpots(newExistingSpots);
+    },
+    [spotService, setExistingSpots],
+  );
 
   useEffect(() => {
     console.log('@@ @@ determining if checked spots should be trimmed');
@@ -54,7 +61,6 @@ export function SpotSelectionScreen() {
       setAndSaveCheckedSpots(newCheckedSpots);
     }
   }, [existingSpots, checkedSpots, setAndSaveCheckedSpots]);
-  // }, []);
 
   const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
   const saveSpotFunc = useCallback(
@@ -87,7 +93,7 @@ export function SpotSelectionScreen() {
       <h2>Select Spots</h2>
 
       <MapContainerWrapper
-        setExistingSpots={setExistingSpots}
+        setExistingSpots={setAndSaveExistingSpots}
         saveSpotFunc={saveSpotFunc}
         toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
       >

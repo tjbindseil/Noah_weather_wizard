@@ -30,6 +30,8 @@ export const MapExistingSpotsMonitor = ({
     [mapBounds, setMapBounds],
   );
 
+  // I think we will have to run this func upon start up if we want to save checked spots between page loads
+  // so we might have to vend the funcgtionality from spot service
   const fetchExistingSpots = useCallback(() => {
     // weird initial situation...
     // the asynchronous calls here are returning out of order, so the initial call with a 0/0 window

@@ -12,6 +12,7 @@ import {
   DeleteFavoriteOutput,
   GetFavoritesInput,
   GetFavoritesOutput,
+  Spot,
 } from 'ww-3-models-tjb';
 import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
@@ -26,43 +27,11 @@ export interface ISpotService {
   getFavorites(input: GetFavoritesInput): Promise<GetFavoritesOutput>;
   postFavorite(input: PostFavoriteInput): Promise<PostFavoriteOutput>;
   deleteFavorite(input: DeleteFavoriteInput): Promise<DeleteFavoriteOutput>;
-  getCheckedSpots(): number[];
+  getCheckedSpots(): number[]; // TODO checked => selected and existing => showns
   setCheckedSpots(checkedSpots: number[]): void;
+  getExistingSpots(): Spot[];
+  setExistingSpots(newExistingSpots: Spot[]): void;
 }
-
-// so,
-// app loads
-// we check to load the selected spots
-// if spots are selected, bounds are ensured to show these spots
-// this interacts with the lat/lng that are stored
-// in theory, the only way we could have spots that are not in scope, is if we allow them to remain selected after the map zooms them off the map
-// so, what happens today when we move the window after selecting some?
-// ...
-// they remain selected!
-//
-// lets keep it simple
-// spots can only be selected if they are in view
-//
-// hmm, a lot of the things im thinking about revovle around the fact that the map bounds are hard to deal with
-// is there a way to broadcast them to the entire system?
-//
-// as of now, there is a way to get them (from the mapService), but there is not way to know when they've changed?
-//
-// lets try it from firt principles
-//
-// well, the way it would work is for all components to register their setMapBounds state funcs with the map service
-// then, when the mapService.setCenter or map.setZoom is called, all registered setMapBounds funcs are called
-//
-// so, the event registration and broadcast change is quite the overhaul. Lets keep to what we have and just get
-// the selected spots to be saved
-//
-// now, lets get selected/checked spots to save during "session", ie not worry about saving them in cookies
-//
-// so, it wasn't so hard until....
-// I realized that existing spots (an input into recaluculatin the checked spots) is being reset upon revising the
-// spot selection page
-//
-// lets see how to deal with that
 
 export const SpotServiceContext = Contextualizer.createContext(ProvidedServices.SpotService);
 export const useSpotService = (): ISpotService =>
@@ -75,6 +44,7 @@ const SpotService = ({ children }: any) => {
 
   const spotService = {
     checkedSpots: [] as number[],
+    existingSpots: [] as Spot[],
 
     async createSpot(postSpotInput: PostSpotInput): Promise<PostSpotOutput> {
       return await fetchWithError<PostSpotInput, PostSpotOutput>(
@@ -135,6 +105,14 @@ const SpotService = ({ children }: any) => {
 
     setCheckedSpots(checkedSpots: number[]): void {
       this.checkedSpots = checkedSpots;
+    },
+
+    getExistingSpots(): Spot[] {
+      return this.existingSpots;
+    },
+
+    setExistingSpots(newExistingSpots: Spot[]): void {
+      this.existingSpots = newExistingSpots;
     },
   };
 
