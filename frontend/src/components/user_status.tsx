@@ -59,6 +59,7 @@ function UserStatusDroppedDown({ setDroppedDown }: UserStatusDroppedDownProps) {
         <button
           className={'UserStatusDropDown'}
           onClick={async () => {
+            // TODO gotta revamp this with new concept of underlying tracking of checked spots
             const favoriteSpotIds = await spotService.getFavorites({});
             navigate('/forecast', {
               state: { selectedSpots: [favoriteSpotIds.favoriteSpots.map((spot) => spot.id)] },

@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import mapViewReducer from './map_view_reducer';
+import visibleSpotsReducer from './visible_spots_reducer';
 
 export const store = configureStore({
   reducer: {
@@ -7,7 +8,7 @@ export const store = configureStore({
     // not sure if we want to track all favorites or which of the shown spots are favorited
     //
     // hmm, i guerss all spots could have a forecasts
-    //     visibleSpots: visibleSpotsReducer,
+    visibleSpots: visibleSpotsReducer,
     //     userStatus: userStatusReducer, // includes login status and optional name
     mapView: mapViewReducer,
 

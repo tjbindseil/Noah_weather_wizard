@@ -19,6 +19,10 @@ import ProvidedServices from './provided_services';
 import { useUserService } from './user_service';
 import { fetchWithError, getWithError, HTTPMethod } from './fetch_wrapper';
 import { baseUrl } from '.';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useEffect } from 'react';
+import { LatLngBounds } from 'leaflet';
+import { refreshVisibleSpots } from '../app/visible_spots_reducer';
 
 export interface ISpotService {
   createSpot(input: PostSpotInput): Promise<PostSpotOutput>;
@@ -115,6 +119,46 @@ const SpotService = ({ children }: any) => {
       this.existingSpots = newExistingSpots;
     },
   };
+
+  const dispatch = useAppDispatch();
+  const mapBounds = useAppSelector((state) => state.mapView.mapBounds);
+
+  useEffect(() => {
+    // weird initial situation...
+    // the asynchronous calls here are returning out of order, so the initial call with a 0/0 window
+    // will return after the call with the real window. this results in there being no spots
+    // this solution does not address the root cause but seems to work
+    //     const zeroMapBounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0));
+    //     if (mapBounds.equals(zeroMapBounds)) {
+    //       return;
+    //     }
+    const mapBoundsCreated = new LatLngBounds(mapBounds.sw, mapBounds.ne);
+    spotService
+      .getSpots({
+        minLat: mapBoundsCreated.getSouth().toString(),
+        maxLat: mapBoundsCreated.getNorth().toString(),
+        minLong: mapBoundsCreated.getWest().toString(),
+        maxLong: mapBoundsCreated.getEast().toString(),
+      })
+      .then((result) => {
+        // TODO this seems to be working, but there are A BUNCH of errors
+        console.log(
+          `@@ @@ spotService refreshed spots based on mapBounds: ${mapBoundsCreated.toBBoxString()}`,
+        );
+        result.spots.forEach((s) => console.log(`  ${s.name}`));
+        dispatch(
+          refreshVisibleSpots(
+            result.spots.map((spot) => ({
+              spot,
+              selected: false,
+              favorite: false,
+              hovered: false,
+            })),
+          ),
+        );
+      })
+      .catch(console.error);
+  }, [mapBounds]);
 
   return (
     <>

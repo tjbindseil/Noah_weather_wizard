@@ -18,7 +18,7 @@ export const FavoritedExistingSpotExtension = ({
       .getFavorites({})
       .then((result) => setSelfManagedFavorites(result.favoriteSpots.map((spot) => spot.id)))
       .catch((e) => {
-        console.error(e);
+        console.error(`issue getting favorites, e is: ${e}`);
         setSelfManagedFavorites([]);
       });
   }, [spotService, setSelfManagedFavorites]);

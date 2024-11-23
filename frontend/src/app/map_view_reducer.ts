@@ -4,9 +4,10 @@ export const mapViewSlice = createSlice({
   name: 'map_view',
   initialState: {
     zoom: 13,
-    center: { lat: 40.255014, lng: -105.615115 }, // TODO rename current center?
+    center: { lat: 40.255014, lng: -105.615115 },
     desiredCenter: { lat: 40.255014, lng: -105.615115 },
     toggleToCenter: false,
+    mapBounds: { sw: { lat: 0, lng: 0 }, ne: { lat: 0, lng: 0 } }, // TODO this might need to be initialized
   },
   reducers: {
     setZoom: (state, action: PayloadAction<number>) => {
@@ -22,10 +23,16 @@ export const mapViewSlice = createSlice({
       state.desiredCenter = action.payload;
       state.toggleToCenter = !state.toggleToCenter;
     },
+    setMapBounds: (
+      state,
+      action: PayloadAction<{ sw: { lat: number; lng: number }; ne: { lat: number; lng: number } }>,
+    ) => {
+      console.log('@@ @@ settingMapBounds');
+      state.mapBounds = action.payload;
+    },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { setZoom, setCenter, setDesiredCenter } = mapViewSlice.actions;
+export const { setZoom, setCenter, setDesiredCenter, setMapBounds } = mapViewSlice.actions;
 
 export default mapViewSlice.reducer;
