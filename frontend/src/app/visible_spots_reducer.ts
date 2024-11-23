@@ -25,7 +25,15 @@ export const visibleSpotsSlice = createSlice({
   },
   reducers: {
     refreshVisibleSpots: (state, action: PayloadAction<VisibleSpot[]>) => {
+      const previouslySelectedSpotIds = state.visibleSpots
+        .filter((visibleSpot) => visibleSpot.selected)
+        .map((visibleSpot) => visibleSpot.spot.id);
       state.visibleSpots = action.payload;
+      state.visibleSpots.forEach((visibleSpot) => {
+        if (previouslySelectedSpotIds.includes(visibleSpot.spot.id)) {
+          visibleSpot.selected = true;
+        }
+      });
     },
     setHoveredSpot: (state, action: PayloadAction<HoveredSpot>) => {
       state.hoveredSpot = action.payload;
@@ -55,5 +63,4 @@ export const { refreshVisibleSpots, setHoveredSpot, clearHoveredSpot, toggleSpot
 export default visibleSpotsSlice.reducer;
 
 // TODO
-// 1. maintain selected spots when map moves or whatever
 // 2. get forecast when getting visible spots
