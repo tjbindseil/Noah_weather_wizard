@@ -1,7 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { NavBar } from '../nav_bar';
-import { DeleteSpotInput, PostSpotInput, Spot } from 'ww-3-models-tjb';
-import { useSpotService } from '../../services/spot_service';
+import { Spot } from 'ww-3-models-tjb';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CreatorExistingSpotExtension } from '../existing_spots/deletable_existing_spot_extension';
 import {
@@ -11,6 +10,7 @@ import {
   SelectedSpot,
 } from '../map_stuff';
 import { Tooltip } from 'react-tooltip';
+import { useAppSelector } from '../../app/hooks';
 
 export interface HoveredSpot {
   spotId: number;
@@ -18,45 +18,12 @@ export interface HoveredSpot {
 }
 
 export function SpotCreationScreen() {
-  const spotService = useSpotService();
-
-  const [existingSpots, setExistingSpots] = useState<Spot[]>(spotService.getExistingSpots());
-  const setAndSaveExistingSpots = useCallback(
-    (newExistingSpots: Spot[]) => {
-      spotService.setExistingSpots(newExistingSpots);
-      setExistingSpots(newExistingSpots);
-    },
-    [spotService, setExistingSpots],
-  );
-
-  const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
-
   const [hoveredSpotId, setHoveredSpotId] = useState<HoveredSpot | undefined>(undefined);
-
-  const saveSpotFunc = useCallback(
-    async (selectedSpot: PostSpotInput) => {
-      const ret = await spotService.createSpot(selectedSpot);
-      setToggleToRefreshExistingSpots(!toggleToRefreshExistingSpots);
-      return ret;
-    },
-    [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots, spotService],
-  );
-
-  const removeSpotFunc = useCallback(
-    async (selectedSpot: DeleteSpotInput) => {
-      await spotService.deleteSpot(selectedSpot);
-      setToggleToRefreshExistingSpots(!toggleToRefreshExistingSpots);
-    },
-    [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots, spotService],
-  );
-
-  // TODO upon clicing on map, set the lat/long input values
+  const visibleSpots = useAppSelector((state) => state.visibleSpots);
 
   const spotCreationCustomizations = new Map<string, (existingSpot: Spot) => React.ReactNode>();
   spotCreationCustomizations.set('Creator', (existingSpot: Spot) => {
-    return (
-      <CreatorExistingSpotExtension existingSpot={existingSpot} removeSpotFunc={removeSpotFunc} />
-    );
+    return <CreatorExistingSpotExtension existingSpot={existingSpot} />;
   });
 
   const tooltipId = 'spot_creation_tooltip_id';
@@ -73,32 +40,26 @@ export function SpotCreationScreen() {
         </h2>
       </div>
 
-      <MapContainerWrapper
-        setExistingSpots={setAndSaveExistingSpots}
-        saveSpotFunc={saveSpotFunc}
-        toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
-      >
-        {existingSpots.map((existingSpot) => (
-          <SelectedSpot
-            key={existingSpot.id}
-            latitude={existingSpot.latitude}
-            longitude={existingSpot.longitude}
-            name={existingSpot.name}
-            spotId={existingSpot.id}
-            color={LeafletMarkerColorOptions.Blue}
-            hoveredColor={LeafletMarkerColorOptions.Red}
-            hoveredSpot={hoveredSpotId}
-            setHoveredSpot={setHoveredSpotId}
-          />
-        ))}
-        <MapClickController
-          saveSelectedSpot={saveSpotFunc}
-          color={LeafletMarkerColorOptions.Green}
-        />
+      <MapContainerWrapper>
+        {visibleSpots
+          .map((visibleSpots) => visibleSpots.spot)
+          .map((existingSpot) => (
+            <SelectedSpot
+              key={existingSpot.id}
+              latitude={existingSpot.latitude}
+              longitude={existingSpot.longitude}
+              name={existingSpot.name}
+              spotId={existingSpot.id}
+              color={LeafletMarkerColorOptions.Blue}
+              hoveredColor={LeafletMarkerColorOptions.Red}
+              hoveredSpot={hoveredSpotId}
+              setHoveredSpot={setHoveredSpotId}
+            />
+          ))}
+        <MapClickController color={LeafletMarkerColorOptions.Green} />
       </MapContainerWrapper>
 
       <ExistingSpots
-        existingSpots={existingSpots}
         hoveredSpot={hoveredSpotId}
         setHoveredSpot={setHoveredSpotId}
         customizations={spotCreationCustomizations}

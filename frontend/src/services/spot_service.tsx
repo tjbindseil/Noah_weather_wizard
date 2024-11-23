@@ -23,6 +23,7 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useEffect } from 'react';
 import { LatLngBounds } from 'leaflet';
 import { refreshVisibleSpots } from '../app/visible_spots_reducer';
+import { setMapBounds } from '../app/map_view_reducer';
 
 export interface ISpotService {
   createSpot(input: PostSpotInput): Promise<PostSpotOutput>;
@@ -46,18 +47,23 @@ export const useSpotService = (): ISpotService =>
 const SpotService = ({ children }: any) => {
   const userService = useUserService();
 
+  const dispatch = useAppDispatch();
+  const mapBounds = useAppSelector((state) => state.mapView.mapBounds);
+
   const spotService = {
     checkedSpots: [] as number[],
     existingSpots: [] as Spot[],
 
     async createSpot(postSpotInput: PostSpotInput): Promise<PostSpotOutput> {
-      return await fetchWithError<PostSpotInput, PostSpotOutput>(
+      const output = await fetchWithError<PostSpotInput, PostSpotOutput>(
         postSpotInput,
         `${baseUrl}/spot`,
         HTTPMethod.POST,
         _schema.PostSpotOutput,
         userService,
       );
+      this.refreshExistingSpots();
+      return output;
     },
 
     async getSpots(input: GetSpotsInput): Promise<GetSpotsOutput> {
@@ -65,13 +71,15 @@ const SpotService = ({ children }: any) => {
     },
 
     async deleteSpot(input: DeleteSpotInput): Promise<DeleteSpotOutput> {
-      return await fetchWithError<DeleteSpotInput, DeleteSpotOutput>(
+      const output = await fetchWithError<DeleteSpotInput, DeleteSpotOutput>(
         input,
         `${baseUrl}/spot`,
         HTTPMethod.DELETE,
         _schema.DeleteSpotOutput,
         userService,
       );
+      this.refreshExistingSpots();
+      return output;
     },
 
     async getFavorites(input: GetFavoritesInput): Promise<GetFavoritesOutput> {
@@ -118,10 +126,12 @@ const SpotService = ({ children }: any) => {
     setExistingSpots(newExistingSpots: Spot[]): void {
       this.existingSpots = newExistingSpots;
     },
-  };
 
-  const dispatch = useAppDispatch();
-  const mapBounds = useAppSelector((state) => state.mapView.mapBounds);
+    refreshExistingSpots(): void {
+      // TODO why am i setting the map bounds to get new existing spots?
+      dispatch(setMapBounds(mapBounds));
+    },
+  };
 
   useEffect(() => {
     const mapBoundsCreated = new LatLngBounds(mapBounds.sw, mapBounds.ne);

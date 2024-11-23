@@ -1,5 +1,4 @@
 export * from './map_click_controller';
-export * from './map_existing_spots_monitor';
 export * from './map_zoom_controller';
 export * from './selected_spot';
 export * from './map_center_controller';

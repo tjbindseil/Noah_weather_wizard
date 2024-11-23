@@ -1,14 +1,11 @@
 import { useState } from 'react';
-import { PostSpotInput, PostSpotOutput } from 'ww-3-models-tjb';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setDesiredCenter } from '../app/map_view_reducer';
+import { useSpotService } from '../services/spot_service';
 
-export interface LatLngInputProps {
-  saveSpotFunc: (input: PostSpotInput) => Promise<PostSpotOutput>;
-}
-
-export const LatLngInput = ({ saveSpotFunc }: LatLngInputProps) => {
+export const LatLngInput = () => {
   const dispatch = useAppDispatch();
+  const spotService = useSpotService();
 
   const [lat, setLat] = useState(useAppSelector((state) => state.mapView.center).lat);
   const [lng, setLng] = useState(useAppSelector((state) => state.mapView.center).lng);
@@ -59,7 +56,7 @@ export const LatLngInput = ({ saveSpotFunc }: LatLngInputProps) => {
 
       <button
         onClick={async () => {
-          await saveSpotFunc({ latitude: lat, longitude: lng, name });
+          await spotService.createSpot({ latitude: lat, longitude: lng, name });
         }}
       >
         Create Spot

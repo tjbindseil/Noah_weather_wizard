@@ -1,15 +1,16 @@
 import { LeafletEventHandlerFn } from 'leaflet';
 import { useState } from 'react';
 import { Popup, Marker, useMapEvent } from 'react-leaflet';
-import { PostSpotInput, PostSpotOutput } from 'ww-3-models-tjb';
+import { useSpotService } from '../../services/spot_service';
 import { LeafletMarkerColorOptions, makeColoredIcon } from './marker_color';
 
 export interface MapClickControllerProps {
-  saveSelectedSpot: (selectedSpot: PostSpotInput) => Promise<PostSpotOutput>;
   color: LeafletMarkerColorOptions;
 }
 
-export function MapClickController({ saveSelectedSpot, color }: MapClickControllerProps) {
+export function MapClickController({ color }: MapClickControllerProps) {
+  const spotService = useSpotService();
+
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupLat, setPopupLat] = useState(0);
   const [popupLong, setPopupLong] = useState(0);
@@ -41,7 +42,7 @@ export function MapClickController({ saveSelectedSpot, color }: MapClickControll
         />
         <button
           onClick={async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-            await saveSelectedSpot({
+            await spotService.createSpot({
               latitude: popupLat,
               longitude: popupLong,
               name: popupName,

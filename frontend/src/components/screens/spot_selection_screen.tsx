@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { NavBar } from '../nav_bar';
-import { PostSpotInput, Spot } from 'ww-3-models-tjb';
+import { Spot } from 'ww-3-models-tjb';
 import { useNavigate } from 'react-router-dom';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
@@ -8,10 +8,13 @@ import { FavoritedExistingSpotExtension } from '../existing_spots/favorite_exist
 import { MapContainerWrapper, LeafletMarkerColorOptions, SelectedSpot } from '../map_stuff';
 import { HoveredSpot } from './spot_creation_screen';
 import { useSpotService } from '../../services/spot_service';
+import { useAppSelector } from '../../app/hooks';
 
 export function SpotSelectionScreen() {
   const navigate = useNavigate();
   const spotService = useSpotService();
+
+  const visibleSpots = useAppSelector((state) => state.visibleSpots);
 
   const [checkedSpots, setCheckedSpots] = useState<number[]>(spotService.getCheckedSpots());
   const setAndSaveCheckedSpots = useCallback(
@@ -30,18 +33,8 @@ export function SpotSelectionScreen() {
     navigate('/forecast');
   }, [navigate]);
 
-  // really these are existing spots in view
-  const [existingSpots, setExistingSpots] = useState<Spot[]>(spotService.getExistingSpots());
-  const setAndSaveExistingSpots = useCallback(
-    (newExistingSpots: Spot[]) => {
-      spotService.setExistingSpots(newExistingSpots);
-      setExistingSpots(newExistingSpots);
-    },
-    [spotService, setExistingSpots],
-  );
-
   useEffect(() => {
-    const existingSpotIds = existingSpots.map((s) => s.id);
+    const existingSpotIds = visibleSpots.map((v) => v.spot).map((s) => s.id);
     let recalculateCheckedSpots = false;
     checkedSpots.forEach(
       (checkedSpot) =>
@@ -58,17 +51,7 @@ export function SpotSelectionScreen() {
       });
       setAndSaveCheckedSpots(newCheckedSpots);
     }
-  }, [existingSpots, checkedSpots, setAndSaveCheckedSpots]);
-
-  const [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots] = useState(true);
-  const saveSpotFunc = useCallback(
-    async (selectedSpot: PostSpotInput) => {
-      const ret = await spotService.createSpot(selectedSpot);
-      setToggleToRefreshExistingSpots(!toggleToRefreshExistingSpots);
-      return ret;
-    },
-    [toggleToRefreshExistingSpots, setToggleToRefreshExistingSpots, spotService],
-  );
+  }, [visibleSpots, checkedSpots, setAndSaveCheckedSpots]);
 
   const existingSpotCustomizations = new Map<string, (existingSpot: Spot) => React.ReactNode>();
   existingSpotCustomizations.set('Checked', (existingSpot: Spot) => (
@@ -90,32 +73,29 @@ export function SpotSelectionScreen() {
       <NavBar />
       <h2>Select Spots</h2>
 
-      <MapContainerWrapper
-        setExistingSpots={setAndSaveExistingSpots}
-        saveSpotFunc={saveSpotFunc}
-        toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
-      >
-        {existingSpots.map((existingSpot) => (
-          <SelectedSpot
-            key={existingSpot.id}
-            latitude={existingSpot.latitude}
-            longitude={existingSpot.longitude}
-            name={existingSpot.name}
-            spotId={existingSpot.id}
-            color={
-              checkedSpots.includes(existingSpot.id)
-                ? LeafletMarkerColorOptions.Green
-                : LeafletMarkerColorOptions.Blue
-            }
-            hoveredColor={LeafletMarkerColorOptions.Red}
-            hoveredSpot={hoveredSpot}
-            setHoveredSpot={setHoveredSpot}
-          />
-        ))}
+      <MapContainerWrapper>
+        {visibleSpots
+          .map((v) => v.spot)
+          .map((existingSpot) => (
+            <SelectedSpot
+              key={existingSpot.id}
+              latitude={existingSpot.latitude}
+              longitude={existingSpot.longitude}
+              name={existingSpot.name}
+              spotId={existingSpot.id}
+              color={
+                checkedSpots.includes(existingSpot.id)
+                  ? LeafletMarkerColorOptions.Green
+                  : LeafletMarkerColorOptions.Blue
+              }
+              hoveredColor={LeafletMarkerColorOptions.Red}
+              hoveredSpot={hoveredSpot}
+              setHoveredSpot={setHoveredSpot}
+            />
+          ))}
       </MapContainerWrapper>
 
       <ExistingSpots
-        existingSpots={existingSpots}
         hoveredSpot={hoveredSpot}
         setHoveredSpot={setHoveredSpot}
         customizations={existingSpotCustomizations}
