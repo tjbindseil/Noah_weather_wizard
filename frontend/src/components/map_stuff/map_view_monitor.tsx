@@ -10,13 +10,11 @@ export const MapViewMonitor = () => {
 
   // all this does is save the zoom and center so that we can keep the map the same while moving from page to page
   map.on('moveend', () => {
-    console.log('MapViewMonitor setting zoom and center');
-
     const zoom = map.getZoom();
     dispatch(setZoom(zoom));
 
     const center = map.getCenter();
-    dispatch(setCenter(new LatLng(center.lat, center.lng)));
+    dispatch(setCenter({ lat: center.lat, lng: center.lng }));
   });
 
   return <></>;

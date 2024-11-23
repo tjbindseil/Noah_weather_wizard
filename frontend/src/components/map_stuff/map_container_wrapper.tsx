@@ -2,7 +2,7 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 import { useRef } from 'react';
 import { PostSpotInput, PostSpotOutput, Spot } from 'ww-3-models-tjb';
 import { LatLng } from 'leaflet';
-import { MapCenterController, MapViewMonitor, MapExistingSpotsMonitor } from './';
+import { MapViewMonitor, MapExistingSpotsMonitor } from './';
 import { LatLngInput } from '../lat_lng_input';
 import { useAppSelector } from '../../app/hooks';
 
@@ -22,12 +22,14 @@ export const MapContainerWrapper = ({
   const mapRef = useRef(null);
 
   const zoom = useAppSelector((state) => state.mapView.zoom);
+  console.log(`zoom is: ${zoom}`);
   const center = useAppSelector((state) => state.mapView.center);
+  console.log(`center is: ${JSON.stringify(center)}`);
 
   // TODO move this and all style to CSS
   return (
     <div className='map'>
-      <div onClick={() => console.log('latlong click handler')} className={'LatLngInput'}>
+      <div className={'LatLngInput'}>
         <LatLngInput saveSpotFunc={saveSpotFunc} />
       </div>
       <MapContainer
@@ -47,7 +49,6 @@ export const MapContainerWrapper = ({
           toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
         />
         <MapViewMonitor />
-        <MapCenterController />
         {children}
       </MapContainer>
     </div>

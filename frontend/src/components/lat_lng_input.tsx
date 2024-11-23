@@ -52,7 +52,10 @@ export const LatLngInput = ({ saveSpotFunc }: LatLngInputProps) => {
 
       <button
         onClick={async () => {
-          dispatch(setDesiredCenter(new LatLng(lat, lng)));
+          () => {
+            console.log('todo');
+            dispatch(setDesiredCenter({ lat, lng }));
+          };
         }}
       >
         Center Map
