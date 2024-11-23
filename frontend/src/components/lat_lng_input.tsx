@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { PostSpotInput, PostSpotOutput } from 'ww-3-models-tjb';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { center, setDesiredCenter } from '../app/map_view_reducer';
+import { setDesiredCenter } from '../app/map_view_reducer';
 
 export interface LatLngInputProps {
   saveSpotFunc: (input: PostSpotInput) => Promise<PostSpotOutput>;
@@ -51,9 +51,7 @@ export const LatLngInput = ({ saveSpotFunc }: LatLngInputProps) => {
 
       <button
         onClick={() => {
-          console.log('todo');
           dispatch(setDesiredCenter({ lat, lng }));
-          dispatch(center());
         }}
       >
         Center Map
