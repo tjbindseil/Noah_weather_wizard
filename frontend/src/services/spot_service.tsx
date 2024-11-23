@@ -124,15 +124,10 @@ const SpotService = ({ children }: any) => {
   const mapBounds = useAppSelector((state) => state.mapView.mapBounds);
 
   useEffect(() => {
-    // weird initial situation...
-    // the asynchronous calls here are returning out of order, so the initial call with a 0/0 window
-    // will return after the call with the real window. this results in there being no spots
-    // this solution does not address the root cause but seems to work
-    //     const zeroMapBounds = new LatLngBounds(new LatLng(0.0, 0.0), new LatLng(0.0, 0.0));
-    //     if (mapBounds.equals(zeroMapBounds)) {
-    //       return;
-    //     }
     const mapBoundsCreated = new LatLngBounds(mapBounds.sw, mapBounds.ne);
+    console.log(
+      `@@ @@ spotService about to refresh spots based on mapBounds: ${mapBoundsCreated.toBBoxString()}`,
+    );
     spotService
       .getSpots({
         minLat: mapBoundsCreated.getSouth().toString(),
@@ -141,7 +136,6 @@ const SpotService = ({ children }: any) => {
         maxLong: mapBoundsCreated.getEast().toString(),
       })
       .then((result) => {
-        // TODO this seems to be working, but there are A BUNCH of errors
         console.log(
           `@@ @@ spotService refreshed spots based on mapBounds: ${mapBoundsCreated.toBBoxString()}`,
         );

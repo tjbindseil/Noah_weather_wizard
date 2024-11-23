@@ -17,6 +17,7 @@
 * implement show (select?) favorites button in spot selection page (small)
 * display waiting until successful or unsuccessful
 * spot selection page search by name
+* stop user from making spots without names
 
 ## Going live...
 * free secrets manager

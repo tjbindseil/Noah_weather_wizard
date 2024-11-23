@@ -10,7 +10,7 @@ export const store = configureStore({
     // hmm, i guerss all spots could have a forecasts
     visibleSpots: visibleSpotsReducer,
     //     userStatus: userStatusReducer, // includes login status and optional name
-    mapView: mapViewReducer,
+    mapView: mapViewReducer, // TODO store in cookies
 
     // I think the below are too narrowly scoped to be of use here
     // latLngInput: latLngInputReducer,

@@ -7,7 +7,7 @@ export const mapViewSlice = createSlice({
     center: { lat: 40.255014, lng: -105.615115 },
     desiredCenter: { lat: 40.255014, lng: -105.615115 },
     toggleToCenter: false,
-    mapBounds: { sw: { lat: 0, lng: 0 }, ne: { lat: 0, lng: 0 } }, // TODO this might need to be initialized
+    mapBounds: { sw: { lat: 0, lng: 0 }, ne: { lat: 0, lng: 0 } },
   },
   reducers: {
     setZoom: (state, action: PayloadAction<number>) => {
@@ -27,7 +27,6 @@ export const mapViewSlice = createSlice({
       state,
       action: PayloadAction<{ sw: { lat: number; lng: number }; ne: { lat: number; lng: number } }>,
     ) => {
-      console.log('@@ @@ settingMapBounds');
       state.mapBounds = action.payload;
     },
   },
