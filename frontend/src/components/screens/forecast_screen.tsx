@@ -8,12 +8,12 @@ import { LongForecast } from '../forecast_stuff/long_forecast';
 import { NavBar } from '../nav_bar';
 import { AllHourlyForecastCharts } from '../forecast_stuff/all_hourly_forecasts';
 import { ForecastTypeSelector, ForecastType } from '../forecast_stuff/forecast_type_selector';
+import { useSpotService } from '../../services/spot_service';
 
 export function ForecastScreen() {
   const forecastService = useForecastService();
-  const location = useLocation();
-
-  const selectedSpots = location.state?.selectedSpots;
+  const spotService = useSpotService();
+  const selectedSpots = spotService.getCheckedSpots();
 
   const [forecastType, setForecastType] = useState(ForecastType.Image);
 
@@ -28,11 +28,13 @@ export function ForecastScreen() {
       return;
     }
 
-    forecastService.getForecasts({ spotIDs: selectedSpots }).then((result) => {
+    const spotIdsStr = selectedSpots.join(',');
+
+    forecastService.getForecasts({ spotIDs: spotIdsStr }).then((result) => {
       setForecasts(result.forecasts);
     });
     forecastService
-      .getForecastsHourly({ spotIDs: selectedSpots })
+      .getForecastsHourly({ spotIDs: spotIdsStr })
       .then((result) => {
         setForecastsHourly(result.forecastsHourly);
       })

@@ -27,8 +27,8 @@ export function SpotSelectionScreen() {
   const [hoveredSpot, setHoveredSpot] = useState<HoveredSpot | undefined>(undefined);
 
   const toForecastPage = useCallback(() => {
-    navigate('/forecast', { state: { selectedSpots: [checkedSpots] } });
-  }, [checkedSpots, navigate]);
+    navigate('/forecast');
+  }, [navigate]);
 
   // really these are existing spots in view
   const [existingSpots, setExistingSpots] = useState<Spot[]>(spotService.getExistingSpots());
