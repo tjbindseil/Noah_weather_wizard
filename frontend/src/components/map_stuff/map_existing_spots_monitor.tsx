@@ -64,6 +64,3 @@ export const MapExistingSpotsMonitor = ({
 
   return <></>;
 };
-
-// county office: 303 271 1388
-// main office (last resort): 800 221 3943

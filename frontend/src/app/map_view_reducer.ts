@@ -10,22 +10,26 @@ export const mapViewSlice = createSlice({
   },
   reducers: {
     setZoom: (state, action: PayloadAction<number>) => {
-      state.zoom = action.payload;
       console.log(`setting zoom to: ${action.payload}`);
+      state.zoom = action.payload;
     },
     setCenter: (state, action: PayloadAction<{ lat: number; lng: number }>) => {
+      console.log(`setting center to: ${JSON.stringify(action.payload)}`);
       state.center = action.payload;
       state.desiredCenter = action.payload;
-      console.log(`setting center to: ${action.payload}`);
     },
     setDesiredCenter: (state, action: PayloadAction<{ lat: number; lng: number }>) => {
+      console.log(`setting desiredCenter to: ${JSON.stringify(action.payload)}`);
       state.desiredCenter = action.payload;
+    },
+    center: (state) => {
+      console.log('setting toggle');
       state.toggleToCenter = !state.toggleToCenter;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setZoom, setCenter, setDesiredCenter } = mapViewSlice.actions;
+export const { setZoom, setCenter, setDesiredCenter, center } = mapViewSlice.actions;
 
 export default mapViewSlice.reducer;

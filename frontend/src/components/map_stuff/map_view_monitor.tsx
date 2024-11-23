@@ -1,4 +1,3 @@
-import { LatLng } from 'leaflet';
 import { useMap } from 'react-leaflet';
 import { useAppDispatch } from '../../app/hooks';
 import { setCenter, setZoom } from '../../app/map_view_reducer';
