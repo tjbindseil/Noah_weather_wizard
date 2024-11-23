@@ -21,7 +21,7 @@ import { fetchWithError, getWithError, HTTPMethod } from './fetch_wrapper';
 import { baseUrl } from '.';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { useEffect } from 'react';
-import { LatLngBounds } from 'leaflet';
+import { LatLng, LatLngBounds } from 'leaflet';
 import { refreshVisibleSpots } from '../app/visible_spots_reducer';
 import { setMapBounds } from '../app/map_view_reducer';
 
@@ -114,6 +114,12 @@ const SpotService = ({ children }: any) => {
 
   useEffect(() => {
     const mapBoundsCreated = new LatLngBounds(mapBounds.sw, mapBounds.ne);
+    if (mapBoundsCreated.equals(new LatLngBounds(new LatLng(0, 0), new LatLng(0, 0)))) {
+      // upon start up, we get a 0,0,0,0 map bounds before getting the map bounds, but the real map bounds
+      // update that comes after get "covered up" by it, so this hack skips 0000 map bounds
+      return;
+    }
+
     spotService
       .getSpots({
         minLat: mapBoundsCreated.getSouth().toString(),

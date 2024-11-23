@@ -56,11 +56,7 @@ export const visibleSpotsSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { refreshVisibleSpots, setHoveredSpot, clearHoveredSpot, toggleSpotSelection } =
   visibleSpotsSlice.actions;
 
 export default visibleSpotsSlice.reducer;
-
-// TODO
-// 2. get forecast when getting visible spots

@@ -12,6 +12,7 @@ export const MapViewMonitor = () => {
   // this is really the only way to initialize it
   useEffect(() => {
     const initialMapBounds = map.getBounds();
+    console.log(`dispatching initialMapBounds is: ${initialMapBounds.toBBoxString()}`);
     dispatch(
       setMapBounds({
         sw: {
