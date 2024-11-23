@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavBar } from '../nav_bar';
 import { Spot } from 'ww-3-models-tjb';
 import { ExistingSpots } from '../existing_spots/existing_spots';
@@ -12,13 +12,7 @@ import {
 import { Tooltip } from 'react-tooltip';
 import { useAppSelector } from '../../app/hooks';
 
-export interface HoveredSpot {
-  spotId: number;
-  fromMap: boolean;
-}
-
 export function SpotCreationScreen() {
-  const [hoveredSpotId, setHoveredSpotId] = useState<HoveredSpot | undefined>(undefined);
   const visibleSpots = useAppSelector((state) => state.visibleSpots.visibleSpots);
 
   const spotCreationCustomizations = new Map<string, (existingSpot: Spot) => React.ReactNode>();
@@ -52,18 +46,12 @@ export function SpotCreationScreen() {
               spotId={existingSpot.id}
               color={LeafletMarkerColorOptions.Blue}
               hoveredColor={LeafletMarkerColorOptions.Red}
-              hoveredSpot={hoveredSpotId}
-              setHoveredSpot={setHoveredSpotId}
             />
           ))}
         <MapClickController color={LeafletMarkerColorOptions.Green} />
       </MapContainerWrapper>
 
-      <ExistingSpots
-        hoveredSpot={hoveredSpotId}
-        setHoveredSpot={setHoveredSpotId}
-        customizations={spotCreationCustomizations}
-      />
+      <ExistingSpots customizations={spotCreationCustomizations} />
     </div>
   );
 }

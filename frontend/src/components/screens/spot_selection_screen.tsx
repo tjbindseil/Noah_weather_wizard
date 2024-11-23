@@ -6,7 +6,6 @@ import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
 import { FavoritedExistingSpotExtension } from '../existing_spots/favorite_existing_spot_extension';
 import { MapContainerWrapper, LeafletMarkerColorOptions, SelectedSpot } from '../map_stuff';
-import { HoveredSpot } from './spot_creation_screen';
 import { useSpotService } from '../../services/spot_service';
 import { useAppSelector } from '../../app/hooks';
 
@@ -24,10 +23,6 @@ export function SpotSelectionScreen() {
     },
     [spotService, setCheckedSpots],
   );
-
-  // so, when the row is hovered, the spot on the map is hovered
-  // and vice versa (when spot is hovered, row is hovered)
-  const [hoveredSpot, setHoveredSpot] = useState<HoveredSpot | undefined>(undefined);
 
   const toForecastPage = useCallback(() => {
     navigate('/forecast');
@@ -89,17 +84,11 @@ export function SpotSelectionScreen() {
                   : LeafletMarkerColorOptions.Blue
               }
               hoveredColor={LeafletMarkerColorOptions.Red}
-              hoveredSpot={hoveredSpot}
-              setHoveredSpot={setHoveredSpot}
             />
           ))}
       </MapContainerWrapper>
 
-      <ExistingSpots
-        hoveredSpot={hoveredSpot}
-        setHoveredSpot={setHoveredSpot}
-        customizations={existingSpotCustomizations}
-      />
+      <ExistingSpots customizations={existingSpotCustomizations} />
       <button onClick={() => toForecastPage()}>Compare Forecasts</button>
     </div>
   );

@@ -1,5 +1,6 @@
 import { Marker, Popup } from 'react-leaflet';
-import { HoveredSpot } from '../screens/spot_creation_screen';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { clearHoveredSpot, setHoveredSpot } from '../../app/visible_spots_reducer';
 import { LeafletMarkerColorOptions, makeColoredIcon } from './marker_color';
 
 export interface SelectedSpotProps {
@@ -9,13 +10,14 @@ export interface SelectedSpotProps {
   spotId: number;
   color: LeafletMarkerColorOptions;
   hoveredColor: LeafletMarkerColorOptions;
-  hoveredSpot: HoveredSpot | undefined;
-  setHoveredSpot: (arg: HoveredSpot | undefined) => void;
 }
 
 export function SelectedSpot(props: SelectedSpotProps) {
+  const dispatch = useAppDispatch();
+  const hoveredSpot = useAppSelector((state) => state.visibleSpots.hoveredSpot);
+
   const coloredIcon =
-    props.spotId === props.hoveredSpot?.spotId
+    props.spotId === hoveredSpot.spotId
       ? makeColoredIcon(props.hoveredColor)
       : makeColoredIcon(props.color);
 
@@ -24,10 +26,10 @@ export function SelectedSpot(props: SelectedSpotProps) {
       eventHandlers={{
         mouseover: () => {
           // TODO maybe delay a split second before scrolling table
-          props.setHoveredSpot({ spotId: props.spotId, fromMap: true });
+          dispatch(setHoveredSpot({ spotId: props.spotId, fromMap: true }));
         },
         mouseout: () => {
-          props.setHoveredSpot(undefined);
+          dispatch(clearHoveredSpot());
         },
       }}
       key={props.name}

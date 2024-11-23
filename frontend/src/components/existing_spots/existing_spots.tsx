@@ -1,22 +1,18 @@
 import { useEffect } from 'react';
 import { Spot } from 'ww-3-models-tjb';
-import { useAppSelector } from '../../app/hooks';
-import { HoveredSpot } from '../screens/spot_creation_screen';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { clearHoveredSpot, setHoveredSpot } from '../../app/visible_spots_reducer';
 import { ExistingSpot } from './existing_spot';
 import { ExistingSpotsHeader } from './header';
 
 export interface ExistingSpotsProps {
-  hoveredSpot: HoveredSpot | undefined;
-  setHoveredSpot: (arg: HoveredSpot | undefined) => void;
   customizations: Map<string, (existingSpot: Spot) => React.ReactNode>; // column name to factory
 }
 
-export const ExistingSpots = ({
-  hoveredSpot,
-  setHoveredSpot,
-  customizations,
-}: ExistingSpotsProps) => {
+export const ExistingSpots = ({ customizations }: ExistingSpotsProps) => {
+  const dispatch = useAppDispatch();
   const visibleSpots = useAppSelector((state) => state.visibleSpots.visibleSpots);
+  const hoveredSpot = useAppSelector((state) => state.visibleSpots.hoveredSpot);
 
   const extraColumnNames = Array.from(customizations.keys());
 
@@ -52,10 +48,10 @@ export const ExistingSpots = ({
                   key={existingSpot.id}
                   id={makeExistingSpotRowId(existingSpot.id)}
                   onMouseOver={() => {
-                    setHoveredSpot({ spotId: existingSpot.id, fromMap: false });
+                    dispatch(setHoveredSpot({ spotId: existingSpot.id, fromMap: false }));
                   }}
                   onMouseOut={() => {
-                    setHoveredSpot(undefined);
+                    dispatch(clearHoveredSpot());
                   }}
                   style={style}
                 >

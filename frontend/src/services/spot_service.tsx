@@ -149,7 +149,6 @@ const SpotService = ({ children }: any) => {
               spot,
               selected: false,
               favorite: false,
-              hovered: false,
             })),
           ),
         );
