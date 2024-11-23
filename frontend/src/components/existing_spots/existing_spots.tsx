@@ -16,7 +16,7 @@ export const ExistingSpots = ({
   setHoveredSpot,
   customizations,
 }: ExistingSpotsProps) => {
-  const visibleSpots = useAppSelector((state) => state.visibleSpots);
+  const visibleSpots = useAppSelector((state) => state.visibleSpots.visibleSpots);
 
   const extraColumnNames = Array.from(customizations.keys());
 

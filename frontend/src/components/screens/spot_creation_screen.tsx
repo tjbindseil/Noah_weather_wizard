@@ -19,7 +19,7 @@ export interface HoveredSpot {
 
 export function SpotCreationScreen() {
   const [hoveredSpotId, setHoveredSpotId] = useState<HoveredSpot | undefined>(undefined);
-  const visibleSpots = useAppSelector((state) => state.visibleSpots);
+  const visibleSpots = useAppSelector((state) => state.visibleSpots.visibleSpots);
 
   const spotCreationCustomizations = new Map<string, (existingSpot: Spot) => React.ReactNode>();
   spotCreationCustomizations.set('Creator', (existingSpot: Spot) => {

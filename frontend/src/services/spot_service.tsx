@@ -135,9 +135,6 @@ const SpotService = ({ children }: any) => {
 
   useEffect(() => {
     const mapBoundsCreated = new LatLngBounds(mapBounds.sw, mapBounds.ne);
-    console.log(
-      `@@ @@ spotService about to refresh spots based on mapBounds: ${mapBoundsCreated.toBBoxString()}`,
-    );
     spotService
       .getSpots({
         minLat: mapBoundsCreated.getSouth().toString(),
@@ -146,10 +143,6 @@ const SpotService = ({ children }: any) => {
         maxLong: mapBoundsCreated.getEast().toString(),
       })
       .then((result) => {
-        console.log(
-          `@@ @@ spotService refreshed spots based on mapBounds: ${mapBoundsCreated.toBBoxString()}`,
-        );
-        result.spots.forEach((s) => console.log(`  ${s.name}`));
         dispatch(
           refreshVisibleSpots(
             result.spots.map((spot) => ({

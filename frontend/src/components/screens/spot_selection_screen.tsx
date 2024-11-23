@@ -14,7 +14,7 @@ export function SpotSelectionScreen() {
   const navigate = useNavigate();
   const spotService = useSpotService();
 
-  const visibleSpots = useAppSelector((state) => state.visibleSpots);
+  const visibleSpots = useAppSelector((state) => state.visibleSpots.visibleSpots);
 
   const [checkedSpots, setCheckedSpots] = useState<number[]>(spotService.getCheckedSpots());
   const setAndSaveCheckedSpots = useCallback(

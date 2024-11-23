@@ -11,11 +11,10 @@ interface VisibleSpot {
 
 export const visibleSpotsSlice = createSlice({
   name: 'visible_spots',
-  initialState: [] as VisibleSpot[],
+  initialState: { visibleSpots: [] as VisibleSpot[] },
   reducers: {
     refreshVisibleSpots: (state, action: PayloadAction<VisibleSpot[]>) => {
-      state;
-      state = action.payload;
+      state.visibleSpots = action.payload;
     },
   },
 });
