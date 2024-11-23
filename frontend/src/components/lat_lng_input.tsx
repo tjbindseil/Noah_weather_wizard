@@ -1,19 +1,18 @@
 import { useState } from 'react';
 import { LatLng } from 'leaflet';
-import { useMapService } from '../services/map_service';
 import { PostSpotInput, PostSpotOutput } from 'ww-3-models-tjb';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { setDesiredCenter } from '../app/map_view_reducer';
 
 export interface LatLngInputProps {
-  setDesiredCenter: (arg: LatLng) => void;
-
   saveSpotFunc: (input: PostSpotInput) => Promise<PostSpotOutput>;
 }
 
-export const LatLngInput = ({ setDesiredCenter, saveSpotFunc }: LatLngInputProps) => {
-  const mapService = useMapService();
+export const LatLngInput = ({ saveSpotFunc }: LatLngInputProps) => {
+  const dispatch = useAppDispatch();
 
-  const [lat, setLat] = useState(mapService.getCenterLat());
-  const [lng, setLng] = useState(mapService.getCenterLng());
+  const [lat, setLat] = useState(useAppSelector((state) => state.mapView.center).lat);
+  const [lng, setLng] = useState(useAppSelector((state) => state.mapView.center).lng);
   const [name, setName] = useState('');
 
   return (
@@ -53,7 +52,7 @@ export const LatLngInput = ({ setDesiredCenter, saveSpotFunc }: LatLngInputProps
 
       <button
         onClick={async () => {
-          setDesiredCenter(new LatLng(lat, lng));
+          dispatch(setDesiredCenter(new LatLng(lat, lng)));
         }}
       >
         Center Map

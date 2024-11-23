@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
+import mapViewReducer from './map_view_reducer';
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     // includes information on what is favorited, hovered, and selected, or maybe user status has favorites?
     // not sure if we want to track all favorites or which of the shown spots are favorited
@@ -8,7 +9,8 @@ const store = configureStore({
     // hmm, i guerss all spots could have a forecasts
     //     visibleSpots: visibleSpotsReducer,
     //     userStatus: userStatusReducer, // includes login status and optional name
-    //     mapView: mapViewReducer, // includes zoom and bounds
+    mapView: mapViewReducer,
+
     // I think the below are too narrowly scoped to be of use here
     // latLngInput: latLngInputReducer,
     // forecastDropDown: forecastDropDownReducer,

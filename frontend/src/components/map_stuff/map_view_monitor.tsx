@@ -1,17 +1,22 @@
+import { LatLng } from 'leaflet';
 import { useMap } from 'react-leaflet';
-import { useMapService } from '../../services/map_service';
+import { useAppDispatch } from '../../app/hooks';
+import { setCenter, setZoom } from '../../app/map_view_reducer';
 
 export const MapViewMonitor = () => {
   const map = useMap();
-  const mapService = useMapService();
+
+  const dispatch = useAppDispatch();
 
   // all this does is save the zoom and center so that we can keep the map the same while moving from page to page
   map.on('moveend', () => {
     console.log('MapViewMonitor setting zoom and center');
-    mapService.saveZoom(map.getZoom());
+
+    const zoom = map.getZoom();
+    dispatch(setZoom(zoom));
 
     const center = map.getCenter();
-    mapService.saveCenter(center.lat, center.lng);
+    dispatch(setCenter(new LatLng(center.lat, center.lng)));
   });
 
   return <></>;

@@ -1,10 +1,10 @@
 import { MapContainer, TileLayer } from 'react-leaflet';
-import { useRef, useState } from 'react';
-import { useMapService } from '../../services/map_service';
+import { useRef } from 'react';
 import { PostSpotInput, PostSpotOutput, Spot } from 'ww-3-models-tjb';
 import { LatLng } from 'leaflet';
 import { MapCenterController, MapViewMonitor, MapExistingSpotsMonitor } from './';
 import { LatLngInput } from '../lat_lng_input';
+import { useAppSelector } from '../../app/hooks';
 
 export interface MapContainerWrapperProps {
   children: React.ReactNode;
@@ -20,21 +20,19 @@ export const MapContainerWrapper = ({
   saveSpotFunc,
 }: MapContainerWrapperProps) => {
   const mapRef = useRef(null);
-  const mapService = useMapService();
 
-  const [desiredCenter, setDesiredCenter] = useState(
-    new LatLng(mapService.getCenterLat(), mapService.getCenterLng()),
-  );
+  const zoom = useAppSelector((state) => state.mapView.zoom);
+  const center = useAppSelector((state) => state.mapView.center);
 
   // TODO move this and all style to CSS
   return (
     <div className='map'>
       <div onClick={() => console.log('latlong click handler')} className={'LatLngInput'}>
-        <LatLngInput saveSpotFunc={saveSpotFunc} setDesiredCenter={setDesiredCenter} />
+        <LatLngInput saveSpotFunc={saveSpotFunc} />
       </div>
       <MapContainer
-        center={new LatLng(mapService.getCenterLat(), mapService.getCenterLng())}
-        zoom={mapService.getZoom()}
+        center={new LatLng(center.lat, center.lng)}
+        zoom={zoom}
         ref={mapRef}
         style={{ height: '50vh', width: '100vw' }}
       >
@@ -49,7 +47,7 @@ export const MapContainerWrapper = ({
           toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
         />
         <MapViewMonitor />
-        <MapCenterController desiredCenter={desiredCenter} />
+        <MapCenterController />
         {children}
       </MapContainer>
     </div>

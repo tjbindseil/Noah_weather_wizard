@@ -1,22 +1,16 @@
-import { LatLng } from 'leaflet';
 import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
-import { useMapService } from '../../services/map_service';
+import { useAppSelector } from '../../app/hooks';
 
-export interface MapCenterControllerProps {
-  desiredCenter: LatLng;
-}
-
-export const MapCenterController = ({ desiredCenter }: MapCenterControllerProps) => {
-  const mapService = useMapService();
+export const MapCenterController = () => {
   const map = useMap();
+  const center = useAppSelector((state) => state.mapView.center);
+  const desiredCenter = useAppSelector((state) => state.mapView.desiredCenter);
 
-  // on render
   useEffect(() => {
-    const currCenter = map.getCenter();
-    if (!currCenter.equals(desiredCenter)) {
+    if (!center.equals(desiredCenter)) {
       map.setView(desiredCenter);
-      mapService.saveCenter(desiredCenter.lat, desiredCenter.lng);
+      // this will rip through and the state store will be updated when the map actually moves
     }
   }, [desiredCenter]);
 
