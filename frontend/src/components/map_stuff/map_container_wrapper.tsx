@@ -22,9 +22,7 @@ export const MapContainerWrapper = ({
   const mapRef = useRef(null);
 
   const zoom = useAppSelector((state) => state.mapView.zoom);
-  console.log(`zoom is: ${zoom}`);
   const center = useAppSelector((state) => state.mapView.center);
-  console.log(`center is: ${JSON.stringify(center)}`);
 
   // TODO move this and all style to CSS
   return (

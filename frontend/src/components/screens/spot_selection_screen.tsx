@@ -41,7 +41,6 @@ export function SpotSelectionScreen() {
   );
 
   useEffect(() => {
-    console.log('@@ @@ determining if checked spots should be trimmed');
     const existingSpotIds = existingSpots.map((s) => s.id);
     let recalculateCheckedSpots = false;
     checkedSpots.forEach(
@@ -51,7 +50,6 @@ export function SpotSelectionScreen() {
     );
 
     if (recalculateCheckedSpots) {
-      console.log('@@ @@ checked spots should be trimmed');
       const newCheckedSpots: number[] = [];
       checkedSpots.forEach((checkedSpotId) => {
         if (existingSpotIds.includes(checkedSpotId)) {

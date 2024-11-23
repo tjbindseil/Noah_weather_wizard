@@ -35,8 +35,7 @@ export const FavoritedExistingSpotExtension = ({
         onChange={async () => {
           if (favorited) {
             try {
-              const result = await spotService.deleteFavorite({ spotId: existingSpot.id });
-              console.log(`result is: ${JSON.stringify(result)}`);
+              await spotService.deleteFavorite({ spotId: existingSpot.id });
               const newFavorites = selfManagedFavorites.filter((id) => id !== existingSpot.id);
               setSelfManagedFavorites(newFavorites);
             } catch (e: unknown) {
