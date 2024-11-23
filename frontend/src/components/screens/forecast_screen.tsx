@@ -8,14 +8,13 @@ import { LongForecast } from '../forecast_stuff/long_forecast';
 import { NavBar } from '../nav_bar';
 import { AllHourlyForecastCharts } from '../forecast_stuff/all_hourly_forecasts';
 import { ForecastTypeSelector, ForecastType } from '../forecast_stuff/forecast_type_selector';
-import { useSpotService } from '../../services/spot_service';
+import { useAppSelector } from '../../app/hooks';
 
 export function ForecastScreen() {
   const forecastService = useForecastService();
-  const spotService = useSpotService();
-  const selectedSpots = spotService.getCheckedSpots();
 
   const [forecastType, setForecastType] = useState(ForecastType.Image);
+  const visibleSpots = useAppSelector((state) => state.visibleSpots.visibleSpots);
 
   const [forecasts, setForecasts] = useState<{ spot: Spot; forecast: Forecast }[]>([]);
   const [forecastsHourly, setForecastsHourly] = useState<
@@ -23,11 +22,9 @@ export function ForecastScreen() {
   >([]);
 
   useEffect(() => {
-    if (!selectedSpots || !selectedSpots.length || selectedSpots.length === 0) {
-      console.error('selectedSpots is undefined');
-      return;
-    }
-
+    const selectedSpots = visibleSpots
+      .filter((visibleSpot) => visibleSpot.selected)
+      .map((visibleSpot) => visibleSpot.spot.id);
     const spotIdsStr = selectedSpots.join(',');
 
     forecastService.getForecasts({ spotIDs: spotIdsStr }).then((result) => {

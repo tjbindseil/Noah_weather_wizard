@@ -32,10 +32,6 @@ export interface ISpotService {
   getFavorites(input: GetFavoritesInput): Promise<GetFavoritesOutput>;
   postFavorite(input: PostFavoriteInput): Promise<PostFavoriteOutput>;
   deleteFavorite(input: DeleteFavoriteInput): Promise<DeleteFavoriteOutput>;
-  getCheckedSpots(): number[]; // TODO checked => selected and existing => showns
-  setCheckedSpots(checkedSpots: number[]): void;
-  getExistingSpots(): Spot[];
-  setExistingSpots(newExistingSpots: Spot[]): void;
 }
 
 export const SpotServiceContext = Contextualizer.createContext(ProvidedServices.SpotService);
@@ -111,24 +107,7 @@ const SpotService = ({ children }: any) => {
       );
     },
 
-    getCheckedSpots(): number[] {
-      return this.checkedSpots;
-    },
-
-    setCheckedSpots(checkedSpots: number[]): void {
-      this.checkedSpots = checkedSpots;
-    },
-
-    getExistingSpots(): Spot[] {
-      return this.existingSpots;
-    },
-
-    setExistingSpots(newExistingSpots: Spot[]): void {
-      this.existingSpots = newExistingSpots;
-    },
-
     refreshExistingSpots(): void {
-      // TODO why am i setting the map bounds to get new existing spots?
       dispatch(setMapBounds(mapBounds));
     },
   };

@@ -11,13 +11,17 @@ import {
 } from '../map_stuff';
 import { Tooltip } from 'react-tooltip';
 import { useAppSelector } from '../../app/hooks';
+import { VisibleSpot } from '../../app/visible_spots_reducer';
 
 export function SpotCreationScreen() {
   const visibleSpots = useAppSelector((state) => state.visibleSpots.visibleSpots);
 
-  const spotCreationCustomizations = new Map<string, (existingSpot: Spot) => React.ReactNode>();
-  spotCreationCustomizations.set('Creator', (existingSpot: Spot) => {
-    return <CreatorExistingSpotExtension existingSpot={existingSpot} />;
+  const spotCreationCustomizations = new Map<
+    string,
+    (visibleSpot: VisibleSpot) => React.ReactNode
+  >();
+  spotCreationCustomizations.set('Creator', (visibleSpot: VisibleSpot) => {
+    return <CreatorExistingSpotExtension visibleSpot={visibleSpot} />;
   });
 
   const tooltipId = 'spot_creation_tooltip_id';
@@ -35,19 +39,18 @@ export function SpotCreationScreen() {
       </div>
 
       <MapContainerWrapper>
-        {visibleSpots
-          .map((visibleSpots) => visibleSpots.spot)
-          .map((existingSpot) => (
-            <SelectedSpot
-              key={existingSpot.id}
-              latitude={existingSpot.latitude}
-              longitude={existingSpot.longitude}
-              name={existingSpot.name}
-              spotId={existingSpot.id}
-              color={LeafletMarkerColorOptions.Blue}
-              hoveredColor={LeafletMarkerColorOptions.Red}
-            />
-          ))}
+        {visibleSpots.map((visibleSpot) => (
+          <SelectedSpot
+            color={
+              visibleSpot.selected
+                ? LeafletMarkerColorOptions.Green
+                : LeafletMarkerColorOptions.Blue
+            }
+            hoveredColor={LeafletMarkerColorOptions.Red}
+            visibleSpot={visibleSpot}
+            key={`SelectedSpot-${visibleSpot.spot.id}`}
+          />
+        ))}
         <MapClickController color={LeafletMarkerColorOptions.Green} />
       </MapContainerWrapper>
 

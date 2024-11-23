@@ -1,15 +1,15 @@
 import { Spot } from 'ww-3-models-tjb';
 
 export interface ExistingSpotProps {
-  existingSpot: Spot;
+  spot: Spot;
 }
 
-export const ExistingSpot = ({ existingSpot }: ExistingSpotProps) => {
+export const ExistingSpot = ({ spot }: ExistingSpotProps) => {
   return (
     <>
-      <td>{existingSpot.name}</td>
-      <td>{existingSpot.latitude}</td>
-      <td>{existingSpot.longitude}</td>
+      <td>{spot.name}</td>
+      <td>{spot.latitude}</td>
+      <td>{spot.longitude}</td>
     </>
   );
 };

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Spot } from 'ww-3-models-tjb';
+import { VisibleSpot } from '../../app/visible_spots_reducer';
 import { useSpotService } from '../../services/spot_service';
 
 export interface FavoritedExistingSpotExtensionProps {
-  existingSpot: Spot;
+  visibleSpot: VisibleSpot;
 }
 
 export const FavoritedExistingSpotExtension = ({
-  existingSpot,
+  visibleSpot,
 }: FavoritedExistingSpotExtensionProps) => {
   const spotService = useSpotService();
 
@@ -23,29 +23,29 @@ export const FavoritedExistingSpotExtension = ({
       });
   }, [spotService, setSelfManagedFavorites]);
 
-  const favorited = !!selfManagedFavorites.includes(existingSpot.id);
+  const favorited = !!selfManagedFavorites.includes(visibleSpot.spot.id);
 
   return (
     <td>
       <input
         type='checkbox'
-        id={existingSpot.id.toString()}
+        id={visibleSpot.spot.id.toString()}
         name='selected'
         checked={favorited}
         onChange={async () => {
           if (favorited) {
             try {
-              await spotService.deleteFavorite({ spotId: existingSpot.id });
-              const newFavorites = selfManagedFavorites.filter((id) => id !== existingSpot.id);
+              await spotService.deleteFavorite({ spotId: visibleSpot.spot.id });
+              const newFavorites = selfManagedFavorites.filter((id) => id !== visibleSpot.spot.id);
               setSelfManagedFavorites(newFavorites);
             } catch (e: unknown) {
               console.error(e);
             }
           } else {
             try {
-              await spotService.postFavorite({ spotId: existingSpot.id });
+              await spotService.postFavorite({ spotId: visibleSpot.spot.id });
               const newFavorites = JSON.parse(JSON.stringify(selfManagedFavorites));
-              newFavorites.push(existingSpot.id);
+              newFavorites.push(visibleSpot.spot.id);
               setSelfManagedFavorites(newFavorites);
             } catch (e: unknown) {
               console.error(e);

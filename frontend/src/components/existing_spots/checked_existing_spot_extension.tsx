@@ -1,32 +1,23 @@
-import { Spot } from 'ww-3-models-tjb';
+import { useAppDispatch } from '../../app/hooks';
+import { toggleSpotSelection, VisibleSpot } from '../../app/visible_spots_reducer';
 
 export interface CheckedExistingSpotExtensionProps {
-  existingSpot: Spot;
-  checkedSpots: number[];
-  setCheckedSpots: (arg: number[]) => void;
+  visibleSpot: VisibleSpot;
 }
 
 export const CheckedExistingSpotExtension = ({
-  existingSpot,
-  checkedSpots,
-  setCheckedSpots,
+  visibleSpot,
 }: CheckedExistingSpotExtensionProps) => {
+  const dispatch = useAppDispatch();
   return (
     <td>
       <input
         type='checkbox'
-        id={existingSpot.id.toString()}
+        id={visibleSpot.spot.id.toString()}
         name='selected'
-        checked={!!checkedSpots.includes(existingSpot.id)}
+        checked={visibleSpot.selected}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          checkedSpots.includes(Number(event.target.id))
-            ? checkedSpots.splice(
-                checkedSpots.findIndex((spotId) => spotId === Number(event.target.id)),
-                1,
-              )
-            : checkedSpots.push(Number(event.target.id));
-
-          setCheckedSpots([...checkedSpots]);
+          dispatch(toggleSpotSelection(Number(event.target.id)));
         }}
       />
     </td>

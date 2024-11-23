@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
-import { Spot } from 'ww-3-models-tjb';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { clearHoveredSpot, setHoveredSpot } from '../../app/visible_spots_reducer';
+import { clearHoveredSpot, setHoveredSpot, VisibleSpot } from '../../app/visible_spots_reducer';
 import { ExistingSpot } from './existing_spot';
 import { ExistingSpotsHeader } from './header';
 
 export interface ExistingSpotsProps {
-  customizations: Map<string, (existingSpot: Spot) => React.ReactNode>; // column name to factory
+  customizations: Map<string, (visibleSpot: VisibleSpot) => React.ReactNode>; // column name to factory
 }
 
 export const ExistingSpots = ({ customizations }: ExistingSpotsProps) => {
@@ -33,33 +32,31 @@ export const ExistingSpots = ({ customizations }: ExistingSpotsProps) => {
       <table>
         <ExistingSpotsHeader extraColumns={extraColumnNames} />
         <tbody>
-          {visibleSpots
-            .map((visibleSpot) => visibleSpot.spot)
-            .map((existingSpot) => {
-              const style =
-                existingSpot.id === hoveredSpot?.spotId ? { backgroundColor: 'yellow' } : {};
+          {visibleSpots.map((visibleSpot) => {
+            const style =
+              visibleSpot.spot.id === hoveredSpot?.spotId ? { backgroundColor: 'yellow' } : {};
 
-              const extraColumns = Array.from(customizations.values()).map((extensionFactory) =>
-                extensionFactory(existingSpot),
-              );
+            const extraColumns = Array.from(customizations.values()).map((extensionFactory) =>
+              extensionFactory(visibleSpot),
+            );
 
-              return (
-                <tr
-                  key={existingSpot.id}
-                  id={makeExistingSpotRowId(existingSpot.id)}
-                  onMouseOver={() => {
-                    dispatch(setHoveredSpot({ spotId: existingSpot.id, fromMap: false }));
-                  }}
-                  onMouseOut={() => {
-                    dispatch(clearHoveredSpot());
-                  }}
-                  style={style}
-                >
-                  <ExistingSpot existingSpot={existingSpot} />
-                  {extraColumns}
-                </tr>
-              );
-            })}
+            return (
+              <tr
+                key={visibleSpot.spot.id}
+                id={makeExistingSpotRowId(visibleSpot.spot.id)}
+                onMouseOver={() => {
+                  dispatch(setHoveredSpot({ spotId: visibleSpot.spot.id, fromMap: false }));
+                }}
+                onMouseOut={() => {
+                  dispatch(clearHoveredSpot());
+                }}
+                style={style}
+              >
+                <ExistingSpot spot={visibleSpot.spot} />
+                {extraColumns}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
