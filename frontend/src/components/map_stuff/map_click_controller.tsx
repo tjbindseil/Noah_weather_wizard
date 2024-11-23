@@ -16,7 +16,6 @@ export function MapClickController({ saveSelectedSpot, color }: MapClickControll
   const [popupName, setPopupName] = useState('');
 
   useMapEvent('click', (e) => {
-    console.log('@@@@@@@@ HERERERERERE');
     setPopupOpen(true);
     setPopupLat(e.latlng.lat);
     setPopupLong(e.latlng.lng);

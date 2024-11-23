@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Forecast, ForecastHourly, Spot } from 'ww-3-models-tjb';
 import { useForecastService } from '../../services/forecast_service';
 import { ImageForecast } from '../forecast_stuff/image_forecast';
