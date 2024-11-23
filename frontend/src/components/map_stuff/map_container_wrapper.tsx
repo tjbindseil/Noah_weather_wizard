@@ -2,7 +2,7 @@ import { MapContainer, TileLayer } from 'react-leaflet';
 import { useRef } from 'react';
 import { PostSpotInput, PostSpotOutput, Spot } from 'ww-3-models-tjb';
 import { LatLng } from 'leaflet';
-import { MapViewMonitor, MapExistingSpotsMonitor } from './';
+import { MapViewMonitor, MapExistingSpotsMonitor, MapCenterController } from './';
 import { LatLngInput } from '../lat_lng_input';
 import { useAppSelector } from '../../app/hooks';
 
@@ -49,6 +49,7 @@ export const MapContainerWrapper = ({
           toggleToRefreshExistingSpots={toggleToRefreshExistingSpots}
         />
         <MapViewMonitor />
+        <MapCenterController />
         {children}
       </MapContainer>
     </div>
