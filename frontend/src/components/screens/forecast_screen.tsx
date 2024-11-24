@@ -25,6 +25,11 @@ export function ForecastScreen() {
     const selectedSpots = visibleSpots
       .filter((visibleSpot) => visibleSpot.selected)
       .map((visibleSpot) => visibleSpot.spot.id);
+
+    if (selectedSpots.length === 0) {
+      return;
+    }
+
     const spotIdsStr = selectedSpots.join(',');
 
     forecastService
@@ -39,7 +44,7 @@ export function ForecastScreen() {
         setForecastsHourly(result.forecastsHourly);
       })
       .catch((e) => console.error(`@@ @@ get hourly and e is: ${e}`));
-  }, [forecastService, setForecasts, setForecastsHourly]);
+  }, [forecastService, setForecasts, setForecastsHourly, visibleSpots]);
 
   return (
     <div className='ForecastWrapper'>

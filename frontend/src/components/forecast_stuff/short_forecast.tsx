@@ -13,9 +13,7 @@ export const ShortForecast = ({ forecasts }: ShortForecastProps) => {
     <ForecastTable
       forecasts={forecasts}
       periodFunc={(period, spot) => (
-        <td key={`${spot.id} - ${period.name}`}>
-          <img src={period.shortForecast} />
-        </td>
+        <td key={`${spot.id} - ${period.name}`}>{period.shortForecast}</td>
       )}
     />
   );

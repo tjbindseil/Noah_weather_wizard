@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../app/hooks';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { toggleSpotSelection } from '../app/visible_spots_reducer';
 import { useSpotService } from '../services/spot_service';
 import { UserSignInStatus, useUserService } from '../services/user_service';
@@ -56,21 +56,27 @@ function UserStatusDroppedDown({ setDroppedDown }: UserStatusDroppedDownProps) {
 
   const navigate = useNavigate();
 
+  const visibleSpots = useAppSelector((state) => state.visibleSpots.visibleSpots);
+
+  const compareFavoritesCallback = useCallback(async () => {
+    const selectedSpotIds = visibleSpots
+      .filter((visibleSpot) => visibleSpot.selected)
+      .map((visibleSpot) => visibleSpot.spot.id);
+
+    (await spotService.getFavorites({})).favoriteSpots
+      .map((spot) => spot.id)
+      .filter((id) => !selectedSpotIds.includes(id))
+      .forEach((id) => dispatch(toggleSpotSelection(id)));
+
+    navigate('/forecast');
+  }, [visibleSpots, navigate, spotService]);
+
   const noBulletStyle = { listStyleType: 'none' };
 
   return (
     <ul>
       <li style={noBulletStyle}>
-        <button
-          className={'UserStatusDropDown'}
-          onClick={async () => {
-            (await spotService.getFavorites({})).favoriteSpots.forEach((spot) =>
-              dispatch(toggleSpotSelection(spot.id)),
-            );
-
-            navigate('/forecast');
-          }}
-        >
+        <button className={'UserStatusDropDown'} onClick={compareFavoritesCallback}>
           Compare favorites
         </button>
       </li>
