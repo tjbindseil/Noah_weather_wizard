@@ -13,7 +13,7 @@ export const LongForecast = ({ forecasts }: LongForecastProps) => {
     <ForecastTable
       forecasts={forecasts}
       periodFunc={(period, spot) => (
-        <td key={`${spot.id} - ${period.name}`}>period.detailedForecast</td>
+        <td key={`${spot.id} - ${period.name}`}>{period.detailedForecast}</td>
       )}
     />
   );

@@ -26,10 +26,10 @@ export const ExistingSpots = ({ customizations }: ExistingSpotsProps) => {
     }
   }, [hoveredSpot]);
 
+  // TODO spread table accross full width
   return (
     <div className={'ExistingSpots'}>
-      <h4 style={{ margin: 4 }}>Existing Spots</h4>
-      <table>
+      <table style={{ borderSpacing: 0 }}>
         <ExistingSpotsHeader extraColumns={extraColumnNames} />
         <tbody>
           {visibleSpots.map((visibleSpot) => {

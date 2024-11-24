@@ -25,7 +25,7 @@ export const MapContainerWrapper = ({ children }: MapContainerWrapperProps) => {
         center={new LatLng(center.lat, center.lng)}
         zoom={zoom}
         ref={mapRef}
-        style={{ height: '50vh', width: '100vw' }}
+        style={{ height: '100%', width: '100vw' }}
       >
         <TileLayer
           attribution={

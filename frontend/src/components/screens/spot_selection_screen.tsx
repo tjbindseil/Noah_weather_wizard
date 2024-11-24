@@ -1,7 +1,4 @@
-import { useCallback } from 'react';
 import { NavBar } from '../nav_bar';
-import { Spot } from 'ww-3-models-tjb';
-import { useNavigate } from 'react-router-dom';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
 import { FavoritedExistingSpotExtension } from '../existing_spots/favorite_existing_spot_extension';
@@ -10,13 +7,7 @@ import { useAppSelector } from '../../app/hooks';
 import { VisibleSpot } from '../../app/visible_spots_reducer';
 
 export function SpotSelectionScreen() {
-  const navigate = useNavigate();
-
   const visibleSpots = useAppSelector((state) => state.visibleSpots.visibleSpots);
-
-  const toForecastPage = useCallback(() => {
-    navigate('/forecast');
-  }, [navigate]);
 
   const existingSpotCustomizations = new Map<
     string,
@@ -53,7 +44,6 @@ export function SpotSelectionScreen() {
       </MapContainerWrapper>
 
       <ExistingSpots customizations={existingSpotCustomizations} />
-      <button onClick={() => toForecastPage()}>Compare Forecasts</button>
     </div>
   );
 }

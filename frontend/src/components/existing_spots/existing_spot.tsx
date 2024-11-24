@@ -7,7 +7,7 @@ export interface ExistingSpotProps {
 export const ExistingSpot = ({ spot }: ExistingSpotProps) => {
   return (
     <>
-      <td>{spot.name}</td>
+      <td style={{ backgroundColor: 'lightgrey', fontWeight: 'bold' }}>{spot.name}</td>
       <td>{spot.latitude}</td>
       <td>{spot.longitude}</td>
     </>

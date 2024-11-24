@@ -11,14 +11,12 @@ interface ForecastProps {
 
 export const ForecastTable = ({ forecasts, periodFunc }: ForecastProps) => {
   return (
-    <table>
+    <table style={{ borderSpacing: 0 }}>
       <thead>
         <tr>
-          <th style={{ position: 'sticky', top: 0, left: 0, backgroundColor: 'white', zIndex: 6 }}>
-            Spot Name
-          </th>
+          <th className={'StickyTableHeader'}>Spot Name</th>
           {forecasts[0].forecast.periods.map((period) => (
-            <th style={{ position: 'sticky', top: 0, backgroundColor: 'white' }} key={period.name}>
+            <th className={'StickyTableHeader'} key={period.name}>
               {period.name}
             </th>
           ))}
