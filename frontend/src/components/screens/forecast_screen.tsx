@@ -27,9 +27,12 @@ export function ForecastScreen() {
       .map((visibleSpot) => visibleSpot.spot.id);
     const spotIdsStr = selectedSpots.join(',');
 
-    forecastService.getForecasts({ spotIDs: spotIdsStr }).then((result) => {
-      setForecasts(result.forecasts);
-    });
+    forecastService
+      .getForecasts({ spotIDs: spotIdsStr })
+      .then((result) => {
+        setForecasts(result.forecasts);
+      })
+      .catch((e) => console.error(`@@ @@ get and e is: ${e}`));
     forecastService
       .getForecastsHourly({ spotIDs: spotIdsStr })
       .then((result) => {

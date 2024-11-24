@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../app/hooks';
+import { toggleSpotSelection } from '../app/visible_spots_reducer';
 import { useSpotService } from '../services/spot_service';
 import { UserSignInStatus, useUserService } from '../services/user_service';
 
@@ -48,42 +50,45 @@ interface UserStatusDroppedDownProps {
 }
 
 function UserStatusDroppedDown({ setDroppedDown }: UserStatusDroppedDownProps) {
+  const dispatch = useAppDispatch();
   const userService = useUserService();
   const spotService = useSpotService();
 
   const navigate = useNavigate();
 
+  const noBulletStyle = { listStyleType: 'none' };
+
   return (
     <ul>
-      <li>
+      <li style={noBulletStyle}>
         <button
           className={'UserStatusDropDown'}
           onClick={async () => {
-            // TODO gotta revamp this with new concept of underlying tracking of checked spots
-            const favoriteSpotIds = await spotService.getFavorites({});
-            navigate('/forecast', {
-              state: { selectedSpots: [favoriteSpotIds.favoriteSpots.map((spot) => spot.id)] },
-            });
+            (await spotService.getFavorites({})).favoriteSpots.forEach((spot) =>
+              dispatch(toggleSpotSelection(spot.id)),
+            );
+
+            navigate('/forecast');
           }}
         >
-          Favorites page
+          Compare favorites
         </button>
       </li>
-      <li>
+      <li style={noBulletStyle}>
         <button className={'UserStatusDropDown'} onClick={() => userService.logout()}>
           <Link reloadDocument to={'/'}>
             logout
           </Link>
         </button>
       </li>
-      <li>
+      <li style={noBulletStyle}>
         <button className={'UserStatusDropDown'}>
           <Link reloadDocument to={'/delete_user'}>
             Delete Account
           </Link>
         </button>
       </li>
-      <li>
+      <li style={noBulletStyle}>
         <button className={'UserStatusDropDown'} onClick={() => setDroppedDown(false)}>
           close
         </button>
