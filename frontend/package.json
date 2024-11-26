@@ -36,6 +36,8 @@
   "scripts": {
     "start": "export REACT_APP_WW_ENV='laptop' && react-scripts start",
     "build": "export REACT_APP_WW_ENV='laptop' && react-scripts build",
+    "build-staging": "export REACT_APP_WW_ENV='staging' && react-scripts build",
+    "build-prod": "export REACT_APP_WW_ENV='prod' && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

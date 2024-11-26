@@ -21,8 +21,10 @@
 
 ## Going live...
 * free secrets manager
+* more than one cognito pool
 * pm2 autoreload
 * firewall
+* specific user to run app
 * deploy frontend
 * ssl (certbot)
 * organize build.sh, isntall.sh, and initial\_ec2\_script a little better
