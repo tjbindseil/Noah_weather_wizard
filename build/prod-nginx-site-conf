@@ -1,62 +1,62 @@
 server {
     listen 80;
-    # server_name example.com www.example.com;
+    server_name 3.208.25.58;
 
-    # root /var/www/example.com/html;
-    # index index.html index.htm;
+    root /var/www/weather_wizard/prod;
+    index index.html;
 
     location / {
-        proxy_buffering off;
-        proxy_pass http://localhost:8880;
+        try_files $uri /index.html;
     }
+
     location /spot {
         proxy_buffering off;
-        proxy_pass http://localhost:8880;
+        proxy_pass http://localhost:8080;
     }
     location /spots {
         proxy_buffering off;
-        proxy_pass http://localhost:8880;
+        proxy_pass http://localhost:8080;
     }
     location /favorite {
         proxy_buffering off;
-        proxy_pass http://localhost:8880;
+        proxy_pass http://localhost:8080;
     }
     location /favorites {
         proxy_buffering off;
-        proxy_pass http://localhost:8880;
+        proxy_pass http://localhost:8080;
     }
 
     location /forecast {
         proxy_buffering off;
-        proxy_pass http://localhost:8881;
+        proxy_pass http://localhost:8081;
     }
     location /forecasts {
         proxy_buffering off;
-        proxy_pass http://localhost:8881;
+        proxy_pass http://localhost:8081;
     }
     location /forecasts_hourly {
         proxy_buffering off;
-        proxy_pass http://localhost:8881;
+        proxy_pass http://localhost:8081;
     }
 
     location /user {
         proxy_buffering off;
-        proxy_pass http://localhost:8882;
+        proxy_pass http://localhost:8082;
     }
     location /auth {
         proxy_buffering off;
-        proxy_pass http://localhost:8882;
+        proxy_pass http://localhost:8082;
     }
     location /confirmation {
         proxy_buffering off;
-        proxy_pass http://localhost:8882;
+        proxy_pass http://localhost:8082;
     }
     location /refresh {
         proxy_buffering off;
-        proxy_pass http://localhost:8882;
+        proxy_pass http://localhost:8082;
     }
     location /new-confirmation-code {
         proxy_buffering off;
-        proxy_pass http://localhost:8882;
+        proxy_pass http://localhost:8082;
     }
 }

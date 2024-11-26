@@ -37,3 +37,20 @@ sudo systemctl enable nginx
 # bash stuff
 echo "alias gs='git status'" >> ~/.bashrc
 echo "set -o vi" >> ~/.bashrc
+
+# # Allow Nginx to read the directory and files
+# sudo chmod -R 755 /home/ec2-user/build
+
+# Change the owner to Nginx's user (e.g., www-data)
+# sudo chown -R nginx:nginx /home/ec2-user/build
+
+
+# SElinux stuff
+# sudo semanage fcontext -a -t httpd_sys_content_t "/home/ec2-user/ww_staging/frontend/build(/.*)?"
+# sudo semanage fcontext -a -t httpd_sys_content_t "/home/ec2-user/ww_prod/frontend/build(/.*)?"
+# sudo restorecon -R /home/ec2-user/ww_staging/frontend/build
+# sudo restorecon -R /home/ec2-user/ww_prod/frontend/build
+
+
+# I Don't think the above was what did it
+# I ended up moving the build output to /var/www/weather_wizard/build and gave it permissions. That worked!

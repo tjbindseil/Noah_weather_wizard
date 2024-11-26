@@ -148,6 +148,13 @@ const UserService = ({ children }: any) => {
       return this.userSignInStatus;
     },
 
+    // TODO apparently this is not a best practice
+    // I asked chatgpt and it said that the token could be tampered with or stolen
+    // or the authentication code could be modified
+    // I don't think tampered with is an issue because any
+    // authenticated routes are checked on the backend as well, this is just a way
+    // to reduce requests that would fail due to expired tokens
+    // for now, I'm adding a dep (npm install jsonwebtoken) here to make it work in the browser even though its 'not advised'
     async verifyAccessToken() {
       const accessToken = tokenStorageObject.getAccessToken();
       if (accessToken) {
