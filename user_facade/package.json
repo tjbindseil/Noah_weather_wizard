@@ -19,6 +19,7 @@
         "@aws-sdk/client-cognito-identity-provider": "^3.588.0",
         "aws-jwt-verify": "^4.0.1",
         "ww-3-api-tjb": "file:../api",
+        "ww-3-app-config-tjb": "file:../app_config",
         "ww-3-models-tjb": "file:../models"
     },
     "devDependencies": {

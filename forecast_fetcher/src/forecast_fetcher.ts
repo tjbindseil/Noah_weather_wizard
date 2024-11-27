@@ -5,6 +5,7 @@ export class ForecastFetcher {
     constructor(private readonly s3Adapter: S3Adapter) {}
 
     public async fetchForecast() {
+        console.log(`@@ @@ fetching forecast at: ${new Date().toISOString()}`);
         const forecastKeys = await this.s3Adapter.getAllPolygons();
         const promises: Promise<void>[] = [];
 
@@ -24,9 +25,15 @@ export class ForecastFetcher {
         );
 
         await Promise.all(promises);
+        console.log(
+            `@@ @@ finished fetching forecast at: ${new Date().toISOString()}`
+        );
     }
 
     public async fetchForecastHourly() {
+        console.log(
+            `@@ @@ fetching hourly forecast at: ${new Date().toISOString()}`
+        );
         const forecastKeys = await this.s3Adapter.getAllPolygons();
         const promises: Promise<void>[] = [];
 
@@ -49,5 +56,8 @@ export class ForecastFetcher {
         );
 
         await Promise.all(promises);
+        console.log(
+            `@@ @@ finished fetching hourly forecast at: ${new Date().toISOString()}`
+        );
     }
 }

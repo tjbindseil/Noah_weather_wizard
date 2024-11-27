@@ -9,8 +9,9 @@ import {
     SignUpCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { APIError } from 'ww-3-api-tjb';
+import { get_app_config } from 'ww-3-app-config-tjb';
 
-const clientId = '6j6t301u6iu773ic3dc627fi0n';
+const clientId = get_app_config().userPoolClientId;
 const client = new CognitoIdentityProviderClient({});
 
 export const createUser = async (user: User, testUser = false) => {
