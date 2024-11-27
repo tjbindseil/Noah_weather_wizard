@@ -24,6 +24,14 @@ module.exports = {
       },
       time: true,
     },
+    {
+      name: "forecast_fetcher_prod",
+      script: "forecast_fetcher/build/src/index.js",
+      env: {
+        WW_ENV: "prod",
+      },
+      time: true,
+    },
   ],
 
   //   deploy: {
