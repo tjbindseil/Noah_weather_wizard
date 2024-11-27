@@ -3,6 +3,7 @@ import {
     CognitoJwtVerifier,
 } from 'aws-jwt-verify/cognito-verifier';
 import { APIError } from './api_error';
+import { get_app_config } from 'ww-3-app-config-tjb';
 
 export type JWTAuthenticator = (s: string | undefined) => Promise<string>;
 
@@ -12,11 +13,10 @@ type CognitoJwtVerifierReturn = CognitoJwtVerifierSingleUserPool<{
     clientId: string;
 }>;
 
-const clientId = '6j6t301u6iu773ic3dc627fi0n';
 export const defaultVerifier = CognitoJwtVerifier.create({
-    userPoolId: 'us-east-1_ZVFeJ2Kqj',
+    userPoolId: get_app_config().userPoolId,
     tokenUse: 'access',
-    clientId: clientId,
+    clientId: get_app_config().userPoolClientId,
 });
 
 export const makeCognitoJWTAuthenticator = (

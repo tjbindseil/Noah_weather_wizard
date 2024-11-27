@@ -5,7 +5,7 @@
     "main": "build/src/index.js",
     "types": "build/src/index.d.ts",
     "scripts": {
-        "test": "jest unit --config jest.unit.config.js",
+        "test": "export WW_ENV='docker-unit-test' && jest unit --config jest.unit.config.js",
         "tsc": "tsc",
         "ww-clean": "rm -rf node_modules package-lock.json build",
         "ww-format": "npx prettier --write $(find src test package*)",
@@ -20,6 +20,7 @@
         "aws-jwt-verify": "^4.0.1",
         "aws-sdk": "^2.1692.0",
         "express": "^4.18.2",
+        "ww-3-app-config-tjb": "file:../app_config",
         "generic-pool": "^3.9.0",
         "ts-postgres": "^1.8.0"
     },

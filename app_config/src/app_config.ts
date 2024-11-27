@@ -21,6 +21,8 @@ export interface AppConfig {
     userServiceListenPort: number;
     frontendServiceHost: string;
     frontendServicePort: number;
+    userPoolId: string;
+    userPoolClientId: string;
 }
 
 const prodHost = '3.208.25.58';
@@ -39,6 +41,8 @@ const laptopAppConfig: AppConfig = {
     userServiceListenPort: 8082,
     frontendServiceHost: '127.0.0.1',
     frontendServicePort: 8888,
+    userPoolId: 'us-east-1_ZVFeJ2Kqj',
+    userPoolClientId: '6j6t301u6iu773ic3dc627fi0n',
 };
 
 const dockerUnitTestAppConfig: AppConfig = {
@@ -55,6 +59,8 @@ const dockerUnitTestAppConfig: AppConfig = {
     userServiceListenPort: 8082,
     frontendServiceHost: prodHost,
     frontendServicePort: 8888,
+    userPoolId: 'us-east-1_ZVFeJ2Kqj',
+    userPoolClientId: '6j6t301u6iu773ic3dc627fi0n',
 };
 
 const stagingAppConfig: AppConfig = {
@@ -72,6 +78,8 @@ const stagingAppConfig: AppConfig = {
     userServiceListenPort: 8882,
     frontendServiceHost: prodHost,
     frontendServicePort: 8888,
+    userPoolId: 'us-east-1_35BKiPwnQ',
+    userPoolClientId: '3mq06dv4oh81u1na3vn59kgik9',
 };
 
 const prodAppConfig: AppConfig = {
@@ -89,6 +97,8 @@ const prodAppConfig: AppConfig = {
     userServiceListenPort: 8082,
     frontendServiceHost: prodHost,
     frontendServicePort: 80,
+    userPoolId: 'us-east-1_Yd9p9O1m7',
+    userPoolClientId: '26koknide856thsp3v78fgtv6g',
 };
 
 let appConfigSet = false;
