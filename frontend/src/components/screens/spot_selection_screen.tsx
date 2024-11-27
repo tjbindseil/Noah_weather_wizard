@@ -1,6 +1,6 @@
 import { NavBar } from '../nav_bar';
 import { ExistingSpots } from '../existing_spots/existing_spots';
-import { CheckedExistingSpotExtension } from '../existing_spots/checked_existing_spot_extension';
+import { SelectedExistingSpotExtension } from '../existing_spots/selected_existing_spot_extension';
 import { FavoritedExistingSpotExtension } from '../existing_spots/favorite_existing_spot_extension';
 import { MapContainerWrapper, LeafletMarkerColorOptions, SelectedSpot } from '../map_stuff';
 import { useAppSelector } from '../../app/hooks';
@@ -13,8 +13,8 @@ export function SpotSelectionScreen() {
     string,
     (visibleSpot: VisibleSpot) => React.ReactNode
   >();
-  existingSpotCustomizations.set('Checked', (visibleSpot: VisibleSpot) => (
-    <CheckedExistingSpotExtension visibleSpot={visibleSpot} />
+  existingSpotCustomizations.set('Selected', (visibleSpot: VisibleSpot) => (
+    <SelectedExistingSpotExtension visibleSpot={visibleSpot} />
   ));
 
   existingSpotCustomizations.set('Favorited', (visibleSpot: VisibleSpot) => (

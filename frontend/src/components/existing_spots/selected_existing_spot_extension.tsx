@@ -5,7 +5,7 @@ export interface CheckedExistingSpotExtensionProps {
   visibleSpot: VisibleSpot;
 }
 
-export const CheckedExistingSpotExtension = ({
+export const SelectedExistingSpotExtension = ({
   visibleSpot,
 }: CheckedExistingSpotExtensionProps) => {
   const dispatch = useAppDispatch();

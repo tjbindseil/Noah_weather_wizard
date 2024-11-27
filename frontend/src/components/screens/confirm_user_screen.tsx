@@ -47,7 +47,9 @@ export function ConfirmUserScreen() {
         </p>
         <p>
           Need a new code? Enter the username and then{' '}
-          <button onClick={() => userService.getNewRefreshCode({ username })}>Click Here</button>
+          <button onClick={() => userService.getNewConfirmationCode({ username })}>
+            Click Here
+          </button>
         </p>
       </div>
     </div>

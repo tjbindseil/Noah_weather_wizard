@@ -7,11 +7,11 @@ export enum HTTPMethod {
   GET = 'GET',
 }
 
-const getHeaders = async (userService?: IUserService) => {
+const getHeaders = (userService?: IUserService) => {
   const headers: HeadersInit = userService
     ? {
         'Content-Type': 'application/json',
-        Authorization: `Bearer: ${await userService.getAccessToken()}`,
+        Authorization: `Bearer: ${userService.getAccessToken()}`,
       }
     : {
         'Content-Type': 'application/json',
@@ -27,14 +27,25 @@ export async function fetchWithError<I, O>(
   outputSchema: any,
   userService?: IUserService,
 ): Promise<O> {
-  const result = await fetch(url, {
-    method: method.toString(),
-    mode: 'cors',
-    headers: await getHeaders(userService),
-    body: JSON.stringify({
-      ...input,
-    }),
-  });
+  const fetchFunc = async () => {
+    return await fetch(url, {
+      method: method.toString(),
+      mode: 'cors',
+      headers: getHeaders(userService),
+      body: JSON.stringify({
+        ...input,
+      }),
+    });
+  };
+
+  let result = await fetchFunc();
+
+  if (result.status === 401) {
+    if (userService) {
+      await userService?.refreshUser();
+      result = await fetchFunc();
+    }
+  }
 
   if (result.status !== 200) {
     throw new Error();

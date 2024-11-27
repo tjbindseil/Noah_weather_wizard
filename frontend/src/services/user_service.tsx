@@ -15,7 +15,6 @@ import {
 } from 'ww-3-models-tjb';
 import Contextualizer from './contextualizer';
 import ProvidedServices from './provided_services';
-import { defaultVerifier } from 'ww-3-api-tjb';
 import { TokenStorageObject } from './utils/token_storage_obj';
 import { useEffect } from 'react';
 import { fetchWithError, HTTPMethod } from './fetch_wrapper';
@@ -36,10 +35,11 @@ export interface IUserService {
   getUserSignInStatus(): UserSignInStatus;
   getUsername(): string | undefined;
   logout(): void;
-  getAccessToken(): Promise<string>;
-  getNewRefreshCode: (
+  getAccessToken(): string;
+  getNewConfirmationCode: (
     input: PostNewConfirmationCodeInput,
   ) => Promise<PostNewConfirmationCodeOutput>;
+  refreshUser(): Promise<void>;
 }
 
 export const UserServiceContext = Contextualizer.createContext(ProvidedServices.UserService);
@@ -47,9 +47,7 @@ export const useUserService = (): IUserService =>
   Contextualizer.use<IUserService>(ProvidedServices.UserService);
 
 interface UserServiceImpl extends IUserService {
-  refreshUser(): Promise<void>;
   username: string | undefined;
-  verifyAccessToken: () => Promise<void>;
   userSignInStatus: UserSignInStatus;
 }
 
@@ -77,8 +75,14 @@ const UserService = ({ children }: any) => {
         HTTPMethod.POST,
         _schema.PostAuthOutput,
       );
-      tokenStorageObject.setTokens(postAuthOutput.accessToken, postAuthOutput.refreshToken);
-      await this.verifyAccessToken();
+      tokenStorageObject.setTokens(
+        postAuthOutput.accessToken,
+        postAuthOutput.refreshToken,
+        input.username,
+      );
+
+      this.username = input.username;
+      this.userSignInStatus = UserSignInStatus.LOGGED_IN;
     },
 
     async confirmUser(input: PostConfirmationInput) {
@@ -103,7 +107,9 @@ const UserService = ({ children }: any) => {
         );
 
         tokenStorageObject.setTokens(postRefreshOutput.accessToken, postRefreshOutput.refreshToken);
-        await this.verifyAccessToken();
+
+        this.username = tokenStorageObject.getUsername();
+        this.userSignInStatus = UserSignInStatus.LOGGED_IN;
       }
     },
 
@@ -113,18 +119,9 @@ const UserService = ({ children }: any) => {
       }
 
       try {
-        await this.verifyAccessToken();
+        await this.refreshUser();
       } catch (e: any) {
-        // currently unable to detect what type of errors we are getting ...
-        //
-        // so assuming an expired token first
-        //
-        // TODO do this better
-        try {
-          await this.refreshUser();
-        } catch (e: any) {
-          this.logout();
-        }
+        this.logout();
       }
     },
 
@@ -148,24 +145,6 @@ const UserService = ({ children }: any) => {
       return this.userSignInStatus;
     },
 
-    // TODO apparently this is not a best practice
-    // I asked chatgpt and it said that the token could be tampered with or stolen
-    // or the authentication code could be modified
-    // I don't think tampered with is an issue because any
-    // authenticated routes are checked on the backend as well, this is just a way
-    // to reduce requests that would fail due to expired tokens
-    // for now, I'm adding a dep (npm install jsonwebtoken) here to make it work in the browser even though its 'not advised'
-    async verifyAccessToken() {
-      const accessToken = tokenStorageObject.getAccessToken();
-      if (accessToken) {
-        const decoded = await defaultVerifier.verify(accessToken);
-        this.username = decoded.username;
-        this.userSignInStatus = UserSignInStatus.LOGGED_IN;
-      } else {
-        this.logout();
-      }
-    },
-
     getUsername() {
       return this.username;
     },
@@ -176,26 +155,11 @@ const UserService = ({ children }: any) => {
       this.userSignInStatus = UserSignInStatus.LOGGED_OUT;
     },
 
-    async getAccessToken() {
-      // TODO - this try catch try catch is repeated
-      try {
-        await this.verifyAccessToken();
-      } catch (e: any) {
-        // currently unable to detect what type of errors we are getting ...
-        //
-        // so assuming an expired token first
-        //
-        // TODO do this better
-        try {
-          await this.refreshUser();
-        } catch (e: any) {
-          this.logout();
-        }
-      }
+    getAccessToken() {
       return tokenStorageObject.getAccessToken();
     },
 
-    async getNewRefreshCode(input: PostNewConfirmationCodeInput) {
+    async getNewConfirmationCode(input: PostNewConfirmationCodeInput) {
       await (
         await fetch(`${baseUrl}/new-confirmation-code`, {
           method: 'POST',
@@ -223,3 +187,17 @@ const UserService = ({ children }: any) => {
 };
 
 export default UserService;
+
+// ok, so we can't verify the token on the browser
+// so, the ideal is,
+//
+// initially, no token in cookies
+// user logs in, gets token stores token
+// user makes other requests to backend and includes token in those requests
+// backend will do one of three things:
+// 1. handle the request when the token is valid
+// 2. return http 5something code to indicate expired token
+// 3. return http 5somethingelse code to indicate that the token is invalid
+//
+// no, the backend refreshes!!!
+// the only thing here is that the token would have to be returned
