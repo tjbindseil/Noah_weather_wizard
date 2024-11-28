@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavBar } from '../nav_bar';
-import { Spot } from 'ww-3-models-tjb';
 import { ExistingSpots } from '../existing_spots/existing_spots';
 import { CreatorExistingSpotExtension } from '../existing_spots/deletable_existing_spot_extension';
 import {

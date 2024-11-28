@@ -1,4 +1,5 @@
-import { validate } from 'ww-3-api-tjb';
+// TODO this relies on api which does app config stuff and the env var, maybe use a global.d.ts file to rewrite app_config as app_config(REACT_APP_WW_ENV);
+// import { validate } from 'ww-3-api-tjb';
 import { IUserService } from './user_service';
 
 export enum HTTPMethod {
@@ -51,9 +52,10 @@ export async function fetchWithError<I, O>(
     throw new Error();
   }
 
-  const validatedOutput = validate(outputSchema, await result.json()) as unknown as O;
+  // const validatedOutput = validate(outputSchema, await result.json()) as unknown as O;
+  // return validatedOutput;
 
-  return validatedOutput;
+  return (await result.json()) as unknown as O;
 }
 
 export async function getWithError<O>(
@@ -66,14 +68,15 @@ export async function getWithError<O>(
   const result = await fetch(`${url}?` + new URLSearchParams({ ...input }), {
     method: HTTPMethod.GET.toString(),
     mode: 'cors',
-    headers: await getHeaders(userService),
+    headers: getHeaders(userService),
   });
 
   if (result.status !== 200) {
     throw new Error();
   }
 
-  const validatedOutput = validate(outputSchema, await result.json()) as unknown as O;
+  // const validatedOutput = validate(outputSchema, await result.json()) as unknown as O;
+  // return validatedOutput;
 
-  return validatedOutput;
+  return (await result.json()) as unknown as O;
 }

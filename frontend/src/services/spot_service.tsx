@@ -108,7 +108,7 @@ const SpotService = ({ children }: any) => {
     },
 
     refreshExistingSpots(): void {
-      dispatch(setMapBounds(mapBounds));
+      dispatch(setMapBounds({ ...mapBounds }));
     },
   };
 

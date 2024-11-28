@@ -14,7 +14,9 @@ export const ForecastTable = ({ forecasts, periodFunc }: ForecastProps) => {
     <table style={{ borderSpacing: 0 }}>
       <thead>
         <tr>
-          <th className={'StickyTableHeader'}>Spot Name</th>
+          <th className={'StickyTableHeader'} style={{ zIndex: 10 }}>
+            Spot Name
+          </th>
           {forecasts[0].forecast.periods.map((period) => (
             <th className={'StickyTableHeader'} key={period.name}>
               {period.name}

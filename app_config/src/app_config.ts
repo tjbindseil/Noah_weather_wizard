@@ -104,6 +104,7 @@ const prodAppConfig: AppConfig = {
 let appConfigSet = false;
 let app_config: AppConfig;
 const set_app_config = (env_var?: string) => {
+    console.log(`set_app_config, env_var is: ${env_var}`);
     const env = env_var ?? process.env.WW_ENV;
 
     if (env === Environment[Environment.laptop]) {
