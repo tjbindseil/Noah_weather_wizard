@@ -16,17 +16,18 @@ export function UserStatus() {
   const [localUserSignInStatus, setLocalUserSignInStatus] = useState(
     userService.getUserSignInStatus(),
   );
+
   useEffect(() => {
-    const to = setTimeout(() => {
+    const interval = setInterval(() => {
       const newUserSignInStatus = userService.getUserSignInStatus();
-      if (newUserSignInStatus !== localUserSignInStatus) {
+      if (newUserSignInStatus !== UserSignInStatus.LOADING) {
         setLocalUserSignInStatus(newUserSignInStatus);
+        clearInterval(interval);
       }
-    }, 200);
-    return () => {
-      clearTimeout(to);
-    };
-  }, []);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [userService, setLocalUserSignInStatus]);
 
   return (
     <div>
