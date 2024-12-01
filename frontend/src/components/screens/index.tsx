@@ -12,7 +12,7 @@ export const navBarScreens = [
   { title: 'Home', path: '/', element: <HomeScreen /> },
   { title: 'Spot Creation', path: '/spot-creation', element: <SpotCreationScreen /> },
   { title: 'Spot Selection', path: '/spot-selection', element: <SpotSelectionScreen /> },
-  { title: 'Forecast', path: '/forecast', element: <ForecastScreen /> },
+  { title: 'Forecast', path: '/compare-forecast', element: <ForecastScreen /> },
 ];
 
 export const implicitScreens = [
