@@ -41,6 +41,7 @@ export function MapClickController({ color }: MapClickControllerProps) {
           }}
         />
         <button
+          disabled={popupName === ''}
           onClick={async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
             await spotService.createSpot({
               latitude: popupLat,

@@ -1,5 +1,5 @@
 import { PostSpotInput, PostSpotOutput, _schema } from 'ww-3-models-tjb';
-import { StrictlyAuthenticatedAPI } from 'ww-3-api-tjb';
+import { APIError, StrictlyAuthenticatedAPI } from 'ww-3-api-tjb';
 import { ValidateFunction } from 'ajv';
 import { Client } from 'ts-postgres';
 import {
@@ -31,6 +31,10 @@ export class PostSpot extends StrictlyAuthenticatedAPI<
         input: PostSpotInput,
         pgClient: Client
     ): Promise<PostSpotOutput> {
+        if (input.name === '') {
+            throw new APIError(400, 'invalid input');
+        }
+
         const trimmedLat = this.trimLatLong(input.latitude);
         const trimmedLong = this.trimLatLong(input.longitude);
         const forecastKey = await getForecastKey(trimmedLat, trimmedLong);

@@ -55,6 +55,7 @@ export const LatLngInput = () => {
       </button>
 
       <button
+        disabled={name === ''}
         onClick={async () => {
           await spotService.createSpot({ latitude: lat, longitude: lng, name });
         }}

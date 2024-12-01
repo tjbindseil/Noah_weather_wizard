@@ -31,6 +31,7 @@ export abstract class StrictlyAuthenticatedAPI<I, O, C> extends API<I, O, C> {
             console.error('Issue authenticating');
             console.error(error);
             next(new APIError(403, 'unauthorized'));
+            return;
         }
         super.call(req, res, next, contextController);
     }
