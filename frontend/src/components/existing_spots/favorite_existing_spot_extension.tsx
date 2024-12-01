@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { VisibleSpot } from '../../app/visible_spots_reducer';
 import { useSpotService } from '../../services/spot_service';
+import { UserSignInStatus, useUserService } from '../../services/user_service';
 
 export interface FavoritedExistingSpotExtensionProps {
   visibleSpot: VisibleSpot;
@@ -10,6 +11,7 @@ export const FavoritedExistingSpotExtension = ({
   visibleSpot,
 }: FavoritedExistingSpotExtensionProps) => {
   const spotService = useSpotService();
+  const userService = useUserService();
 
   const [selfManagedFavorites, setSelfManagedFavorites] = useState<number[]>([]);
 
@@ -28,6 +30,7 @@ export const FavoritedExistingSpotExtension = ({
   return (
     <td>
       <input
+        disabled={userService.getUserSignInStatus() !== UserSignInStatus.LOGGED_IN}
         type='checkbox'
         id={visibleSpot.spot.id.toString()}
         name='selected'
