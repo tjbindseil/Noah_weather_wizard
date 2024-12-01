@@ -20,6 +20,12 @@ const s3Adapter = new S3Adapter(s3Client, bucketName);
 
 const oneHourInMilliseconds = 1000 * 60 * 60;
 const fourHoursInMilliseconds = 1000 * 60 * 60 * 4;
-const forecastFetcher = new ForecastFetcher(s3Adapter);
-setInterval(forecastFetcher.fetchForecast, fourHoursInMilliseconds);
-setInterval(forecastFetcher.fetchForecastHourly, oneHourInMilliseconds);
+const forecastFetcher = new ForecastFetcher();
+setInterval(
+    () => forecastFetcher.fetchForecast(s3Adapter),
+    fourHoursInMilliseconds
+);
+setInterval(
+    () => forecastFetcher.fetchForecastHourly(s3Adapter),
+    oneHourInMilliseconds
+);

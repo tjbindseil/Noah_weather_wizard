@@ -2,18 +2,18 @@ import { getForecast, getForecastHourly, S3Adapter } from 'ww-3-utilities-tjb';
 import { publishMetric } from 'ww-3-api-tjb';
 
 export class ForecastFetcher {
-    constructor(private readonly s3Adapter: S3Adapter) {}
+    constructor() {}
 
-    public async fetchForecast() {
+    public async fetchForecast(s3Adapter: S3Adapter) {
         console.log(`@@ @@ fetching forecast at: ${new Date().toISOString()}`);
-        const forecastKeys = await this.s3Adapter.getAllPolygons();
+        const forecastKeys = await s3Adapter.getAllPolygons();
         const promises: Promise<void>[] = [];
 
         forecastKeys.forEach((forecastKey) =>
             promises.push(
                 getForecast(forecastKey)
                     .then((forecast) => {
-                        this.s3Adapter.putForecast(forecastKey, forecast);
+                        s3Adapter.putForecast(forecastKey, forecast);
                     })
                     .catch((e) => {
                         console.error(
@@ -30,18 +30,18 @@ export class ForecastFetcher {
         );
     }
 
-    public async fetchForecastHourly() {
+    public async fetchForecastHourly(s3Adapter: S3Adapter) {
         console.log(
             `@@ @@ fetching hourly forecast at: ${new Date().toISOString()}`
         );
-        const forecastKeys = await this.s3Adapter.getAllPolygons();
+        const forecastKeys = await s3Adapter.getAllPolygons();
         const promises: Promise<void>[] = [];
 
         forecastKeys.forEach((forecastKey) =>
             promises.push(
                 getForecastHourly(forecastKey)
                     .then((forecastHourly) => {
-                        this.s3Adapter.putForecastHourly(
+                        s3Adapter.putForecastHourly(
                             forecastKey,
                             forecastHourly
                         );

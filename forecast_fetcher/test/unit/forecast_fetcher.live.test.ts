@@ -24,7 +24,7 @@ describe('forecast_fetcher LIVE tests', () => {
         region: 'us-east-1',
     });
     const s3Adapter = new S3Adapter(s3Client, bucketName);
-    const forecastFetcher = new ForecastFetcher(s3Adapter);
+    const forecastFetcher = new ForecastFetcher();
 
     beforeAll(async () => {
         fs.readdirSync(SEED_DIRECTORY).forEach((fileName) => {
@@ -70,7 +70,7 @@ describe('forecast_fetcher LIVE tests', () => {
     });
 
     it('updates all forecasts', async () => {
-        await forecastFetcher.fetchForecast();
+        await forecastFetcher.fetchForecast(s3Adapter);
 
         const forecastKeys = Array.from(seedForecasts.keys());
         const forecastPromises: Promise<Forecast>[] = [];
@@ -83,7 +83,7 @@ describe('forecast_fetcher LIVE tests', () => {
     });
 
     it('updates all hourly forecasts', async () => {
-        await forecastFetcher.fetchForecastHourly();
+        await forecastFetcher.fetchForecastHourly(s3Adapter);
 
         const forecastKeys = Array.from(seedForecasts.keys());
         const forecastHourlyPromises: Promise<ForecastHourly>[] = [];

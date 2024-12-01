@@ -22,7 +22,7 @@ describe('forecast_fetcher tests', () => {
     const mockS3Adapter = {
         getAllPolygons: mockGetAllPolygons,
     } as unknown as S3Adapter;
-    const forecastFetcher = new ForecastFetcher(mockS3Adapter);
+    const forecastFetcher = new ForecastFetcher();
 
     beforeEach(() => {
         mockGetForecast.mockClear();
@@ -35,7 +35,7 @@ describe('forecast_fetcher tests', () => {
         mockGetForecast.mockRejectedValue(new Error('error'));
         mockGetAllPolygons.mockResolvedValue([new ForecastKey('PID', 4, 20)]);
 
-        await forecastFetcher.fetchForecast();
+        await forecastFetcher.fetchForecast(mockS3Adapter);
 
         expect(mockPublishMetric).toHaveBeenCalledWith(
             'FORECAST_FETCHER_FAILED_FETCH',
@@ -47,7 +47,7 @@ describe('forecast_fetcher tests', () => {
         mockGetForecastHourly.mockRejectedValue(new Error('error'));
         mockGetAllPolygons.mockResolvedValue([new ForecastKey('PID', 4, 20)]);
 
-        await forecastFetcher.fetchForecastHourly();
+        await forecastFetcher.fetchForecastHourly(mockS3Adapter);
 
         expect(mockPublishMetric).toHaveBeenCalledWith(
             'FORECAST_FETCHER_FAILED_FETCH',
