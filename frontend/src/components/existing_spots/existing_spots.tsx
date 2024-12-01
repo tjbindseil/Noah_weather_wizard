@@ -10,6 +10,7 @@ export interface ExistingSpotsProps {
 
 export const ExistingSpots = ({ customizations }: ExistingSpotsProps) => {
   const dispatch = useAppDispatch();
+
   const visibleSpots = useAppSelector((state) => state.visibleSpots.visibleSpots);
   const hoveredSpot = useAppSelector((state) => state.visibleSpots.hoveredSpot);
 
@@ -22,7 +23,15 @@ export const ExistingSpots = ({ customizations }: ExistingSpotsProps) => {
       const existingSpotRowElement = document.getElementById(
         makeExistingSpotRowId(hoveredSpot.spotId),
       );
-      existingSpotRowElement?.scrollIntoView();
+      const tableContainer = document.querySelector('.ExistingSpots');
+      const header = tableContainer?.querySelector('thead');
+      const table = tableContainer?.querySelector('table');
+
+      if (existingSpotRowElement && tableContainer && header && table) {
+        const rowOffsetTop = existingSpotRowElement.offsetTop;
+        const headerHeight = header.offsetHeight;
+        table.scrollTop = rowOffsetTop - headerHeight;
+      }
     }
   }, [hoveredSpot]);
 
@@ -34,7 +43,7 @@ export const ExistingSpots = ({ customizations }: ExistingSpotsProps) => {
         <tbody>
           {visibleSpots.map((visibleSpot) => {
             const style =
-              visibleSpot.spot.id === hoveredSpot?.spotId ? { backgroundColor: 'yellow' } : {};
+              visibleSpot.spot.id === hoveredSpot?.spotId ? { backgroundColor: 'red' } : {};
 
             const extraColumns = Array.from(customizations.values()).map((extensionFactory) =>
               extensionFactory(visibleSpot),
