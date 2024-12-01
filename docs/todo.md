@@ -18,6 +18,7 @@
 * display waiting until successful or unsuccessful
 * spot selection page search by name
 * stop user from making spots without names
+* validate responses from backend (this requires importing api which automatically runs `get_app_config` without the react env var explicitly given, which crashes)
 
 ## Going live...
 * free secrets manager

@@ -119,8 +119,10 @@ const UserService = ({ children }: any) => {
       }
 
       try {
+        console.log('user service, refershing user in init');
         await this.refreshUser();
       } catch (e: any) {
+        console.log('user service, logging user out in init');
         this.logout();
       }
     },

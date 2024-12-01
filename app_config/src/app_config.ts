@@ -79,7 +79,7 @@ const stagingAppConfig: AppConfig = {
     frontendServiceHost: prodHost,
     frontendServicePort: 8888,
     userPoolId: 'us-east-1_35BKiPwnQ',
-    userPoolClientId: '3mq06dv4oh81u1na3vn59kgik9',
+    userPoolClientId: '45ubs612dm6d0p8s8qbf1ue55t',
 };
 
 const prodAppConfig: AppConfig = {
@@ -98,7 +98,7 @@ const prodAppConfig: AppConfig = {
     frontendServiceHost: prodHost,
     frontendServicePort: 80,
     userPoolId: 'us-east-1_Yd9p9O1m7',
-    userPoolClientId: '26koknide856thsp3v78fgtv6g',
+    userPoolClientId: '2m7h0eahav6kmhntuvl71tb310',
 };
 
 let appConfigSet = false;
